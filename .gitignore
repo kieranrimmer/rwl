@@ -2,6 +2,7 @@
 .idea/
 rwl_lexer.yy.cc
 rwl_lexer
+rwl_phaseone
 
 # Created by .ignore support plugin (hsz.mobi)
 ### C++ template

@@ -76,9 +76,6 @@ ELSE    (?i:else)
                return( token::UPPER );
             }
 
-{name}      {
-                return( token::WORD );
-            }
 
 [a-zA-Z]+   {
                /**
