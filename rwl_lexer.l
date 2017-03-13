@@ -40,7 +40,7 @@ GTE >=
 LT <
 LTE <=
 EQ ==
-ASS_OP =
+assign =
 INC_OP ++
 DEC_OP --
 
@@ -61,13 +61,23 @@ num1    [-+]?{dig}+\.?([eE][-+]?{dig}+)?
 num2    [-+]?{dig}*\.{dig}+([eE][-+]?{dig}+)?
 number  {num1}|{num2}
 ELSE    (?i:else)
-PRINT (?:print)
+print (?i:print)
 
 
 %%
 %{          /** Code executed at the beginning of yylex **/
             yylval = lval;
 %}
+
+{print}     {
+
+
+                return(token::PRINT);
+            }
+
+{assign} {
+  return(token::ASSIGN);
+}
 
 [a-z]       {
                return( token::LOWER );
@@ -77,12 +87,10 @@ PRINT (?:print)
                return( token::UPPER );
             }
 
-{PRINT}     {
-                return(token::PRINT);
-            }
+
 
 {name}      {
-                yylval->id = strdup(yytext);;
+                yylval->id = strdup(yytext);
                 return( token::WORD );
             }
 
@@ -98,15 +106,14 @@ PRINT (?:print)
                return( token::WORD );
             }
 
+{ws}   {}
+
 \n          {
                // Update line number
                loc->lines();
                return( token::NEWLINE );
             }
 
-.           {
-               return( token::CHAR );
-            }
 %%
 
 

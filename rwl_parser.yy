@@ -46,6 +46,9 @@
 #define yylex scanner.yylex
 }
 
+%start program
+
+
 
 
 %union {
@@ -56,6 +59,8 @@
   RWL::statement *st;
   RWL::pgm *prog;
 }
+
+%error-verbose
 
 %token CLASS 258 ELSE 259 FI 260 IF 261 IN 262 
     %token INHERITS 263 LET 264 LOOP 265 POOL 266 THEN 267 WHILE 268
@@ -91,32 +96,44 @@ stmtlist : stmtlist NEWLINE    /* empty line */
          | stmtlist stmt NEWLINE
             { // copy up the list and add the stmt to it
               $$ = $1;
+              std::cout << "statement detected: "; $2->print(); std::cout << std::endl;
               $1->push_back($2);
             }
          | stmtlist error NEWLINE
      { // just copy up the stmtlist when an error occurs
-             $$ = $1;
+             $$ = $1;              
              yyclearin; } 
          |  
            { $$ = new std::list<statement *>(); }  /* empty string */
 ;
 
-stmt: PRINT WORD { 
-  $$ = new print_stmt($2);
-     }
-
-     | exp
-
-      {
-      new print_stmt("descending!!!");
-      }
-       
+stmt: 
 
 
- ;
 
-exp:   WORD {
-  $$ = new id_node($1); }
+
+  PRINT WORD { 
+    $$ = new print_stmt("WORD FOUND");
+    std::cout << "PRINT" << std::endl;
+       }
+
+   
+       | WORD ASSIGN exp
+
+        {
+        std::cout << "descending!!!" << std::endl;
+        $$ = new assignment_stmt($1, $3);
+        }
+
+        | exp {std::cout << "expression detected: "; std::cout << std::endl;}
+         
+
+
+   ;
+
+  exp:   WORD {
+    $$ = new id_node($1); }
+
 ;
 
 

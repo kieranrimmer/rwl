@@ -157,6 +157,44 @@
 namespace RWL {
 #line 159 "rwl_parser.tab.cc" // lalr1.cc:479
 
+  /* Return YYSTR after stripping away unnecessary quotes and
+     backslashes, so that it's suitable for yyerror.  The heuristic is
+     that double-quoting is unnecessary unless the string contains an
+     apostrophe, a comma, or backslash (other than backslash-backslash).
+     YYSTR is taken from yytname.  */
+  std::string
+  RWL_Parser::yytnamerr_ (const char *yystr)
+  {
+    if (*yystr == '"')
+      {
+        std::string yyr = "";
+        char const *yyp = yystr;
+
+        for (;;)
+          switch (*++yyp)
+            {
+            case '\'':
+            case ',':
+              goto do_not_strip_quotes;
+
+            case '\\':
+              if (*++yyp != '\\')
+                goto do_not_strip_quotes;
+              // Fall through.
+            default:
+              yyr += *yyp;
+              break;
+
+            case '"':
+              return yyr;
+            }
+      do_not_strip_quotes: ;
+      }
+
+    return yystr;
+  }
+
+
   /// Build a parser object.
   RWL_Parser::RWL_Parser (RWL_Scanner  &scanner_yyarg, RWL_Driver  &driver_yyarg)
     :
@@ -596,67 +634,76 @@ namespace RWL {
           switch (yyn)
             {
   case 2:
-#line 84 "rwl_parser.yy" // lalr1.cc:859
+#line 89 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.prog) = new pgm((yystack_[0].value.stmts)); root = (yylhs.value.prog); }
-#line 602 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 640 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 3:
-#line 88 "rwl_parser.yy" // lalr1.cc:859
+#line 93 "rwl_parser.yy" // lalr1.cc:859
     { // just copy up the stmtlist when a blank line occurs
              (yylhs.value.stmts) = (yystack_[1].value.stmts);
            }
-#line 610 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 648 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 4:
-#line 92 "rwl_parser.yy" // lalr1.cc:859
+#line 97 "rwl_parser.yy" // lalr1.cc:859
     { // copy up the list and add the stmt to it
               (yylhs.value.stmts) = (yystack_[2].value.stmts);
+              std::cout << "statement detected: "; (yystack_[1].value.st)->print(); std::cout << std::endl;
               (yystack_[2].value.stmts)->push_back((yystack_[1].value.st));
             }
-#line 619 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 658 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 5:
-#line 97 "rwl_parser.yy" // lalr1.cc:859
+#line 103 "rwl_parser.yy" // lalr1.cc:859
     { // just copy up the stmtlist when an error occurs
-             (yylhs.value.stmts) = (yystack_[2].value.stmts);
+             (yylhs.value.stmts) = (yystack_[2].value.stmts);              
              yyclearin; }
-#line 627 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 666 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 6:
-#line 101 "rwl_parser.yy" // lalr1.cc:859
+#line 107 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.stmts) = new std::list<statement *>(); }
-#line 633 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 672 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 7:
-#line 104 "rwl_parser.yy" // lalr1.cc:859
+#line 115 "rwl_parser.yy" // lalr1.cc:859
     { 
-  (yylhs.value.st) = new print_stmt((yystack_[0].value.id));
-     }
-#line 641 "rwl_parser.tab.cc" // lalr1.cc:859
+    (yylhs.value.st) = new print_stmt("WORD FOUND");
+    std::cout << "PRINT" << std::endl;
+       }
+#line 681 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 8:
-#line 110 "rwl_parser.yy" // lalr1.cc:859
+#line 123 "rwl_parser.yy" // lalr1.cc:859
     {
-      new print_stmt("descending!!!");
-      }
-#line 649 "rwl_parser.tab.cc" // lalr1.cc:859
+        std::cout << "descending!!!" << std::endl;
+        (yylhs.value.st) = new assignment_stmt((yystack_[2].value.id), (yystack_[0].value.expnode));
+        }
+#line 690 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 9:
-#line 118 "rwl_parser.yy" // lalr1.cc:859
+#line 128 "rwl_parser.yy" // lalr1.cc:859
+    {std::cout << "expression detected: "; std::cout << std::endl;}
+#line 696 "rwl_parser.tab.cc" // lalr1.cc:859
+    break;
+
+  case 10:
+#line 134 "rwl_parser.yy" // lalr1.cc:859
     {
-  (yylhs.value.expnode) = new id_node((yystack_[0].value.id)); }
-#line 656 "rwl_parser.tab.cc" // lalr1.cc:859
+    (yylhs.value.expnode) = new id_node((yystack_[0].value.id)); }
+#line 703 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
 
-#line 660 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 707 "rwl_parser.tab.cc" // lalr1.cc:859
             default:
               break;
             }
@@ -816,9 +863,98 @@ namespace RWL {
 
   // Generate an error message.
   std::string
-  RWL_Parser::yysyntax_error_ (state_type, const symbol_type&) const
+  RWL_Parser::yysyntax_error_ (state_type yystate, const symbol_type& yyla) const
   {
-    return YY_("syntax error");
+    // Number of reported tokens (one for the "unexpected", one per
+    // "expected").
+    size_t yycount = 0;
+    // Its maximum.
+    enum { YYERROR_VERBOSE_ARGS_MAXIMUM = 5 };
+    // Arguments of yyformat.
+    char const *yyarg[YYERROR_VERBOSE_ARGS_MAXIMUM];
+
+    /* There are many possibilities here to consider:
+       - If this state is a consistent state with a default action, then
+         the only way this function was invoked is if the default action
+         is an error action.  In that case, don't check for expected
+         tokens because there are none.
+       - The only way there can be no lookahead present (in yyla) is
+         if this state is a consistent state with a default action.
+         Thus, detecting the absence of a lookahead is sufficient to
+         determine that there is no unexpected or expected token to
+         report.  In that case, just report a simple "syntax error".
+       - Don't assume there isn't a lookahead just because this state is
+         a consistent state with a default action.  There might have
+         been a previous inconsistent state, consistent state with a
+         non-default action, or user semantic action that manipulated
+         yyla.  (However, yyla is currently not documented for users.)
+       - Of course, the expected token list depends on states to have
+         correct lookahead information, and it depends on the parser not
+         to perform extra reductions after fetching a lookahead from the
+         scanner and before detecting a syntax error.  Thus, state
+         merging (from LALR or IELR) and default reductions corrupt the
+         expected token list.  However, the list is correct for
+         canonical LR with one exception: it will still contain any
+         token that will not be accepted due to an error action in a
+         later state.
+    */
+    if (!yyla.empty ())
+      {
+        int yytoken = yyla.type_get ();
+        yyarg[yycount++] = yytname_[yytoken];
+        int yyn = yypact_[yystate];
+        if (!yy_pact_value_is_default_ (yyn))
+          {
+            /* Start YYX at -YYN if negative to avoid negative indexes in
+               YYCHECK.  In other words, skip the first -YYN actions for
+               this state because they are default actions.  */
+            int yyxbegin = yyn < 0 ? -yyn : 0;
+            // Stay within bounds of both yycheck and yytname.
+            int yychecklim = yylast_ - yyn + 1;
+            int yyxend = yychecklim < yyntokens_ ? yychecklim : yyntokens_;
+            for (int yyx = yyxbegin; yyx < yyxend; ++yyx)
+              if (yycheck_[yyx + yyn] == yyx && yyx != yyterror_
+                  && !yy_table_value_is_error_ (yytable_[yyx + yyn]))
+                {
+                  if (yycount == YYERROR_VERBOSE_ARGS_MAXIMUM)
+                    {
+                      yycount = 1;
+                      break;
+                    }
+                  else
+                    yyarg[yycount++] = yytname_[yyx];
+                }
+          }
+      }
+
+    char const* yyformat = YY_NULLPTR;
+    switch (yycount)
+      {
+#define YYCASE_(N, S)                         \
+        case N:                               \
+          yyformat = S;                       \
+        break
+        YYCASE_(0, YY_("syntax error"));
+        YYCASE_(1, YY_("syntax error, unexpected %s"));
+        YYCASE_(2, YY_("syntax error, unexpected %s, expecting %s"));
+        YYCASE_(3, YY_("syntax error, unexpected %s, expecting %s or %s"));
+        YYCASE_(4, YY_("syntax error, unexpected %s, expecting %s or %s or %s"));
+        YYCASE_(5, YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s"));
+#undef YYCASE_
+      }
+
+    std::string yyres;
+    // Argument number.
+    size_t yyi = 0;
+    for (char const* yyp = yyformat; *yyp; ++yyp)
+      if (yyp[0] == '%' && yyp[1] == 's' && yyi < yycount)
+        {
+          yyres += yytnamerr_ (yyarg[yyi++]);
+          ++yyp;
+        }
+      else
+        yyres += *yyp;
+    return yyres;
   }
 
 
@@ -829,21 +965,21 @@ namespace RWL {
   const signed char
   RWL_Parser::yypact_[] =
   {
-     -25,     2,     0,   -25,   -24,   -25,   -25,   -22,   -21,   -25,
-     -25,   -25,   -25
+     -25,     2,     0,   -25,   -24,   -16,   -25,   -21,   -20,   -25,
+     -25,   -18,   -25,   -25,   -25,   -25
   };
 
   const unsigned char
   RWL_Parser::yydefact_[] =
   {
-       6,     0,     0,     1,     0,     9,     3,     0,     0,     8,
-       5,     7,     4
+       6,     0,     0,     1,     0,    10,     3,     0,     0,     9,
+       5,     0,     7,     4,    10,     8
   };
 
   const signed char
   RWL_Parser::yypgoto_[] =
   {
-     -25,   -25,   -25,   -25,   -25
+     -25,   -25,   -25,   -25,    -5
   };
 
   const signed char
@@ -855,7 +991,7 @@ namespace RWL {
   const signed char
   RWL_Parser::yytable_[] =
   {
-      -2,     4,     3,    10,    11,     0,    12,     0,     0,     0,
+      -2,     4,     3,    10,    11,    12,    15,    13,    14,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     5,     6,     0,     7
   };
@@ -863,7 +999,7 @@ namespace RWL {
   const signed char
   RWL_Parser::yycheck_[] =
   {
-       0,     1,     0,    27,    26,    -1,    27,    -1,    -1,    -1,
+       0,     1,     0,    27,    20,    26,    11,    27,    26,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    26,    27,    -1,    29
   };
@@ -872,23 +1008,25 @@ namespace RWL {
   RWL_Parser::yystos_[] =
   {
        0,    31,    32,     0,     1,    26,    27,    29,    33,    34,
-      27,    26,    27
+      27,    20,    26,    27,    26,    34
   };
 
   const unsigned char
   RWL_Parser::yyr1_[] =
   {
-       0,    30,    31,    32,    32,    32,    32,    33,    33,    34
+       0,    30,    31,    32,    32,    32,    32,    33,    33,    33,
+      34
   };
 
   const unsigned char
   RWL_Parser::yyr2_[] =
   {
-       0,     2,     1,     2,     3,     3,     0,     2,     1,     1
+       0,     2,     1,     2,     3,     3,     0,     2,     3,     1,
+       1
   };
 
 
-#if YYDEBUG
+
   // YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
   // First, the terminals, then, starting at \a yyntokens_, nonterminals.
   const char*
@@ -901,11 +1039,12 @@ namespace RWL {
   "stmtlist", "stmt", "exp", YY_NULLPTR
   };
 
-
+#if YYDEBUG
   const unsigned char
   RWL_Parser::yyrline_[] =
   {
-       0,    84,    84,    87,    91,    96,   101,   104,   108,   118
+       0,    89,    89,    92,    96,   102,   107,   115,   121,   128,
+     134
   };
 
   // Print the state stack on the debug stream.
@@ -990,8 +1129,8 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:1167
 } // RWL
-#line 994 "rwl_parser.tab.cc" // lalr1.cc:1167
-#line 124 "rwl_parser.yy" // lalr1.cc:1168
+#line 1133 "rwl_parser.tab.cc" // lalr1.cc:1167
+#line 141 "rwl_parser.yy" // lalr1.cc:1168
 
 
 

@@ -17,7 +17,6 @@ Terminals unused in grammar
    DARROW
    NEW
    ISVOID
-   ASSIGN
    NOT
    LE
    ERROR
@@ -38,9 +37,10 @@ Grammar
     5         | %empty
 
     6 stmt: PRINT WORD
-    7     | exp
+    7     | WORD ASSIGN exp
+    8     | exp
 
-    8 exp: WORD
+    9 exp: WORD
 
 
 Terminals, with rules where they appear
@@ -64,13 +64,13 @@ OF (271)
 DARROW (272)
 NEW (273)
 ISVOID (274)
-ASSIGN (280)
+ASSIGN (280) 7
 NOT (281)
 LE (282)
 ERROR (283)
 UPPER (284)
 LOWER (285)
-WORD (286) 6 8
+WORD (286) 6 7 9
 NEWLINE (287) 2 3 4
 CHAR (288)
 PRINT (289) 6
@@ -85,9 +85,9 @@ program (31)
 stmtlist (32)
     on left: 2 3 4 5, on right: 1 2 3 4
 stmt (33)
-    on left: 6 7, on right: 3
+    on left: 6 7 8, on right: 3
 exp (34)
-    on left: 8, on right: 7
+    on left: 9, on right: 7 8
 
 
 State 0
@@ -141,9 +141,12 @@ State 4
 
 State 5
 
-    8 exp: WORD .
+    7 stmt: WORD . ASSIGN exp
+    9 exp: WORD .
 
-    $default  reduce using rule 8 (exp)
+    ASSIGN  shift, and go to state 11
+
+    $default  reduce using rule 9 (exp)
 
 
 State 6
@@ -157,21 +160,21 @@ State 7
 
     6 stmt: PRINT . WORD
 
-    WORD  shift, and go to state 11
+    WORD  shift, and go to state 12
 
 
 State 8
 
     3 stmtlist: stmtlist stmt . NEWLINE
 
-    NEWLINE  shift, and go to state 12
+    NEWLINE  shift, and go to state 13
 
 
 State 9
 
-    7 stmt: exp .
+    8 stmt: exp .
 
-    $default  reduce using rule 7 (stmt)
+    $default  reduce using rule 8 (stmt)
 
 
 State 10
@@ -183,13 +186,36 @@ State 10
 
 State 11
 
+    7 stmt: WORD ASSIGN . exp
+
+    WORD  shift, and go to state 14
+
+    exp  go to state 15
+
+
+State 12
+
     6 stmt: PRINT WORD .
 
     $default  reduce using rule 6 (stmt)
 
 
-State 12
+State 13
 
     3 stmtlist: stmtlist stmt NEWLINE .
 
     $default  reduce using rule 3 (stmtlist)
+
+
+State 14
+
+    9 exp: WORD .
+
+    $default  reduce using rule 9 (exp)
+
+
+State 15
+
+    7 stmt: WORD ASSIGN exp .
+
+    $default  reduce using rule 7 (stmt)

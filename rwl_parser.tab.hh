@@ -144,7 +144,7 @@ namespace RWL {
     /// Symbol semantic values.
     union semantic_type
     {
-    #line 51 "rwl_parser.yy" // lalr1.cc:377
+    #line 54 "rwl_parser.yy" // lalr1.cc:377
 
   float num;
   char *id;
@@ -401,10 +401,13 @@ namespace RWL {
   static const unsigned char yyr2_[];
 
 
-#if YYDEBUG
+    /// Convert the symbol name \a n to a form suitable for a diagnostic.
+    static std::string yytnamerr_ (const char *n);
+
+
     /// For a symbol, its name in clear.
     static const char* const yytname_[];
-
+#if YYDEBUG
   // YYRLINE[YYN] -- Source line where rule number YYN was defined.
   static const unsigned char yyrline_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
@@ -522,7 +525,7 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:377
 } // RWL
-#line 526 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 529 "rwl_parser.tab.hh" // lalr1.cc:377
 
 
 
