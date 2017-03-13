@@ -136,5 +136,7 @@ RWL::RWL_Driver::print( std::ostream &stream )
    stream << blue << "Lines: " << norm << lines << "\n";
    stream << blue << "Words: " << norm << words << "\n";
    stream << blue << "Characters: " << norm << chars << "\n";
+   stream << red << "Root: " << norm << root << "\n";
+   root->evaluate();
    return(stream);
 }
