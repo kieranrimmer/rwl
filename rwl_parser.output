@@ -24,7 +24,6 @@ Terminals unused in grammar
    UPPER
    LOWER
    CHAR
-   PRINT
 
 
 Grammar
@@ -38,9 +37,10 @@ Grammar
     4         | stmtlist error NEWLINE
     5         | %empty
 
-    6 stmt: exp
+    6 stmt: PRINT WORD
+    7     | exp
 
-    7 exp: WORD
+    8 exp: WORD
 
 
 Terminals, with rules where they appear
@@ -70,10 +70,10 @@ LE (282)
 ERROR (283)
 UPPER (284)
 LOWER (285)
-WORD (286) 7
+WORD (286) 6 8
 NEWLINE (287) 2 3 4
 CHAR (288)
-PRINT (289)
+PRINT (289) 6
 
 
 Nonterminals, with rules where they appear
@@ -85,9 +85,9 @@ program (31)
 stmtlist (32)
     on left: 2 3 4 5, on right: 1 2 3 4
 stmt (33)
-    on left: 6, on right: 3
+    on left: 6 7, on right: 3
 exp (34)
-    on left: 7, on right: 6
+    on left: 8, on right: 7
 
 
 State 0
@@ -117,11 +117,12 @@ State 2
     error    shift, and go to state 4
     WORD     shift, and go to state 5
     NEWLINE  shift, and go to state 6
+    PRINT    shift, and go to state 7
 
     "end of file"  reduce using rule 1 (program)
 
-    stmt  go to state 7
-    exp   go to state 8
+    stmt  go to state 8
+    exp   go to state 9
 
 
 State 3
@@ -135,14 +136,14 @@ State 4
 
     4 stmtlist: stmtlist error . NEWLINE
 
-    NEWLINE  shift, and go to state 9
+    NEWLINE  shift, and go to state 10
 
 
 State 5
 
-    7 exp: WORD .
+    8 exp: WORD .
 
-    $default  reduce using rule 7 (exp)
+    $default  reduce using rule 8 (exp)
 
 
 State 6
@@ -154,26 +155,40 @@ State 6
 
 State 7
 
-    3 stmtlist: stmtlist stmt . NEWLINE
+    6 stmt: PRINT . WORD
 
-    NEWLINE  shift, and go to state 10
+    WORD  shift, and go to state 11
 
 
 State 8
 
-    6 stmt: exp .
+    3 stmtlist: stmtlist stmt . NEWLINE
 
-    $default  reduce using rule 6 (stmt)
+    NEWLINE  shift, and go to state 12
 
 
 State 9
+
+    7 stmt: exp .
+
+    $default  reduce using rule 7 (stmt)
+
+
+State 10
 
     4 stmtlist: stmtlist error NEWLINE .
 
     $default  reduce using rule 4 (stmtlist)
 
 
-State 10
+State 11
+
+    6 stmt: PRINT WORD .
+
+    $default  reduce using rule 6 (stmt)
+
+
+State 12
 
     3 stmtlist: stmtlist stmt NEWLINE .
 

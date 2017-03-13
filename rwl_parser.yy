@@ -101,9 +101,15 @@ stmtlist : stmtlist NEWLINE    /* empty line */
            { $$ = new std::list<statement *>(); }  /* empty string */
 ;
 
-stmt: exp { 
-  $$ = new print_stmt("printing");
+stmt: PRINT WORD { 
+  $$ = new print_stmt($2);
      }
+
+     | exp
+
+      {
+      new print_stmt("descending!!!");
+      }
        
 
 
