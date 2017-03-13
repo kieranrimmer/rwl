@@ -61,6 +61,7 @@ num1    [-+]?{dig}+\.?([eE][-+]?{dig}+)?
 num2    [-+]?{dig}*\.{dig}+([eE][-+]?{dig}+)?
 number  {num1}|{num2}
 ELSE    (?i:else)
+PRINT (?:print)
 
 
 %%
@@ -74,6 +75,10 @@ ELSE    (?i:else)
 
 [A-Z]       {
                return( token::UPPER );
+            }
+
+{PRINT}     {
+                return(token::PRINT);
             }
 
 {name}      {

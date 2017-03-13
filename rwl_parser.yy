@@ -65,9 +65,11 @@
 %token               END    0     "end of file"
 %token               UPPER  284
 %token               LOWER 285
-%token <std::string> WORD 286
+%token <id> WORD 286
 %token               NEWLINE 287
 %token               CHAR 288
+%token  PRINT 289
+
 
 %type <expnode> exp 
 %type <stmts> stmtlist
@@ -108,7 +110,7 @@ stmt: exp {
  ;
 
 exp:   WORD {
-  $$ = new id_node("word"); }
+  $$ = new id_node($1); }
 ;
 
 

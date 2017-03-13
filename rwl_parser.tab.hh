@@ -199,7 +199,8 @@ namespace RWL {
         LOWER = 285,
         WORD = 286,
         NEWLINE = 287,
-        CHAR = 288
+        CHAR = 288,
+        PRINT = 289
       };
     };
 
@@ -509,7 +510,7 @@ namespace RWL {
       yyfinal_ = 3, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 29  ///< Number of tokens.
+      yyntokens_ = 30  ///< Number of tokens.
     };
 
 
@@ -521,7 +522,7 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:377
 } // RWL
-#line 525 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 526 "rwl_parser.tab.hh" // lalr1.cc:377
 
 
 
