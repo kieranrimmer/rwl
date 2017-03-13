@@ -2,7 +2,14 @@
 .idea/
 rwl_lexer.yy.cc
 rwl_lexer
+rwl_parser
 rwl_phaseone
+location.hh
+stack.hh
+rwl_parser.output
+rwl_parser.tab.cc
+rwl_parser.tab.hh
+*.sw[pmny]
 
 # Created by .ignore support plugin (hsz.mobi)
 ### C++ template
