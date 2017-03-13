@@ -6,7 +6,6 @@
 %define parser_class_name {RWL_Parser}
 
 %code requires{
-  #include "AST/exp.hpp"
    namespace RWL {
       class RWL_Driver;
       class RWL_Scanner;
@@ -33,14 +32,7 @@
    
    /* include for all driver functions */
    #include "rwl_driver.hpp"
-   
-
-
-// the root of the abstract syntax tree
- RWL::pgm *RWL::root;
-
-// for keeping track of line numbers in the program we are parsing
-  int line_num = 1;
+   #include "AST/exp.hpp"
 
 #undef yylex
 #define yylex scanner.yylex
@@ -52,9 +44,9 @@
   float num;
   char *id;
   exp_node *expnode;
-  std::list<RWL::statement *> *stmts;
-  RWL::statement *st;
-  RWL::pgm *prog;
+  list<statement *> *stmts;
+  statement *st;
+  pgm *prog;
 }
 
 %token CLASS 258 ELSE 259 FI 260 IF 261 IN 262 
@@ -68,11 +60,6 @@
 %token <std::string> WORD 286
 %token               NEWLINE 287
 %token               CHAR 288
-
-%type <expnode> exp 
-%type <stmts> stmtlist
-%type <st> stmt
-%type <prog> program
 
 %locations
 
@@ -96,19 +83,39 @@ stmtlist : stmtlist NEWLINE    /* empty line */
              $$ = $1;
              yyclearin; } 
          |  
-           { $$ = new std::list<statement *>(); }  /* empty string */
+           { $$ = new list<statement *>(); }  /* empty string */
 ;
 
-stmt: exp { 
-  $$ = new print_stmt("printing");
+stmt: ID EQUALS exp { 
+  $$ = new assignment_stmt($1, $3);
      }
        
-
+| PRINT ID {
+  $$ = new print_stmt($2);
+ }
 
  ;
 
-exp:   WORD {
-  $$ = new id_node("word"); }
+exp:  MINUS exp %prec UMINUS {
+  $$ = new unary_minus_node($2); }
+
+  | exp PLUS exp {
+    $$ = new plus_node($1, $3); }
+
+  | exp MINUS exp {
+    $$ = new minus_node($1, $3); }
+
+  | exp TIMES exp {
+    $$ = new times_node($1, $3); }
+
+  | LPAREN exp RPAREN  {
+          $$ = $2; }
+
+  | NUMBER {
+    $$ = new number_node($1); }
+
+|       ID {
+  $$ = new id_node($1); }
 ;
 
 

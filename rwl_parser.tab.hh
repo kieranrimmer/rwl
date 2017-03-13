@@ -42,6 +42,7 @@
 // //                    "%code requires" blocks.
 #line 8 "rwl_parser.yy" // lalr1.cc:377
 
+  #include "AST/exp.hpp"
    namespace RWL {
       class RWL_Driver;
       class RWL_Scanner;
@@ -57,9 +58,9 @@
 # endif
 
 
-#line 61 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 62 "rwl_parser.tab.hh" // lalr1.cc:377
 
-# include <cassert>
+
 # include <cstdlib> // std::abort
 # include <iostream>
 # include <stdexcept>
@@ -67,11 +68,6 @@
 # include <vector>
 # include "stack.hh"
 # include "location.hh"
-#include <typeinfo>
-#ifndef YYASSERT
-# include <cassert>
-# define YYASSERT assert
-#endif
 
 
 #ifndef YY_ATTRIBUTE
@@ -134,163 +130,10 @@
 
 #line 5 "rwl_parser.yy" // lalr1.cc:377
 namespace RWL {
-#line 138 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 134 "rwl_parser.tab.hh" // lalr1.cc:377
 
 
 
-  /// A char[S] buffer to store and retrieve objects.
-  ///
-  /// Sort of a variant, but does not keep track of the nature
-  /// of the stored data, since that knowledge is available
-  /// via the current state.
-  template <size_t S>
-  struct variant
-  {
-    /// Type of *this.
-    typedef variant<S> self_type;
-
-    /// Empty construction.
-    variant ()
-      : yytypeid_ (YY_NULLPTR)
-    {}
-
-    /// Construct and fill.
-    template <typename T>
-    variant (const T& t)
-      : yytypeid_ (&typeid (T))
-    {
-      YYASSERT (sizeof (T) <= S);
-      new (yyas_<T> ()) T (t);
-    }
-
-    /// Destruction, allowed only if empty.
-    ~variant ()
-    {
-      YYASSERT (!yytypeid_);
-    }
-
-    /// Instantiate an empty \a T in here.
-    template <typename T>
-    T&
-    build ()
-    {
-      YYASSERT (!yytypeid_);
-      YYASSERT (sizeof (T) <= S);
-      yytypeid_ = & typeid (T);
-      return *new (yyas_<T> ()) T;
-    }
-
-    /// Instantiate a \a T in here from \a t.
-    template <typename T>
-    T&
-    build (const T& t)
-    {
-      YYASSERT (!yytypeid_);
-      YYASSERT (sizeof (T) <= S);
-      yytypeid_ = & typeid (T);
-      return *new (yyas_<T> ()) T (t);
-    }
-
-    /// Accessor to a built \a T.
-    template <typename T>
-    T&
-    as ()
-    {
-      YYASSERT (*yytypeid_ == typeid (T));
-      YYASSERT (sizeof (T) <= S);
-      return *yyas_<T> ();
-    }
-
-    /// Const accessor to a built \a T (for %printer).
-    template <typename T>
-    const T&
-    as () const
-    {
-      YYASSERT (*yytypeid_ == typeid (T));
-      YYASSERT (sizeof (T) <= S);
-      return *yyas_<T> ();
-    }
-
-    /// Swap the content with \a other, of same type.
-    ///
-    /// Both variants must be built beforehand, because swapping the actual
-    /// data requires reading it (with as()), and this is not possible on
-    /// unconstructed variants: it would require some dynamic testing, which
-    /// should not be the variant's responsability.
-    /// Swapping between built and (possibly) non-built is done with
-    /// variant::move ().
-    template <typename T>
-    void
-    swap (self_type& other)
-    {
-      YYASSERT (yytypeid_);
-      YYASSERT (*yytypeid_ == *other.yytypeid_);
-      std::swap (as<T> (), other.as<T> ());
-    }
-
-    /// Move the content of \a other to this.
-    ///
-    /// Destroys \a other.
-    template <typename T>
-    void
-    move (self_type& other)
-    {
-      build<T> ();
-      swap<T> (other);
-      other.destroy<T> ();
-    }
-
-    /// Copy the content of \a other to this.
-    template <typename T>
-    void
-    copy (const self_type& other)
-    {
-      build<T> (other.as<T> ());
-    }
-
-    /// Destroy the stored \a T.
-    template <typename T>
-    void
-    destroy ()
-    {
-      as<T> ().~T ();
-      yytypeid_ = YY_NULLPTR;
-    }
-
-  private:
-    /// Prohibit blind copies.
-    self_type& operator=(const self_type&);
-    variant (const self_type&);
-
-    /// Accessor to raw memory as \a T.
-    template <typename T>
-    T*
-    yyas_ ()
-    {
-      void *yyp = yybuffer_.yyraw;
-      return static_cast<T*> (yyp);
-     }
-
-    /// Const accessor to raw memory as \a T.
-    template <typename T>
-    const T*
-    yyas_ () const
-    {
-      const void *yyp = yybuffer_.yyraw;
-      return static_cast<const T*> (yyp);
-     }
-
-    union
-    {
-      /// Strongest alignment constraints.
-      long double yyalign_me;
-      /// A buffer large enough to store any of the semantic values.
-      char yyraw[S];
-    } yybuffer_;
-
-    /// Whether the content is built: if defined, the name of the stored type.
-    const std::type_info *yytypeid_;
-  };
 
 
   /// A Bison parser.
@@ -298,15 +141,20 @@ namespace RWL {
   {
   public:
 #ifndef YYSTYPE
-    /// An auxiliary type to compute the largest semantic type.
-    union union_type
-    {
-      // WORD
-      char dummy1[sizeof(std::string)];
-};
-
     /// Symbol semantic values.
-    typedef variant<sizeof(union_type)> semantic_type;
+    union semantic_type
+    {
+    #line 51 "rwl_parser.yy" // lalr1.cc:377
+
+  float num;
+  char *id;
+  exp_node *expnode;
+  std::list<RWL::statement *> *stmts;
+  RWL::statement *st;
+  RWL::pgm *prog;
+
+#line 157 "rwl_parser.tab.hh" // lalr1.cc:377
+    };
 #else
     typedef YYSTYPE semantic_type;
 #endif
@@ -385,12 +233,9 @@ namespace RWL {
       /// Copy constructor.
       basic_symbol (const basic_symbol& other);
 
-      /// Constructor for valueless symbols, and symbols from each type.
-
-  basic_symbol (typename Base::kind_type t, const location_type& l);
-
-  basic_symbol (typename Base::kind_type t, const std::string v, const location_type& l);
-
+      /// Constructor for valueless symbols.
+      basic_symbol (typename Base::kind_type t,
+                    const location_type& l);
 
       /// Constructor for symbols with semantic value.
       basic_symbol (typename Base::kind_type t,
@@ -456,115 +301,6 @@ namespace RWL {
 
     /// "External" symbols: returned by the scanner.
     typedef basic_symbol<by_type> symbol_type;
-
-    // Symbol constructors declarations.
-    static inline
-    symbol_type
-    make_END (const location_type& l);
-
-    static inline
-    symbol_type
-    make_CLASS (const location_type& l);
-
-    static inline
-    symbol_type
-    make_ELSE (const location_type& l);
-
-    static inline
-    symbol_type
-    make_FI (const location_type& l);
-
-    static inline
-    symbol_type
-    make_IF (const location_type& l);
-
-    static inline
-    symbol_type
-    make_IN (const location_type& l);
-
-    static inline
-    symbol_type
-    make_INHERITS (const location_type& l);
-
-    static inline
-    symbol_type
-    make_LET (const location_type& l);
-
-    static inline
-    symbol_type
-    make_LOOP (const location_type& l);
-
-    static inline
-    symbol_type
-    make_POOL (const location_type& l);
-
-    static inline
-    symbol_type
-    make_THEN (const location_type& l);
-
-    static inline
-    symbol_type
-    make_WHILE (const location_type& l);
-
-    static inline
-    symbol_type
-    make_CASE (const location_type& l);
-
-    static inline
-    symbol_type
-    make_ESAC (const location_type& l);
-
-    static inline
-    symbol_type
-    make_OF (const location_type& l);
-
-    static inline
-    symbol_type
-    make_DARROW (const location_type& l);
-
-    static inline
-    symbol_type
-    make_NEW (const location_type& l);
-
-    static inline
-    symbol_type
-    make_ISVOID (const location_type& l);
-
-    static inline
-    symbol_type
-    make_ASSIGN (const location_type& l);
-
-    static inline
-    symbol_type
-    make_NOT (const location_type& l);
-
-    static inline
-    symbol_type
-    make_LE (const location_type& l);
-
-    static inline
-    symbol_type
-    make_ERROR (const location_type& l);
-
-    static inline
-    symbol_type
-    make_UPPER (const location_type& l);
-
-    static inline
-    symbol_type
-    make_LOWER (const location_type& l);
-
-    static inline
-    symbol_type
-    make_WORD (const std::string& v, const location_type& l);
-
-    static inline
-    symbol_type
-    make_NEWLINE (const location_type& l);
-
-    static inline
-    symbol_type
-    make_CHAR (const location_type& l);
 
 
     /// Build a parser object.
@@ -649,7 +385,7 @@ namespace RWL {
   // YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
   // positive, shift that token.  If negative, reduce the rule whose
   // number is the opposite.  If YYTABLE_NINF, syntax error.
-  static const unsigned char yytable_[];
+  static const signed char yytable_[];
 
   static const signed char yycheck_[];
 
@@ -768,9 +504,9 @@ namespace RWL {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 33,     ///< Last index in yytable_.
-      yynnts_ = 4,  ///< Number of nonterminal symbols.
-      yyfinal_ = 10, ///< Termination state number.
+      yylast_ = 27,     ///< Last index in yytable_.
+      yynnts_ = 5,  ///< Number of nonterminal symbols.
+      yyfinal_ = 3, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
       yyntokens_ = 29  ///< Number of tokens.
@@ -785,7 +521,7 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:377
 } // RWL
-#line 789 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 525 "rwl_parser.tab.hh" // lalr1.cc:377
 
 
 

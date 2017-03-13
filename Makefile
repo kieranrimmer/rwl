@@ -36,14 +36,17 @@ all: rwl
 rwl: $(FILES)
 	$(MAKE) $(SOBJ)
 	$(MAKE) $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS) parser.o lexer.o $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS) exp.o parser.o lexer.o $(LIBS)
 
+# exp: AST/exp.cpp AST/exp.h
+# 	${CXX} -c AST/exp.cpp -o exp.o
 
 # lexer: rwl_cpp.l
 # 	flex --outfile=rwl_lexer.yy.cc  $<
 # 	$(CXX)  $(CXXFLAGS) rwl_lexer.yy.cc -o rwl_lexer
 
 parser: rwl_parser.yy
+	${CXX} -c AST/tree.cpp -o exp.o
 	bison -d -v rwl_parser.yy
 	$(CXX) $(CXXFLAGS) -c -o parser.o rwl_parser.tab.cc
 

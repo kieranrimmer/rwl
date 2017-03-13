@@ -120,6 +120,12 @@ RWL::RWL_Driver::add_char()
    chars++; 
 }
 
+std::ostream& 
+RWL::RWL_Driver::declare_start( std::ostream &stream )
+{
+   stream << red  << "Program: " << "commencing" << "\n";
+   return(stream);
+}
 
 std::ostream& 
 RWL::RWL_Driver::print( std::ostream &stream )

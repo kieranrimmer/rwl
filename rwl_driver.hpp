@@ -34,6 +34,7 @@ public:
    void add_char();
 
    std::ostream& print(std::ostream &stream);
+   std::ostream& declare_start(std::ostream &stream);
 private:
 
    void parse_helper( std::istream &stream );

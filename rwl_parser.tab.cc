@@ -49,7 +49,7 @@
 
 #line 51 "rwl_parser.tab.cc" // lalr1.cc:412
 // Unqualified %code blocks.
-#line 28 "rwl_parser.yy" // lalr1.cc:413
+#line 29 "rwl_parser.yy" // lalr1.cc:413
 
    #include <iostream>
    #include <cstdlib>
@@ -57,11 +57,19 @@
    
    /* include for all driver functions */
    #include "rwl_driver.hpp"
+   
+
+
+// the root of the abstract syntax tree
+ RWL::pgm *RWL::root;
+
+// for keeping track of line numbers in the program we are parsing
+  int line_num = 1;
 
 #undef yylex
 #define yylex scanner.yylex
 
-#line 65 "rwl_parser.tab.cc" // lalr1.cc:413
+#line 73 "rwl_parser.tab.cc" // lalr1.cc:413
 
 
 #ifndef YY_
@@ -147,7 +155,7 @@
 
 #line 5 "rwl_parser.yy" // lalr1.cc:479
 namespace RWL {
-#line 151 "rwl_parser.tab.cc" // lalr1.cc:479
+#line 159 "rwl_parser.tab.cc" // lalr1.cc:479
 
   /// Build a parser object.
   RWL_Parser::RWL_Parser (RWL_Scanner  &scanner_yyarg, RWL_Driver  &driver_yyarg)
@@ -188,16 +196,7 @@ namespace RWL {
     , value ()
     , location (other.location)
   {
-      switch (other.type_get ())
-    {
-      case 26: // WORD
-        value.copy< std::string > (other.value);
-        break;
-
-      default:
-        break;
-    }
-
+    value = other.value;
   }
 
 
@@ -205,38 +204,19 @@ namespace RWL {
   inline
   RWL_Parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const semantic_type& v, const location_type& l)
     : Base (t)
-    , value ()
+    , value (v)
     , location (l)
-  {
-    (void) v;
-      switch (this->type_get ())
-    {
-      case 26: // WORD
-        value.copy< std::string > (v);
-        break;
-
-      default:
-        break;
-    }
-}
+  {}
 
 
-  // Implementation of basic_symbol constructor for each type.
-
+  /// Constructor for valueless symbols.
   template <typename Base>
+  inline
   RWL_Parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const location_type& l)
     : Base (t)
     , value ()
     , location (l)
   {}
-
-  template <typename Base>
-  RWL_Parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const std::string v, const location_type& l)
-    : Base (t)
-    , value (v)
-    , location (l)
-  {}
-
 
   template <typename Base>
   inline
@@ -250,27 +230,6 @@ namespace RWL {
   void
   RWL_Parser::basic_symbol<Base>::clear ()
   {
-    // User destructor.
-    symbol_number_type yytype = this->type_get ();
-    basic_symbol<Base>& yysym = *this;
-    (void) yysym;
-    switch (yytype)
-    {
-   default:
-      break;
-    }
-
-    // Type destructor.
-    switch (yytype)
-    {
-      case 26: // WORD
-        value.template destroy< std::string > ();
-        break;
-
-      default:
-        break;
-    }
-
     Base::clear ();
   }
 
@@ -288,16 +247,7 @@ namespace RWL {
   RWL_Parser::basic_symbol<Base>::move (basic_symbol& s)
   {
     super_type::move(s);
-      switch (this->type_get ())
-    {
-      case 26: // WORD
-        value.move< std::string > (s.value);
-        break;
-
-      default:
-        break;
-    }
-
+    value = s.value;
     location = s.location;
   }
 
@@ -338,169 +288,6 @@ namespace RWL {
   {
     return type;
   }
-  // Implementation of make_symbol for each symbol type.
-  RWL_Parser::symbol_type
-  RWL_Parser::make_END (const location_type& l)
-  {
-    return symbol_type (token::END, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_CLASS (const location_type& l)
-  {
-    return symbol_type (token::CLASS, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_ELSE (const location_type& l)
-  {
-    return symbol_type (token::ELSE, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_FI (const location_type& l)
-  {
-    return symbol_type (token::FI, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_IF (const location_type& l)
-  {
-    return symbol_type (token::IF, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_IN (const location_type& l)
-  {
-    return symbol_type (token::IN, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_INHERITS (const location_type& l)
-  {
-    return symbol_type (token::INHERITS, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_LET (const location_type& l)
-  {
-    return symbol_type (token::LET, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_LOOP (const location_type& l)
-  {
-    return symbol_type (token::LOOP, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_POOL (const location_type& l)
-  {
-    return symbol_type (token::POOL, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_THEN (const location_type& l)
-  {
-    return symbol_type (token::THEN, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_WHILE (const location_type& l)
-  {
-    return symbol_type (token::WHILE, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_CASE (const location_type& l)
-  {
-    return symbol_type (token::CASE, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_ESAC (const location_type& l)
-  {
-    return symbol_type (token::ESAC, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_OF (const location_type& l)
-  {
-    return symbol_type (token::OF, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_DARROW (const location_type& l)
-  {
-    return symbol_type (token::DARROW, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_NEW (const location_type& l)
-  {
-    return symbol_type (token::NEW, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_ISVOID (const location_type& l)
-  {
-    return symbol_type (token::ISVOID, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_ASSIGN (const location_type& l)
-  {
-    return symbol_type (token::ASSIGN, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_NOT (const location_type& l)
-  {
-    return symbol_type (token::NOT, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_LE (const location_type& l)
-  {
-    return symbol_type (token::LE, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_ERROR (const location_type& l)
-  {
-    return symbol_type (token::ERROR, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_UPPER (const location_type& l)
-  {
-    return symbol_type (token::UPPER, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_LOWER (const location_type& l)
-  {
-    return symbol_type (token::LOWER, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_WORD (const std::string& v, const location_type& l)
-  {
-    return symbol_type (token::WORD, v, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_NEWLINE (const location_type& l)
-  {
-    return symbol_type (token::NEWLINE, l);
-  }
-
-  RWL_Parser::symbol_type
-  RWL_Parser::make_CHAR (const location_type& l)
-  {
-    return symbol_type (token::CHAR, l);
-  }
-
 
 
   // by_state.
@@ -553,16 +340,7 @@ namespace RWL {
   RWL_Parser::stack_symbol_type::stack_symbol_type (state_type s, symbol_type& that)
     : super_type (s, that.location)
   {
-      switch (that.type_get ())
-    {
-      case 26: // WORD
-        value.move< std::string > (that.value);
-        break;
-
-      default:
-        break;
-    }
-
+    value = that.value;
     // that is emptied.
     that.type = empty_symbol;
   }
@@ -572,16 +350,7 @@ namespace RWL {
   RWL_Parser::stack_symbol_type::operator= (const stack_symbol_type& that)
   {
     state = that.state;
-      switch (that.type_get ())
-    {
-      case 26: // WORD
-        value.copy< std::string > (that.value);
-        break;
-
-      default:
-        break;
-    }
-
+    value = that.value;
     location = that.location;
     return *this;
   }
@@ -594,6 +363,9 @@ namespace RWL {
   {
     if (yymsg)
       YY_SYMBOL_PRINT (yymsg, yysym);
+
+    // User destructor.
+    YYUSE (yysym.type_get ());
   }
 
 #if YYDEBUG
@@ -800,19 +572,16 @@ namespace RWL {
     {
       stack_symbol_type yylhs;
       yylhs.state = yy_lr_goto_state_(yystack_[yylen].state, yyr1_[yyn]);
-      /* Variants are always initialized to an empty instance of the
-         correct type. The default '$$ = $1' action is NOT applied
-         when using variants.  */
-        switch (yyr1_[yyn])
-    {
-      case 26: // WORD
-        yylhs.value.build< std::string > ();
-        break;
+      /* If YYLEN is nonzero, implement the default value of the
+         action: '$$ = $1'.  Otherwise, use the top of the stack.
 
-      default:
-        break;
-    }
-
+         Otherwise, the following line sets YYLHS.VALUE to garbage.
+         This behavior is undocumented and Bison users should not rely
+         upon it.  */
+      if (yylen)
+        yylhs.value = yystack_[yylen - 1].value;
+      else
+        yylhs.value = yystack_[0].value;
 
       // Compute the default @$.
       {
@@ -826,38 +595,60 @@ namespace RWL {
         {
           switch (yyn)
             {
+  case 2:
+#line 82 "rwl_parser.yy" // lalr1.cc:859
+    { (yylhs.value.prog) = new pgm((yystack_[0].value.stmts)); root = (yylhs.value.prog); }
+#line 602 "rwl_parser.tab.cc" // lalr1.cc:859
+    break;
+
+  case 3:
+#line 86 "rwl_parser.yy" // lalr1.cc:859
+    { // just copy up the stmtlist when a blank line occurs
+             (yylhs.value.stmts) = (yystack_[1].value.stmts);
+           }
+#line 610 "rwl_parser.tab.cc" // lalr1.cc:859
+    break;
+
+  case 4:
+#line 90 "rwl_parser.yy" // lalr1.cc:859
+    { // copy up the list and add the stmt to it
+              (yylhs.value.stmts) = (yystack_[2].value.stmts);
+              (yystack_[2].value.stmts)->push_back((yystack_[1].value.st));
+            }
+#line 619 "rwl_parser.tab.cc" // lalr1.cc:859
+    break;
+
+  case 5:
+#line 95 "rwl_parser.yy" // lalr1.cc:859
+    { // just copy up the stmtlist when an error occurs
+             (yylhs.value.stmts) = (yystack_[2].value.stmts);
+             yyclearin; }
+#line 627 "rwl_parser.tab.cc" // lalr1.cc:859
+    break;
+
   case 6:
-#line 68 "rwl_parser.yy" // lalr1.cc:859
-    { driver.add_upper(); }
-#line 833 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 99 "rwl_parser.yy" // lalr1.cc:859
+    { (yylhs.value.stmts) = new std::list<statement *>(); }
+#line 633 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 7:
-#line 69 "rwl_parser.yy" // lalr1.cc:859
-    { driver.add_lower(); }
-#line 839 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 102 "rwl_parser.yy" // lalr1.cc:859
+    { 
+  (yylhs.value.st) = new print_stmt("printing");
+     }
+#line 641 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 8:
-#line 70 "rwl_parser.yy" // lalr1.cc:859
-    { driver.add_word( yystack_[0].value.as< std::string > () ); }
-#line 845 "rwl_parser.tab.cc" // lalr1.cc:859
-    break;
-
-  case 9:
-#line 71 "rwl_parser.yy" // lalr1.cc:859
-    { driver.add_newline(); }
-#line 851 "rwl_parser.tab.cc" // lalr1.cc:859
-    break;
-
-  case 10:
-#line 72 "rwl_parser.yy" // lalr1.cc:859
-    { driver.add_char(); }
-#line 857 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 110 "rwl_parser.yy" // lalr1.cc:859
+    {
+  (yylhs.value.expnode) = new id_node("word"); }
+#line 648 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
 
-#line 861 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 652 "rwl_parser.tab.cc" // lalr1.cc:859
             default:
               break;
             }
@@ -1023,73 +814,69 @@ namespace RWL {
   }
 
 
-  const signed char RWL_Parser::yypact_ninf_ = -7;
+  const signed char RWL_Parser::yypact_ninf_ = -25;
 
-  const signed char RWL_Parser::yytable_ninf_ = -1;
+  const signed char RWL_Parser::yytable_ninf_ = -3;
 
   const signed char
   RWL_Parser::yypact_[] =
   {
-       0,    -7,    -7,    -7,    -7,    -7,    -7,     1,     5,    -7,
-      -7,    -7,    -7
+     -25,     2,     0,   -25,   -24,   -25,   -25,   -23,   -25,   -25,
+     -25
   };
 
   const unsigned char
   RWL_Parser::yydefact_[] =
   {
-       0,     2,     6,     7,     8,     9,    10,     0,     0,     4,
-       1,     3,     5
+       6,     0,     0,     1,     0,     8,     3,     0,     7,     5,
+       4
   };
 
   const signed char
   RWL_Parser::yypgoto_[] =
   {
-      -7,    -7,    -7,    -6
+     -25,   -25,   -25,   -25,   -25
   };
 
   const signed char
   RWL_Parser::yydefgoto_[] =
   {
-      -1,     7,     8,     9
+      -1,     1,     2,     7,     8
   };
 
-  const unsigned char
+  const signed char
   RWL_Parser::yytable_[] =
   {
-       1,    10,    12,     0,     0,    11,     0,     0,     0,     0,
+      -2,     4,     3,     9,    10,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     2,     3,     4,     5,     6,     2,
-       3,     4,     5,     6
+       0,     0,     0,     0,     0,     0,     5,     6
   };
 
   const signed char
   RWL_Parser::yycheck_[] =
   {
-       0,     0,     8,    -1,    -1,     0,    -1,    -1,    -1,    -1,
+       0,     1,     0,    27,    27,    -1,    -1,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    24,    25,    26,    27,    28,    24,
-      25,    26,    27,    28
+      -1,    -1,    -1,    -1,    -1,    -1,    26,    27
   };
 
   const unsigned char
   RWL_Parser::yystos_[] =
   {
-       0,     0,    24,    25,    26,    27,    28,    30,    31,    32,
-       0,     0,    32
+       0,    30,    31,     0,     1,    26,    27,    32,    33,    27,
+      27
   };
 
   const unsigned char
   RWL_Parser::yyr1_[] =
   {
-       0,    29,    30,    30,    31,    31,    32,    32,    32,    32,
-      32
+       0,    29,    30,    31,    31,    31,    31,    32,    33
   };
 
   const unsigned char
   RWL_Parser::yyr2_[] =
   {
-       0,     2,     1,     2,     1,     2,     1,     1,     1,     1,
-       1
+       0,     2,     1,     2,     3,     3,     0,     1,     1
   };
 
 
@@ -1102,16 +889,15 @@ namespace RWL {
   "\"end of file\"", "error", "$undefined", "CLASS", "ELSE", "FI", "IF",
   "IN", "INHERITS", "LET", "LOOP", "POOL", "THEN", "WHILE", "CASE", "ESAC",
   "OF", "DARROW", "NEW", "ISVOID", "ASSIGN", "NOT", "LE", "ERROR", "UPPER",
-  "LOWER", "WORD", "NEWLINE", "CHAR", "$accept", "list_option", "list",
-  "item", YY_NULLPTR
+  "LOWER", "WORD", "NEWLINE", "CHAR", "$accept", "program", "stmtlist",
+  "stmt", "exp", YY_NULLPTR
   };
 
 
   const unsigned char
   RWL_Parser::yyrline_[] =
   {
-       0,    60,    60,    60,    63,    64,    68,    69,    70,    71,
-      72
+       0,    82,    82,    85,    89,    94,    99,   102,   110
   };
 
   // Print the state stack on the debug stream.
@@ -1195,8 +981,8 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:1167
 } // RWL
-#line 1199 "rwl_parser.tab.cc" // lalr1.cc:1167
-#line 75 "rwl_parser.yy" // lalr1.cc:1168
+#line 985 "rwl_parser.tab.cc" // lalr1.cc:1167
+#line 116 "rwl_parser.yy" // lalr1.cc:1168
 
 
 

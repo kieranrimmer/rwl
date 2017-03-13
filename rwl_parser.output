@@ -21,29 +21,31 @@ Terminals unused in grammar
    NOT
    LE
    ERROR
+   UPPER
+   LOWER
+   CHAR
 
 
 Grammar
 
-    0 $accept: list_option "end of file"
+    0 $accept: program "end of file"
 
-    1 list_option: "end of file"
-    2            | list "end of file"
+    1 program: stmtlist
 
-    3 list: item
-    4     | list item
+    2 stmtlist: stmtlist NEWLINE
+    3         | stmtlist stmt NEWLINE
+    4         | stmtlist error NEWLINE
+    5         | %empty
 
-    5 item: UPPER
-    6     | LOWER
-    7     | WORD
-    8     | NEWLINE
-    9     | CHAR
+    6 stmt: exp
+
+    7 exp: WORD
 
 
 Terminals, with rules where they appear
 
-"end of file" (0) 0 1 2
-error (256)
+"end of file" (0) 0
+error (256) 4
 CLASS (258)
 ELSE (259)
 FI (260)
@@ -65,128 +67,112 @@ ASSIGN (280)
 NOT (281)
 LE (282)
 ERROR (283)
-UPPER (284) 5
-LOWER (285) 6
+UPPER (284)
+LOWER (285)
 WORD (286) 7
-NEWLINE (287) 8
-CHAR (288) 9
+NEWLINE (287) 2 3 4
+CHAR (288)
 
 
 Nonterminals, with rules where they appear
 
 $accept (29)
     on left: 0
-list_option (30)
-    on left: 1 2, on right: 0
-list (31)
-    on left: 3 4, on right: 2 4
-item (32)
-    on left: 5 6 7 8 9, on right: 3 4
+program (30)
+    on left: 1, on right: 0
+stmtlist (31)
+    on left: 2 3 4 5, on right: 1 2 3 4
+stmt (32)
+    on left: 6, on right: 3
+exp (33)
+    on left: 7, on right: 6
 
 
 State 0
 
-    0 $accept: . list_option "end of file"
+    0 $accept: . program "end of file"
 
-    "end of file"  shift, and go to state 1
-    UPPER          shift, and go to state 2
-    LOWER          shift, and go to state 3
-    WORD           shift, and go to state 4
-    NEWLINE        shift, and go to state 5
-    CHAR           shift, and go to state 6
+    $default  reduce using rule 5 (stmtlist)
 
-    list_option  go to state 7
-    list         go to state 8
-    item         go to state 9
+    program   go to state 1
+    stmtlist  go to state 2
 
 
 State 1
 
-    1 list_option: "end of file" .
+    0 $accept: program . "end of file"
 
-    $default  reduce using rule 1 (list_option)
+    "end of file"  shift, and go to state 3
 
 
 State 2
 
-    5 item: UPPER .
+    1 program: stmtlist .
+    2 stmtlist: stmtlist . NEWLINE
+    3         | stmtlist . stmt NEWLINE
+    4         | stmtlist . error NEWLINE
 
-    $default  reduce using rule 5 (item)
+    error    shift, and go to state 4
+    WORD     shift, and go to state 5
+    NEWLINE  shift, and go to state 6
+
+    "end of file"  reduce using rule 1 (program)
+
+    stmt  go to state 7
+    exp   go to state 8
 
 
 State 3
 
-    6 item: LOWER .
-
-    $default  reduce using rule 6 (item)
-
-
-State 4
-
-    7 item: WORD .
-
-    $default  reduce using rule 7 (item)
-
-
-State 5
-
-    8 item: NEWLINE .
-
-    $default  reduce using rule 8 (item)
-
-
-State 6
-
-    9 item: CHAR .
-
-    $default  reduce using rule 9 (item)
-
-
-State 7
-
-    0 $accept: list_option . "end of file"
-
-    "end of file"  shift, and go to state 10
-
-
-State 8
-
-    2 list_option: list . "end of file"
-    4 list: list . item
-
-    "end of file"  shift, and go to state 11
-    UPPER          shift, and go to state 2
-    LOWER          shift, and go to state 3
-    WORD           shift, and go to state 4
-    NEWLINE        shift, and go to state 5
-    CHAR           shift, and go to state 6
-
-    item  go to state 12
-
-
-State 9
-
-    3 list: item .
-
-    $default  reduce using rule 3 (list)
-
-
-State 10
-
-    0 $accept: list_option "end of file" .
+    0 $accept: program "end of file" .
 
     $default  accept
 
 
-State 11
+State 4
 
-    2 list_option: list "end of file" .
+    4 stmtlist: stmtlist error . NEWLINE
 
-    $default  reduce using rule 2 (list_option)
+    NEWLINE  shift, and go to state 9
 
 
-State 12
+State 5
 
-    4 list: list item .
+    7 exp: WORD .
 
-    $default  reduce using rule 4 (list)
+    $default  reduce using rule 7 (exp)
+
+
+State 6
+
+    2 stmtlist: stmtlist NEWLINE .
+
+    $default  reduce using rule 2 (stmtlist)
+
+
+State 7
+
+    3 stmtlist: stmtlist stmt . NEWLINE
+
+    NEWLINE  shift, and go to state 10
+
+
+State 8
+
+    6 stmt: exp .
+
+    $default  reduce using rule 6 (stmt)
+
+
+State 9
+
+    4 stmtlist: stmtlist error NEWLINE .
+
+    $default  reduce using rule 4 (stmtlist)
+
+
+State 10
+
+    3 stmtlist: stmtlist stmt NEWLINE .
+
+    $default  reduce using rule 3 (stmtlist)

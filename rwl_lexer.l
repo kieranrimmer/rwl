@@ -76,6 +76,10 @@ ELSE    (?i:else)
                return( token::UPPER );
             }
 
+{name}      {
+                yylval->id = strdup(yytext);;
+                return( token::WORD );
+            }
 
 [a-zA-Z]+   {
                /**
@@ -85,7 +89,7 @@ ELSE    (?i:else)
                 * but it doesn't.
                 * ref: http://goo.gl/KLn0w2
                 */
-               yylval->build< std::string >( yytext );
+               yylval->id = strdup(yytext);;
                return( token::WORD );
             }
 
