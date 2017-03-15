@@ -1,7 +1,8 @@
 #ifndef _UTILITIES_H_
 #define _UTILITIES_H_
 
+#include <string>
 
-extern char *pad(int);
+extern std::string pad(int);
 
 #endif

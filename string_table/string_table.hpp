@@ -216,7 +216,11 @@ extern IntTable inttable;
 extern StrTable stringtable;
 
 
-#define min(a,b) (a > b ? b : a)
+// #define min(a,b) (a > b ? b : a)
+
+inline int min(int a, int b) {
+	return a > b ? b : a;
+}
 
 
 //

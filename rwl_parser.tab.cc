@@ -49,11 +49,12 @@
 
 #line 51 "rwl_parser.tab.cc" // lalr1.cc:412
 // Unqualified %code blocks.
-#line 30 "rwl_parser.yy" // lalr1.cc:413
+#line 31 "rwl_parser.yy" // lalr1.cc:413
 
    #include <iostream>
    #include <cstdlib>
    #include <fstream>
+
    
    /* include for all driver functions */
    #include "rwl_driver.hpp"
@@ -70,7 +71,7 @@
 #undef yylex
 #define yylex scanner.yylex
 
-#line 74 "rwl_parser.tab.cc" // lalr1.cc:413
+#line 75 "rwl_parser.tab.cc" // lalr1.cc:413
 
 
 #ifndef YY_
@@ -156,7 +157,7 @@
 
 #line 5 "rwl_parser.yy" // lalr1.cc:479
 namespace RWL {
-#line 160 "rwl_parser.tab.cc" // lalr1.cc:479
+#line 161 "rwl_parser.tab.cc" // lalr1.cc:479
 
   /* Return YYSTR after stripping away unnecessary quotes and
      backslashes, so that it's suitable for yyerror.  The heuristic is
@@ -635,84 +636,84 @@ namespace RWL {
           switch (yyn)
             {
   case 2:
-#line 94 "rwl_parser.yy" // lalr1.cc:859
+#line 96 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.prog) = new pgm((yystack_[0].value.stmts)); root = (yylhs.value.prog); }
-#line 641 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 642 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 3:
-#line 98 "rwl_parser.yy" // lalr1.cc:859
+#line 100 "rwl_parser.yy" // lalr1.cc:859
     { // just copy up the stmtlist when a blank line occurs
              (yylhs.value.stmts) = (yystack_[1].value.stmts);
            }
-#line 649 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 650 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 4:
-#line 102 "rwl_parser.yy" // lalr1.cc:859
+#line 104 "rwl_parser.yy" // lalr1.cc:859
     { // copy up the list and add the stmt to it
               (yylhs.value.stmts) = (yystack_[2].value.stmts);
               std::cout << "statement detected: "; (yystack_[1].value.st)->print(); std::cout << std::endl;
               (yystack_[2].value.stmts)->push_back((yystack_[1].value.st));
             }
-#line 659 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 660 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 5:
-#line 108 "rwl_parser.yy" // lalr1.cc:859
+#line 110 "rwl_parser.yy" // lalr1.cc:859
     { // just copy up the stmtlist when an error occurs
              (yylhs.value.stmts) = (yystack_[2].value.stmts);              
              yyclearin; }
-#line 667 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 668 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 6:
-#line 112 "rwl_parser.yy" // lalr1.cc:859
+#line 114 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.stmts) = new std::list<statement *>(); }
-#line 673 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 674 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 7:
-#line 120 "rwl_parser.yy" // lalr1.cc:859
+#line 122 "rwl_parser.yy" // lalr1.cc:859
     { 
     (yylhs.value.st) = new print_stmt("WORD FOUND");
     std::cout << "PRINT" << std::endl;
        }
-#line 682 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 683 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 8:
-#line 128 "rwl_parser.yy" // lalr1.cc:859
+#line 130 "rwl_parser.yy" // lalr1.cc:859
     {
         std::cout << "descending!!!" << std::endl;
         (yylhs.value.st) = new assignment_stmt((yystack_[2].value.symbol), (yystack_[0].value.expnode));
         }
-#line 691 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 692 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 9:
-#line 133 "rwl_parser.yy" // lalr1.cc:859
+#line 135 "rwl_parser.yy" // lalr1.cc:859
     {std::cout << "expression detected: "; std::cout << std::endl;}
-#line 697 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 698 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 10:
-#line 139 "rwl_parser.yy" // lalr1.cc:859
+#line 141 "rwl_parser.yy" // lalr1.cc:859
     {
     (yylhs.value.expnode) = new id_node((yystack_[0].value.symbol)); }
-#line 704 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 705 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 11:
-#line 144 "rwl_parser.yy" // lalr1.cc:859
+#line 146 "rwl_parser.yy" // lalr1.cc:859
     {
     (yylhs.value.expnode) = new id_node((yystack_[0].value.string_const));
     }
-#line 712 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 713 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
 
-#line 716 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 717 "rwl_parser.tab.cc" // lalr1.cc:859
             default:
               break;
             }
@@ -1054,8 +1055,8 @@ namespace RWL {
   const unsigned char
   RWL_Parser::yyrline_[] =
   {
-       0,    94,    94,    97,   101,   107,   112,   120,   126,   133,
-     139,   144
+       0,    96,    96,    99,   103,   109,   114,   122,   128,   135,
+     141,   146
   };
 
   // Print the state stack on the debug stream.
@@ -1140,8 +1141,8 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:1167
 } // RWL
-#line 1144 "rwl_parser.tab.cc" // lalr1.cc:1167
-#line 152 "rwl_parser.yy" // lalr1.cc:1168
+#line 1145 "rwl_parser.tab.cc" // lalr1.cc:1167
+#line 154 "rwl_parser.yy" // lalr1.cc:1168
 
 
 

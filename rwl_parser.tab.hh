@@ -59,7 +59,8 @@
 # endif
 
 
-#line 63 "rwl_parser.tab.hh" // lalr1.cc:377
+
+#line 64 "rwl_parser.tab.hh" // lalr1.cc:377
 
 
 # include <cstdlib> // std::abort
@@ -131,7 +132,7 @@
 
 #line 5 "rwl_parser.yy" // lalr1.cc:377
 namespace RWL {
-#line 135 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 136 "rwl_parser.tab.hh" // lalr1.cc:377
 
 
 
@@ -145,7 +146,7 @@ namespace RWL {
     /// Symbol semantic values.
     union semantic_type
     {
-    #line 56 "rwl_parser.yy" // lalr1.cc:377
+    #line 58 "rwl_parser.yy" // lalr1.cc:377
 
   float num;
   Symbol symbol;
@@ -156,7 +157,7 @@ namespace RWL {
   RWL::statement *st;
   RWL::pgm *prog;
 
-#line 160 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 161 "rwl_parser.tab.hh" // lalr1.cc:377
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -529,7 +530,7 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:377
 } // RWL
-#line 533 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 534 "rwl_parser.tab.hh" // lalr1.cc:377
 
 
 
