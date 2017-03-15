@@ -4,6 +4,7 @@
 
 /* Implementation of yyFlexScanner */ 
 #include "rwl_scanner.hpp"
+#include "string_table/string_table.hpp"
 #undef  YY_DECL
 #define YY_DECL int RWL::RWL_Scanner::yylex( RWL::RWL_Parser::semantic_type * const lval, RWL::RWL_Parser::location_type *loc )
 
@@ -79,6 +80,11 @@ print (?i:print)
   return(token::ASSIGN);
 }
 
+{string}    {
+  yylval->string_const = strdup(yytext);
+  return(token::STRING);
+}
+
 [a-z]       {
                return( token::LOWER );
             }
@@ -90,7 +96,7 @@ print (?i:print)
 
 
 {name}      {
-                yylval->id = strdup(yytext);
+                yylval.symbol = stringtable.add_string(yytext);
                 return( token::WORD );
             }
 

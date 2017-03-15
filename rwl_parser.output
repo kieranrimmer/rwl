@@ -41,6 +41,7 @@ Grammar
     8     | exp
 
     9 exp: WORD
+   10    | STRING
 
 
 Terminals, with rules where they appear
@@ -74,20 +75,21 @@ WORD (286) 6 7 9
 NEWLINE (287) 2 3 4
 CHAR (288)
 PRINT (289) 6
+STRING (290) 10
 
 
 Nonterminals, with rules where they appear
 
-$accept (30)
+$accept (31)
     on left: 0
-program (31)
+program (32)
     on left: 1, on right: 0
-stmtlist (32)
+stmtlist (33)
     on left: 2 3 4 5, on right: 1 2 3 4
-stmt (33)
+stmt (34)
     on left: 6 7 8, on right: 3
-exp (34)
-    on left: 9, on right: 7 8
+exp (35)
+    on left: 9 10, on right: 7 8
 
 
 State 0
@@ -118,11 +120,12 @@ State 2
     WORD     shift, and go to state 5
     NEWLINE  shift, and go to state 6
     PRINT    shift, and go to state 7
+    STRING   shift, and go to state 8
 
     "end of file"  reduce using rule 1 (program)
 
-    stmt  go to state 8
-    exp   go to state 9
+    stmt  go to state 9
+    exp   go to state 10
 
 
 State 3
@@ -136,7 +139,7 @@ State 4
 
     4 stmtlist: stmtlist error . NEWLINE
 
-    NEWLINE  shift, and go to state 10
+    NEWLINE  shift, and go to state 11
 
 
 State 5
@@ -144,7 +147,7 @@ State 5
     7 stmt: WORD . ASSIGN exp
     9 exp: WORD .
 
-    ASSIGN  shift, and go to state 11
+    ASSIGN  shift, and go to state 12
 
     $default  reduce using rule 9 (exp)
 
@@ -160,61 +163,69 @@ State 7
 
     6 stmt: PRINT . WORD
 
-    WORD  shift, and go to state 12
+    WORD  shift, and go to state 13
 
 
 State 8
 
-    3 stmtlist: stmtlist stmt . NEWLINE
+   10 exp: STRING .
 
-    NEWLINE  shift, and go to state 13
+    $default  reduce using rule 10 (exp)
 
 
 State 9
+
+    3 stmtlist: stmtlist stmt . NEWLINE
+
+    NEWLINE  shift, and go to state 14
+
+
+State 10
 
     8 stmt: exp .
 
     $default  reduce using rule 8 (stmt)
 
 
-State 10
+State 11
 
     4 stmtlist: stmtlist error NEWLINE .
 
     $default  reduce using rule 4 (stmtlist)
 
 
-State 11
+State 12
 
     7 stmt: WORD ASSIGN . exp
 
-    WORD  shift, and go to state 14
+    WORD    shift, and go to state 15
+    STRING  shift, and go to state 8
 
-    exp  go to state 15
+    exp  go to state 16
 
 
-State 12
+State 13
 
     6 stmt: PRINT WORD .
 
     $default  reduce using rule 6 (stmt)
 
 
-State 13
+State 14
 
     3 stmtlist: stmtlist stmt NEWLINE .
 
     $default  reduce using rule 3 (stmtlist)
 
 
-State 14
+State 15
 
     9 exp: WORD .
 
     $default  reduce using rule 9 (exp)
 
 
-State 15
+State 16
 
     7 stmt: WORD ASSIGN exp .
 

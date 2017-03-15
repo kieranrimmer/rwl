@@ -7,6 +7,7 @@
 
 %code requires{
   #include "AST/exp.hpp"
+  #include "string_table/string_table.hpp"
    namespace RWL {
       class RWL_Driver;
       class RWL_Scanner;
@@ -34,6 +35,7 @@
    /* include for all driver functions */
    #include "rwl_driver.hpp"
    
+   
 
 
 // the root of the abstract syntax tree
@@ -53,7 +55,9 @@
 
 %union {
   float num;
+  Symbol symbol;
   char *id;
+  char *string_const;
   exp_node *expnode;
   std::list<RWL::statement *> *stmts;
   RWL::statement *st;
@@ -70,10 +74,11 @@
 %token               END    0     "end of file"
 %token               UPPER  284
 %token               LOWER 285
-%token <id> WORD 286
+%token <symbol> WORD 286
 %token               NEWLINE 287
 %token               CHAR 288
 %token  PRINT 289
+%token <string_const> STRING 290
 
 
 %type <expnode> exp 
@@ -133,6 +138,12 @@ stmt:
 
   exp:   WORD {
     $$ = new id_node($1); }
+
+    |
+
+    STRING {
+    $$ = new id_node($1);
+    }
 
 ;
 

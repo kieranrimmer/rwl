@@ -30,6 +30,8 @@ void number_node:: print() {
 
   id_node::id_node(std::string value) : id(value) {}
 
+  id_node::id_node(Symbol value) : id((std::string) value->get_string()) {}
+
 void id_node:: print() {
   std::cout << id;
 }
@@ -163,6 +165,9 @@ float unary_minus_node::evaluate() {
 
 assignment_stmt::assignment_stmt(std::string name, exp_node *expression)
   : id(name), exp(expression) {}
+
+assignment_stmt::assignment_stmt(Symbol symbol, exp_node *expression)
+  : id( (std::string) symbol->get_string()), exp(expression) {}
 
 void assignment_stmt::print() {
   std::cout << id << " = ";
