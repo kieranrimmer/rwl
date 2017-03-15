@@ -25,10 +25,8 @@ CLEANLIST =  $(addsuffix .o, $(OBJ)) $(OBJS) \
 				 rwl_parser.tab.cc rwl_parser.tab.hh \
 				 location.hh position.hh \
 			    stack.hh rwl_parser.output parser.o \
+			    util.o tree.o string_table.o \
 				 lexer.o rwl_lexer.yy.cc $(EXE)\
-
-
-# CLEANLIST =  rwl_lexer.yy.cc rwl_lexer $(EXE)
 
 .PHONY: all
 all: rwl
@@ -36,7 +34,7 @@ all: rwl
 rwl: $(FILES)
 	$(MAKE) $(SOBJ)
 	$(MAKE) $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS) exp.o util.o string_table.o parser.o lexer.o $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS) tree.o util.o string_table.o parser.o lexer.o $(LIBS)
 
 # exp: AST/exp.cpp AST/exp.h
 # 	${CXX} -c AST/exp.cpp -o exp.o
@@ -48,7 +46,7 @@ rwl: $(FILES)
 parser: rwl_parser.yy
 	${CXX} -c string_table/string_table.cpp -o string_table.o
 	${CXX} -c util/util.cpp -o util.o
-	${CXX} -c AST/tree.cpp -o exp.o
+	${CXX} -c AST/tree.cpp -o tree.o
 	bison -d -v rwl_parser.yy
 	$(CXX) $(CXXFLAGS) -c -o parser.o rwl_parser.tab.cc
 
