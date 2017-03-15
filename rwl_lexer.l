@@ -96,7 +96,7 @@ print (?i:print)
 
 
 {name}      {
-                yylval.symbol = stringtable.add_string(yytext);
+                yylval->symbol = stringtable.add_string(yytext);
                 return( token::WORD );
             }
 
