@@ -10,7 +10,7 @@ namespace RWL {
 
   // the constructor for node links the node to its children,
   // and stores the character representation of the operator.
-  operator_node::operator_node(exp_node *L, exp_node *R) {
+  operator_node::operator_node(exp_node<int> *L, exp_node<int> *R) {
     left    = L;
     right   = R;
   }
@@ -195,10 +195,10 @@ int unary_minus_node::evaluate() {
     return num;
 }
 
-assignment_stmt::assignment_stmt(std::string name, exp_node *expression)
+assignment_stmt::assignment_stmt(std::string name, exp_node<int> *expression)
   : id(name), exp(expression) {}
 
-assignment_stmt::assignment_stmt(Symbol symbol, exp_node *expression)
+assignment_stmt::assignment_stmt(Symbol symbol, exp_node<int> *expression)
   : id( (std::string) symbol->get_string()), exp(expression) {}
 
 void assignment_stmt::print() {

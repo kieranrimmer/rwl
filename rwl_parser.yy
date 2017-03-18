@@ -61,7 +61,7 @@
   Symbol symbol;
   char *id;
   char *string_const;
-  exp_node *expnode;
+  exp_node<int> *expnode;
   char *error;
   std::list<RWL::statement *> *stmts;
   RWL::statement *st;

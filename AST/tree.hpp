@@ -13,18 +13,18 @@
 
 namespace RWL{
 
-class exp_node {
+template <class DataType> class exp_node {
   public:
-    int num;
+    DataType num;
 
     // print function for pretty printing an expression
     virtual void print() = 0;
 
     // evaluation function for a leaf, replaced for interior nodes
-    virtual int evaluate() = 0;
+    virtual DataType evaluate() = 0;
 };
 
-class operator_node : public exp_node {
+class operator_node : public exp_node<int> {
 public:
     exp_node *left;
     exp_node *right;
@@ -34,7 +34,7 @@ public:
     operator_node(exp_node *L, exp_node *R);
 };
 
-class number_node : public exp_node {
+class number_node : public exp_node<int> {
   
 public:
   number_node(int value);
@@ -42,7 +42,7 @@ public:
   int evaluate();
 };
 
-class integer_node : public exp_node {
+class integer_node : public exp_node<int> {
   
 public:
   integer_node(char *value);
@@ -51,7 +51,7 @@ public:
   int evaluate();
 };
 
-class unary_minus_node : public exp_node {
+class unary_minus_node : public exp_node<int> {
  protected:
   exp_node *exp;
  public:
@@ -60,7 +60,7 @@ class unary_minus_node : public exp_node {
   int evaluate();
 };
 
-class id_node : public exp_node {
+class id_node : public exp_node<int> {
 protected:
   std::string id;
 
@@ -71,7 +71,7 @@ public:
   int evaluate();
 };
 
-class string_node : public exp_node {
+class string_node : public exp_node<int> {
 protected:
   std::string string_const;
 
@@ -131,10 +131,10 @@ class statement {
 class assignment_stmt : public statement {
  protected:
   std::string id;
-  exp_node *exp;
+  exp_node<int> *exp;
  public:
-  assignment_stmt(std::string name, exp_node *expression);
-  assignment_stmt(Symbol symbol, exp_node *expression);
+  assignment_stmt(std::string name, exp_node<int> *expression);
+  assignment_stmt(Symbol symbol, exp_node<int> *expression);
   void print();
   void evaluate();
 };
