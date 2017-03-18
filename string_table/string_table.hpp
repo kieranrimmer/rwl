@@ -291,6 +291,7 @@ Elem *StringTable<Elem>::add_int(int i)
 {
   static char *buf = new char[20];
   snprintf(buf, 20, "%d", i);
+  std::cout << "integer: " << i << "stored as: " << buf << std::endl;
   return add_string(buf);
 }
 template <class Elem>

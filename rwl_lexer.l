@@ -45,18 +45,23 @@ assign =
 INC_OP ++
 DEC_OP --
 
-
+cpp_comment "\/\/"
 
 
 string  \"[^\n"]+\"
 
 ws      [ \t]+
 
+TRUE    t(?i:rue)
+
+FALSE   f(?i:alse)
+
 
 
 
 alpha   [A-Za-z]
 dig     [0-9]
+integer [0-9]+
 name    ({alpha}|{dig}|\$)({alpha}|{dig}|[_.\-/$])*
 num1    [-+]?{dig}+\.?([eE][-+]?{dig}+)?
 num2    [-+]?{dig}*\.{dig}+([eE][-+]?{dig}+)?
@@ -80,9 +85,29 @@ print (?i:print)
   return(token::ASSIGN);
 }
 
+"--".*  {  }
+
+"\/\/".*  {  }
+
+{integer}    {
+  std::cout << "detected integer: " << yytext << std::endl;
+  yylval->symbol = inttable.add_string(yytext);
+  return (token::INTEGER_CONST);
+}
+
 {string}    {
   yylval->string_const = strdup(yytext);
   return(token::STRING);
+}
+
+{TRUE} {
+  yylval->boolean = 1;
+  return token::BOOL_CONST;
+}
+
+{FALSE} {
+  yylval->boolean = 0;
+  return token::BOOL_CONST;
 }
 
 [a-z]       {
@@ -94,6 +119,8 @@ print (?i:print)
             }
 
 
+
+{IF} { return (token::IF); }
 
 {name}      {
                 yylval->symbol = stringtable.add_string(yytext);
@@ -119,6 +146,8 @@ print (?i:print)
                loc->lines();
                return( token::NEWLINE );
             }
+
+.    { yylval->error = strdup(yytext); return (token::ERROR); }
 
 %%
 

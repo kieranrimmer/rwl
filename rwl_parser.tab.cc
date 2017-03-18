@@ -636,13 +636,13 @@ namespace RWL {
           switch (yyn)
             {
   case 2:
-#line 96 "rwl_parser.yy" // lalr1.cc:859
+#line 99 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.prog) = new pgm((yystack_[0].value.stmts)); root = (yylhs.value.prog); }
 #line 642 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 3:
-#line 100 "rwl_parser.yy" // lalr1.cc:859
+#line 103 "rwl_parser.yy" // lalr1.cc:859
     { // just copy up the stmtlist when a blank line occurs
              (yylhs.value.stmts) = (yystack_[1].value.stmts);
            }
@@ -650,7 +650,7 @@ namespace RWL {
     break;
 
   case 4:
-#line 104 "rwl_parser.yy" // lalr1.cc:859
+#line 107 "rwl_parser.yy" // lalr1.cc:859
     { // copy up the list and add the stmt to it
               (yylhs.value.stmts) = (yystack_[2].value.stmts);
               std::cout << "statement detected: "; (yystack_[1].value.st)->print(); std::cout << std::endl;
@@ -660,7 +660,7 @@ namespace RWL {
     break;
 
   case 5:
-#line 110 "rwl_parser.yy" // lalr1.cc:859
+#line 113 "rwl_parser.yy" // lalr1.cc:859
     { // just copy up the stmtlist when an error occurs
              (yylhs.value.stmts) = (yystack_[2].value.stmts);              
              yyclearin; }
@@ -668,52 +668,72 @@ namespace RWL {
     break;
 
   case 6:
-#line 114 "rwl_parser.yy" // lalr1.cc:859
+#line 117 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.stmts) = new std::list<statement *>(); }
 #line 674 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 7:
-#line 122 "rwl_parser.yy" // lalr1.cc:859
+#line 125 "rwl_parser.yy" // lalr1.cc:859
     { 
-    (yylhs.value.st) = new print_stmt("WORD FOUND");
-    std::cout << "PRINT" << std::endl;
+    (yylhs.value.st) = new print_stmt((yystack_[0].value.symbol)->get_string());
+    std::cout << "PRINT WORD" << std::endl;
        }
 #line 683 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 8:
-#line 130 "rwl_parser.yy" // lalr1.cc:859
-    {
-        std::cout << "descending!!!" << std::endl;
-        (yylhs.value.st) = new assignment_stmt((yystack_[2].value.symbol), (yystack_[0].value.expnode));
-        }
+#line 132 "rwl_parser.yy" // lalr1.cc:859
+    { 
+    (yylhs.value.st) = new print_stmt((yystack_[0].value.symbol)->get_string());
+    std::cout << "PRINT INTEGER" << std::endl;
+       }
 #line 692 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 9:
-#line 135 "rwl_parser.yy" // lalr1.cc:859
-    {std::cout << "expression detected: "; std::cout << std::endl;}
-#line 698 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 140 "rwl_parser.yy" // lalr1.cc:859
+    {
+        std::cout << "descending!!!" << std::endl;
+        (yylhs.value.st) = new assignment_stmt((yystack_[2].value.symbol), (yystack_[0].value.expnode));
+        }
+#line 701 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 10:
-#line 141 "rwl_parser.yy" // lalr1.cc:859
-    {
-    (yylhs.value.expnode) = new id_node((yystack_[0].value.symbol)); }
-#line 705 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 145 "rwl_parser.yy" // lalr1.cc:859
+    {std::cout << "expression detected: "; std::cout << std::endl;}
+#line 707 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 11:
-#line 146 "rwl_parser.yy" // lalr1.cc:859
+#line 151 "rwl_parser.yy" // lalr1.cc:859
     {
+      std::cout << "INTEGER expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
+      (yylhs.value.expnode) = new integer_node((yystack_[0].value.symbol));
+    }
+#line 716 "rwl_parser.tab.cc" // lalr1.cc:859
+    break;
+
+  case 12:
+#line 158 "rwl_parser.yy" // lalr1.cc:859
+    {
+    std::cout << "WORD expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
+    (yylhs.value.expnode) = new id_node((yystack_[0].value.symbol)); }
+#line 724 "rwl_parser.tab.cc" // lalr1.cc:859
+    break;
+
+  case 13:
+#line 164 "rwl_parser.yy" // lalr1.cc:859
+    {
+    std::cout << "STRING expression detected: " << (yystack_[0].value.string_const); std::cout << std::endl;
     (yylhs.value.expnode) = new id_node((yystack_[0].value.string_const));
     }
-#line 713 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 733 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
 
-#line 717 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 737 "rwl_parser.tab.cc" // lalr1.cc:859
             default:
               break;
             }
@@ -975,66 +995,66 @@ namespace RWL {
   const signed char
   RWL_Parser::yypact_[] =
   {
-     -25,     3,     0,   -25,   -23,   -15,   -25,   -19,   -25,   -18,
-     -25,   -25,   -24,   -25,   -25,   -25,   -25
+     -25,     4,     0,   -25,   -22,   -11,   -25,   -23,   -25,   -25,
+     -17,   -25,   -25,   -24,   -25,   -25,   -25,   -25,   -25
   };
 
   const unsigned char
   RWL_Parser::yydefact_[] =
   {
-       6,     0,     0,     1,     0,    10,     3,     0,    11,     0,
-       9,     5,     0,     7,     4,    10,     8
+       6,     0,     0,     1,     0,    12,     3,     0,    13,    11,
+       0,    10,     5,     0,     7,     8,     4,    12,     9
   };
 
   const signed char
   RWL_Parser::yypgoto_[] =
   {
-     -25,   -25,   -25,   -25,    -4
+     -25,   -25,   -25,   -25,    -2
   };
 
   const signed char
   RWL_Parser::yydefgoto_[] =
   {
-      -1,     1,     2,     9,    10
+      -1,     1,     2,    10,    11
   };
 
   const signed char
   RWL_Parser::yytable_[] =
   {
-      -2,     4,    15,     3,    11,    12,     8,    13,    16,    14,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+      -2,     4,    17,    14,     3,    12,     8,     9,    15,    13,
+      16,    18,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     5,     6,     0,     7,
-       8
+       8,     9
   };
 
   const signed char
   RWL_Parser::yycheck_[] =
   {
-       0,     1,    26,     0,    27,    20,    30,    26,    12,    27,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+       0,     1,    26,    26,     0,    27,    30,    31,    31,    20,
+      27,    13,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    26,    27,    -1,    29,
-      30
+      30,    31
   };
 
   const unsigned char
   RWL_Parser::yystos_[] =
   {
-       0,    32,    33,     0,     1,    26,    27,    29,    30,    34,
-      35,    27,    20,    26,    27,    26,    35
+       0,    34,    35,     0,     1,    26,    27,    29,    30,    31,
+      36,    37,    27,    20,    26,    31,    27,    26,    37
   };
 
   const unsigned char
   RWL_Parser::yyr1_[] =
   {
-       0,    31,    32,    33,    33,    33,    33,    34,    34,    34,
-      35,    35
+       0,    33,    34,    35,    35,    35,    35,    36,    36,    36,
+      36,    37,    37,    37
   };
 
   const unsigned char
   RWL_Parser::yyr2_[] =
   {
-       0,     2,     1,     2,     3,     3,     0,     2,     3,     1,
-       1,     1
+       0,     2,     1,     2,     3,     3,     0,     2,     2,     3,
+       1,     1,     1,     1
   };
 
 
@@ -1047,16 +1067,16 @@ namespace RWL {
   "\"end of file\"", "error", "$undefined", "CLASS", "ELSE", "FI", "IF",
   "IN", "INHERITS", "LET", "LOOP", "POOL", "THEN", "WHILE", "CASE", "ESAC",
   "OF", "DARROW", "NEW", "ISVOID", "ASSIGN", "NOT", "LE", "ERROR", "UPPER",
-  "LOWER", "WORD", "NEWLINE", "CHAR", "PRINT", "STRING", "$accept",
-  "program", "stmtlist", "stmt", "exp", YY_NULLPTR
+  "LOWER", "WORD", "NEWLINE", "CHAR", "PRINT", "STRING", "INTEGER_CONST",
+  "BOOL_CONST", "$accept", "program", "stmtlist", "stmt", "exp", YY_NULLPTR
   };
 
 #if YYDEBUG
   const unsigned char
   RWL_Parser::yyrline_[] =
   {
-       0,    96,    96,    99,   103,   109,   114,   122,   128,   135,
-     141,   146
+       0,    99,    99,   102,   106,   112,   117,   125,   132,   138,
+     145,   151,   158,   164
   };
 
   // Print the state stack on the debug stream.
@@ -1126,9 +1146,9 @@ namespace RWL {
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,     2,     2,     2,     2,     2,
       20,    21,    22,    23,    24,    25,    26,    27,    28,    29,
-      30,     2
+      30,    31,    32,     2
     };
-    const unsigned int user_token_number_max_ = 291;
+    const unsigned int user_token_number_max_ = 293;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int>(t) <= yyeof_)
@@ -1141,8 +1161,8 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:1167
 } // RWL
-#line 1145 "rwl_parser.tab.cc" // lalr1.cc:1167
-#line 154 "rwl_parser.yy" // lalr1.cc:1168
+#line 1165 "rwl_parser.tab.cc" // lalr1.cc:1167
+#line 173 "rwl_parser.yy" // lalr1.cc:1168
 
 
 

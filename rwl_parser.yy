@@ -56,11 +56,13 @@
 
 
 %union {
-  float num;
+  char *num;
+  int boolean;
   Symbol symbol;
   char *id;
   char *string_const;
   exp_node *expnode;
+  char *error;
   std::list<RWL::statement *> *stmts;
   RWL::statement *st;
   RWL::pgm *prog;
@@ -81,7 +83,8 @@
 %token               CHAR 288
 %token  PRINT 289
 %token <string_const> STRING 290
-
+%token <symbol> INTEGER_CONST 291
+%token <boolean> BOOL_CONST 292
 
 %type <expnode> exp 
 %type <stmts> stmtlist
@@ -120,8 +123,15 @@ stmt:
 
 
   PRINT WORD { 
-    $$ = new print_stmt("WORD FOUND");
-    std::cout << "PRINT" << std::endl;
+    $$ = new print_stmt($2->get_string());
+    std::cout << "PRINT WORD" << std::endl;
+       }
+
+       |
+
+       PRINT INTEGER_CONST { 
+    $$ = new print_stmt($2->get_string());
+    std::cout << "PRINT INTEGER" << std::endl;
        }
 
    
@@ -138,15 +148,24 @@ stmt:
 
    ;
 
-  exp:   WORD {
+  exp:  INTEGER_CONST {
+      std::cout << "INTEGER expression detected: "; $1->print(std::cout); std::cout << std::endl;
+      $$ = new integer_node($1);
+    }
+
+    |
+
+   WORD {
+    std::cout << "WORD expression detected: "; $1->print(std::cout); std::cout << std::endl;
     $$ = new id_node($1); }
 
     |
 
     STRING {
+    std::cout << "STRING expression detected: " << $1; std::cout << std::endl;
     $$ = new id_node($1);
     }
-
+ 
 ;
 
 

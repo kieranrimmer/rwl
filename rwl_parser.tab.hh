@@ -148,16 +148,18 @@ namespace RWL {
     {
     #line 58 "rwl_parser.yy" // lalr1.cc:377
 
-  float num;
+  char *num;
+  int boolean;
   Symbol symbol;
   char *id;
   char *string_const;
   exp_node *expnode;
+  char *error;
   std::list<RWL::statement *> *stmts;
   RWL::statement *st;
   RWL::pgm *prog;
 
-#line 161 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 163 "rwl_parser.tab.hh" // lalr1.cc:377
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -205,7 +207,9 @@ namespace RWL {
         NEWLINE = 287,
         CHAR = 288,
         PRINT = 289,
-        STRING = 290
+        STRING = 290,
+        INTEGER_CONST = 291,
+        BOOL_CONST = 292
       };
     };
 
@@ -513,12 +517,12 @@ namespace RWL {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 30,     ///< Last index in yytable_.
+      yylast_ = 31,     ///< Last index in yytable_.
       yynnts_ = 5,  ///< Number of nonterminal symbols.
       yyfinal_ = 3, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 31  ///< Number of tokens.
+      yyntokens_ = 33  ///< Number of tokens.
     };
 
 
@@ -530,7 +534,7 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:377
 } // RWL
-#line 534 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 538 "rwl_parser.tab.hh" // lalr1.cc:377
 
 
 

@@ -16,7 +16,7 @@ namespace RWL {
   }
 
   
-  number_node::number_node(float value) {
+  number_node::number_node(int value) {
     num = value;
    }
   
@@ -24,7 +24,26 @@ void number_node:: print() {
   std::cout << num;
 }
 
-  float number_node::evaluate() { 
+  int number_node::evaluate() { 
+    std::cout << "number_node: operand = " << num << std::endl;
+    return num; }
+
+
+    integer_node::integer_node(char *value) {
+    std::cout << "integer_node: value = " << value << std::endl;
+    num = std::stoi(value);
+   }
+
+   integer_node::integer_node(Symbol value) {
+    std::cout << "integer_node: value = " << value << std::endl;
+    num = std::stoi(value->get_string());
+   }
+  
+void integer_node:: print() {
+  std::cout << num;
+}
+
+  int integer_node::evaluate() { 
     std::cout << "number_node: operand = " << num << std::endl;
     return num; }
 
@@ -36,7 +55,7 @@ void id_node:: print() {
   std::cout << id;
 }
 
-  float id_node::evaluate() { 
+  int id_node::evaluate() { 
     std::cout << "id_node: " << id << " = " << idTable[id] << std::endl;
     return idTable[id]; 
   }
@@ -54,8 +73,8 @@ void plus_node:: print() {
   std::cout << ")";
 }
 
-  float plus_node::evaluate() {
-    float left_num, right_num;
+  int plus_node::evaluate() {
+    int left_num, right_num;
 
     left_num  = left->evaluate();
     right_num = right->evaluate();
@@ -78,8 +97,8 @@ void minus_node:: print() {
   std::cout << ")";
 }
 
-  float minus_node::evaluate() {
-    float left_num, right_num;
+  int minus_node::evaluate() {
+    int left_num, right_num;
 
     left_num  = left->evaluate();
     right_num = right->evaluate();
@@ -102,8 +121,8 @@ void times_node:: print() {
   std::cout << ")";
 }
 
-  float times_node::evaluate() {
-    float left_num, right_num;
+  int times_node::evaluate() {
+    int left_num, right_num;
 
     left_num = left->evaluate();
     right_num = right->evaluate();
@@ -127,8 +146,8 @@ void divide_node:: print() {
   std::cout << ")";
 }
 
-  float divide_node::evaluate() {
-    float left_num, right_num;
+  int divide_node::evaluate() {
+    int left_num, right_num;
 
     left_num = left->evaluate();
     right_num = right->evaluate();
@@ -155,7 +174,7 @@ void unary_minus_node:: print() {
   exp->print();
 }
 
-float unary_minus_node::evaluate() {
+int unary_minus_node::evaluate() {
   int expValue = exp->evaluate();
   num = -expValue;
 
@@ -176,12 +195,14 @@ void assignment_stmt::print() {
 }
 
 void assignment_stmt::evaluate() {
-  float result = exp->evaluate();
+  int result = exp->evaluate();
   std::cout << "assignment_node: " << id << " = " << result << std::endl << std::endl;
   idTable[id] = result;
 }
 
 print_stmt::print_stmt (std::string name) : id(name) {}
+
+print_stmt::print_stmt (int num) : id(std::to_string(num)) {}
 
 void print_stmt::evaluate() {
   std::cout << "print_node: " << id << " = " << idTable[id] << std::endl << std::endl;
