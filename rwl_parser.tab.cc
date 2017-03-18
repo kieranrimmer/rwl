@@ -726,8 +726,8 @@ namespace RWL {
   case 13:
 #line 164 "rwl_parser.yy" // lalr1.cc:859
     {
-    std::cout << "STRING expression detected: " << (yystack_[0].value.string_const); std::cout << std::endl;
-    (yylhs.value.expnode) = new id_node((yystack_[0].value.string_const));
+    std::cout << "STRING expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
+    (yylhs.value.expnode) = new string_node((yystack_[0].value.symbol));
     }
 #line 733 "rwl_parser.tab.cc" // lalr1.cc:859
     break;

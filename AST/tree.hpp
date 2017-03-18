@@ -71,6 +71,17 @@ public:
   int evaluate();
 };
 
+class string_node : public exp_node {
+protected:
+  std::string string_const;
+
+public:
+  string_node(std::string value);
+  string_node(Symbol value);
+  void print();
+  int evaluate();
+};
+
 // plus_node inherits the characteristics of node and adds its own evaluate function
 class plus_node : public operator_node {
   public:

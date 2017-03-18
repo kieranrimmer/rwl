@@ -82,7 +82,7 @@
 %token               NEWLINE 287
 %token               CHAR 288
 %token  PRINT 289
-%token <string_const> STRING 290
+%token <symbol> STRING 290
 %token <symbol> INTEGER_CONST 291
 %token <boolean> BOOL_CONST 292
 
@@ -162,8 +162,8 @@ stmt:
     |
 
     STRING {
-    std::cout << "STRING expression detected: " << $1; std::cout << std::endl;
-    $$ = new id_node($1);
+    std::cout << "STRING expression detected: "; $1->print(std::cout); std::cout << std::endl;
+    $$ = new string_node($1);
     }
  
 ;

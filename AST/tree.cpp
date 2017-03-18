@@ -60,6 +60,19 @@ void id_node:: print() {
     return idTable[id]; 
   }
 
+  string_node::string_node(std::string value) : string_const(value) {}
+
+  string_node::string_node(Symbol value) : string_const((std::string) value->get_string()) {}
+
+void string_node:: print() {
+  std::cout << string_const;
+}
+
+  int string_node::evaluate() { 
+    std::cout << "id_node: " << string_const << " = " << stringtable.lookup_std_string(string_const) << std::endl;
+    return stringtable.lookup_std_string(string_const)->get_len() > 0; 
+  }
+
 // plus_node inherits the characteristics of node and adds its own evaluate function
   // plus_node's constructor just uses node's constructor
   plus_node::plus_node(exp_node *L, exp_node *R) : operator_node(L,R) {

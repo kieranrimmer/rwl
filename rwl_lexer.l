@@ -96,7 +96,7 @@ print (?i:print)
 }
 
 {string}    {
-  yylval->string_const = strdup(yytext);
+  yylval->symbol = stringtable.add_string(yytext);
   return(token::STRING);
 }
 

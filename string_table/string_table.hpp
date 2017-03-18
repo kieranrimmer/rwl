@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <vector>
 
 #define MAXSIZE 2048
 
@@ -192,6 +193,7 @@ public:
 
    Elem *lookup(int index);      // lookup an element using its index
    Elem *lookup_string(char *s); // lookup an element using its string
+   Elem *lookup_std_string(std::string mystring);
 
    void print();  // print the entire table; for debugging
 
@@ -267,6 +269,15 @@ Elem *StringTable<Elem>::lookup_string(char *s)
       return l->hd();
   assert(0);   // fail if string is not found
   return NULL; // to avoid compiler warning
+}
+
+template <class Elem>
+Elem *StringTable<Elem>::lookup_std_string(std::string mystring)
+{
+  std::vector<char> v(mystring.length() + 1);
+  std::strcpy(&v[0], mystring.c_str());
+  char* pc = &v[0];
+  return lookup_string(pc);
 }
 
 //
