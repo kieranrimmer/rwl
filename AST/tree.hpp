@@ -21,6 +21,7 @@
 
 #include "../string_table/string_table.hpp"
 
+using Value=llvm::Value;
 
 namespace RWL{
 
@@ -33,6 +34,8 @@ template <class DataType> class exp_node {
 
     // evaluation function for a leaf, replaced for interior nodes
     virtual DataType evaluate() = 0;
+
+    virtual Value *codegen() {return nullptr;};
 };
 
 class operator_node : public exp_node<int> {
