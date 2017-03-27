@@ -45,8 +45,8 @@ assign =
 INC_OP ++
 DEC_OP --
 
-cpp_comment "\/\/"
-
+cpp_comment ("\/\/".*)
+sql_comment ("-- ".*)
 
 string  \"[^\n"]+\"
 
@@ -85,9 +85,10 @@ print (?i:print)
   return(token::ASSIGN);
 }
 
-"--".*  {  }
+{sql_comment}  {  }
 
-"\/\/".*  {  }
+
+{cpp_comment}  {  }
 
 {integer}    {
   std::cout << "detected integer: " << yytext << std::endl;

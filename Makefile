@@ -10,8 +10,16 @@ CXXDEBUG = -g -Wall
 CSTD = -std=c99
 CXXSTD = -std=c++14
 
-CFLAGS = -Wno-deprecated-register -O0  $(CDEBUG) $(CSTD) 
-CXXFLAGS = -Wno-deprecated-register -O0  $(CXXDEBUG) $(CXXSTD)
+LLVM_DIR = /usr/local/opt/llvm
+
+LLVMCONFIG = $(LLVM_DIR)/bin/llvm-config
+
+LLVM_INCDIRS = -L$(LLVM_DIR)/include
+
+LLVM_FLAGS = `$(LLVMCONFIG) --cppflags` $(LLVM_INCDIRS)
+
+CFLAGS = -Wno-deprecated-register -O0 $(CDEBUG) $(CSTD)
+CXXFLAGS = -Wno-deprecated-register -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_FLAGS)
 
 
 CPPOBJ = main rwl_driver
@@ -26,6 +34,7 @@ CLEANLIST =  $(addsuffix .o, $(OBJ)) $(OBJS) \
 				 location.hh position.hh \
 			    stack.hh rwl_parser.output parser.o \
 			    util.o tree.o string_table.o \
+			    main.o rwl_driver.o \
 				 lexer.o rwl_lexer.yy.cc $(EXE)\
 
 .PHONY: all
@@ -46,13 +55,13 @@ rwl: $(FILES)
 parser: rwl_parser.yy
 	${CXX} -c string_table/string_table.cpp -o string_table.o
 	${CXX} -c util/util.cpp -o util.o
-	${CXX} -c AST/tree.cpp -o tree.o
+	${CXX} $(CXXFLAGS) $(LLVM_FLAGS) -c AST/tree.cpp -o tree.o
 	bison -d -v rwl_parser.yy
-	$(CXX) $(CXXFLAGS) -c -o parser.o rwl_parser.tab.cc
+	$(CXX) $(CXXFLAGS) $(LLVM_FLAGS) -c -o parser.o rwl_parser.tab.cc
 
 lexer: rwl_lexer.l
 	flex --outfile=rwl_lexer.yy.cc  $<
-	$(CXX)  $(CXXFLAGS) -c rwl_lexer.yy.cc -o lexer.o
+	$(CXX)  $(CXXFLAGS) $(LLVM_FLAGS) -c rwl_lexer.yy.cc -o lexer.o
 
 
 .PHONY: test
