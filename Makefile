@@ -16,7 +16,7 @@ LLVMCONFIG = $(LLVM_DIR)/bin/llvm-config
 
 LLVM_INCDIRS = -L$(LLVM_DIR)/include
 
-LLVM_FLAGS = `$(LLVMCONFIG) --cppflags --ldflags --system-libs --libs core` $(LLVM_INCDIRS)
+LLVM_FLAGS = `$(LLVMCONFIG) --cppflags --ldflags --system-libs --libs core`
 
 CFLAGS = -Wno-deprecated-register -O0 $(CDEBUG) $(CSTD)
 CXXFLAGS = -Wno-deprecated-register -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_FLAGS)
@@ -55,13 +55,13 @@ rwl: $(FILES)
 parser: rwl_parser.yy
 	${CXX} -c string_table/string_table.cpp -o string_table.o
 	${CXX} -c util/util.cpp -o util.o
-	${CXX} $(CXXFLAGS) $(LLVM_FLAGS) -c AST/tree.cpp -o tree.o
+	${CXX} $(CXXFLAGS) -c AST/tree.cpp -o tree.o
 	bison -d -v rwl_parser.yy
-	$(CXX) $(CXXFLAGS) $(LLVM_FLAGS) -c -o parser.o rwl_parser.tab.cc
+	$(CXX) $(CXXFLAGS) -c -o parser.o rwl_parser.tab.cc
 
 lexer: rwl_lexer.l
 	flex --outfile=rwl_lexer.yy.cc  $<
-	$(CXX)  $(CXXFLAGS) $(LLVM_FLAGS) -c rwl_lexer.yy.cc -o lexer.o
+	$(CXX)  $(CXXFLAGS) -c rwl_lexer.yy.cc -o lexer.o
 
 
 .PHONY: test
