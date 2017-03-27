@@ -25,7 +25,19 @@ Underway.
 
 ### Parser
 
-Not started
+Underway
+
+### AST
+
+Underway
+
+#### LLVM integration
+
+Sorta scaffolded.
+
+http://llvm.org/docs/tutorial/index.html
+
+http://www.aosabook.org/en/llvm.html
 
 ## Contact
 
