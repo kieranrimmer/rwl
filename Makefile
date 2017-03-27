@@ -16,7 +16,7 @@ LLVMCONFIG = $(LLVM_DIR)/bin/llvm-config
 
 LLVM_INCDIRS = -L$(LLVM_DIR)/include
 
-LLVM_FLAGS = `$(LLVMCONFIG) --cppflags` $(LLVM_INCDIRS)
+LLVM_FLAGS = `$(LLVMCONFIG) --cppflags --ldflags --system-libs --libs core` $(LLVM_INCDIRS)
 
 CFLAGS = -Wno-deprecated-register -O0 $(CDEBUG) $(CSTD)
 CXXFLAGS = -Wno-deprecated-register -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_FLAGS)
