@@ -10,11 +10,11 @@ CXXDEBUG = -g -Wall
 CSTD = -std=c99
 CXXSTD = -std=c++14
 
-LLVM_DIR = /usr/local/opt/llvm
+LLVM_DIR = /Users/kieranrimmer/packages/build
 
 LLVMCONFIG = $(LLVM_DIR)/bin/llvm-config
 
-LLVM_INCDIRS = -L$(LLVM_DIR)/include
+LLVM_INCDIRS = -I/Users/kieranrimmer/packages/llvm/include -I/Users/kieranrimmer/packages/build/include
 
 LLVM_FLAGS = `$(LLVMCONFIG) --cppflags --ldflags --system-libs --libs core`
 

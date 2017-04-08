@@ -6,6 +6,7 @@
 #include <istream>
 
 #include "rwl_scanner.hpp"
+#include "AST/tree.hpp"
 #include "rwl_parser.tab.hh"
 
 namespace RWL{

@@ -1,5 +1,7 @@
 
 .idea/
+cmake-build-debug/
+error.txt
 rwl_lexer.yy.cc
 rwl_lexer
 rwl_parser

@@ -39,6 +39,15 @@ http://llvm.org/docs/tutorial/index.html
 
 http://www.aosabook.org/en/llvm.html
 
+http://gnuu.org/2009/09/18/writing-your-own-toy-compiler/4/
+
+### CMAKE integration
+
+TODO
+
+https://cmake.org/pipermail/cmake/2002-September/003028.html
+
+
 ## Contact
 
 kieranrimmer@gmail.com
