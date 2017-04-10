@@ -63,6 +63,8 @@ namespace RWL {
 
     public:
         int Val;
+        Symbol sym;
+
         integer_node(int value): Val(value) {};
 
         integer_node(char *value);
@@ -105,10 +107,11 @@ namespace RWL {
 
     public:
         std::string Val;
+        Symbol sym;
 
         id_node(std::string value) : Val(value) {};
 
-        id_node(Symbol value) : Val((std::string) value->get_string()) {}
+        id_node(Symbol value) : Val((std::string) value->get_string()), sym(value) {}
 
 
 
@@ -124,10 +127,13 @@ namespace RWL {
     public:
 
         std::string Val;
+        Symbol sym;
 
         string_node(std::string value) : Val(value) {};
 
-        string_node(Symbol value);
+        string_node(Symbol value): sym(value), Val((std::string) value->get_string()) {};
+
+
 
         void print();
 

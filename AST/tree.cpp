@@ -69,8 +69,8 @@ namespace RWL {
         Val = std::stoi(value);
     }
 
-    integer_node::integer_node(Symbol value) {
-        std::cout << "integer_node: value = " << value << std::endl;
+    integer_node::integer_node(Symbol value) : sym(value) {
+        std::cout << "integer_node constructor: value = " << value->get_string() << std::endl;
         Val = std::stoi(value->get_string());
     }
 
@@ -79,7 +79,7 @@ namespace RWL {
     }
 
     int integer_node::evaluate() {
-        std::cout << "number_node: operand = " << Val << std::endl;
+        std::cout << "integer_node: operand = " << sym->get_string() << std::endl;
         return Val;
     }
 
@@ -98,7 +98,7 @@ namespace RWL {
 
 //    string_node::string_node(std::string value) : Val(value) {}
 
-    string_node::string_node(Symbol value) : Val((std::string) value->get_string()) {}
+//    string_node::string_node(Symbol value) : Val((std::string) value->get_string()) {}
 
     void string_node::print() {
         std::cout << Val;
@@ -258,6 +258,7 @@ namespace RWL {
 
     void pgm::evaluate() {
         std::list<statement *>::iterator stmtIter;
+        std::cout << "Program root node..." << std::endl;
         for (stmtIter = stmts->begin(); stmtIter != stmts->end();
              stmtIter++) {
             (*stmtIter)->print();

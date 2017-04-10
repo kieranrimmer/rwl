@@ -136,7 +136,7 @@ print (?i:print)
                 * but it doesn't.
                 * ref: http://goo.gl/KLn0w2
                 */
-               yylval->id = strdup(yytext);;
+               yylval->symbol = stringtable.add_string(yytext);
                return( token::WORD );
             }
 
