@@ -28,23 +28,27 @@ using namespace llvm;
 
 namespace RWL {
 
-    template<class DataType>
-    class exp_node {
+    class tree_node {
+    protected:
+        int line_no;
     public:
-        DataType Val;
+    };
+
+    class exp_node: public tree_node {
+    public:
 
         // print function for pretty printing an expression
         virtual void print() = 0;
 
         // evaluation function for a leaf, replaced for interior nodes
-        virtual DataType evaluate() = 0;
+        virtual void evaluate() = 0;
 
         virtual Value *codegen() = 0;
     };
 
 
 
-    class number_node : public exp_node<int> {
+    class number_node : public exp_node {
 
     public:
 
@@ -54,12 +58,12 @@ namespace RWL {
 
         void print();
 
-        int evaluate();
+        void evaluate() override;
 
         Value *codegen() override;
     };
 
-    class integer_node : public exp_node<int> {
+    class integer_node : public exp_node {
 
     public:
         int Val;
@@ -73,15 +77,15 @@ namespace RWL {
 
         void print();
 
-        int evaluate();
+        void evaluate() override;
 
         Value *codegen() override;
     };
 
-    class operator_node : public exp_node<int> {
+    class operator_node : public exp_node {
     public:
-        exp_node<int> *left;
-        exp_node<int> *right;
+        exp_node *left;
+        exp_node *right;
 
         // the constructor for node links the node to its children,
         // and stores the character representation of the operator.
@@ -89,7 +93,7 @@ namespace RWL {
         Value *codegen() override;
     };
 
-    class unary_minus_node : public exp_node<int> {
+    class unary_minus_node : public exp_node {
     protected:
         exp_node *_exp;
     public:
@@ -97,12 +101,12 @@ namespace RWL {
 
         void print();
 
-        int evaluate();
+        void evaluate() override;
 
         Value *codegen() override;
     };
 
-    class id_node : public exp_node<std::string> {
+    class id_node : public exp_node {
 
 
     public:
@@ -117,12 +121,12 @@ namespace RWL {
 
         void print();
 
-        std::string evaluate();
+        void evaluate() override;
 
         Value *codegen() override;
     };
 
-    class string_node : public exp_node<std::string> {
+    class string_node : public exp_node {
 
     public:
 
@@ -137,7 +141,7 @@ namespace RWL {
 
         void print();
 
-        std::string evaluate();
+        void evaluate() override;
 
         Value *codegen() override;
     };
@@ -151,7 +155,7 @@ namespace RWL {
 
         void print();
 
-        int evaluate();
+        void evaluate() override;
         Value *codegen() override;
     };
 
@@ -164,7 +168,7 @@ namespace RWL {
 
         void print();
 
-        int evaluate();
+        void evaluate() override;
         Value *codegen() override;
     };
 
@@ -177,7 +181,7 @@ namespace RWL {
 
         void print();
 
-        int evaluate();
+        void evaluate() override;
         Value *codegen() override;
     };
 
@@ -190,7 +194,7 @@ namespace RWL {
 
         void print();
 
-        int evaluate();
+        void evaluate() override;
         Value *codegen() override;
     };
 
@@ -219,7 +223,7 @@ namespace RWL {
 
         void print();
 
-        void evaluate();
+        void evaluate() override;
         virtual Value *codegen() override;
     };
 
@@ -231,7 +235,7 @@ namespace RWL {
 
         print_stmt(int num);
 
-        virtual void evaluate();
+        virtual void evaluate() override;
         virtual Value *codegen() override;
     };
 

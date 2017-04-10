@@ -38,14 +38,12 @@ namespace RWL {
         std::cout << Val;
     }
 
-    int number_node::evaluate() {
+    void number_node::evaluate() {
         std::cout << "number_node: operand = " << Val << std::endl;
-        return Val;
     }
 
-    std::string string_node::evaluate() {
+    void string_node::evaluate() {
         std::cout << "string_node: operand = " << Val << std::endl;
-        return Val;
     }
 
     Value *integer_node::codegen() {
@@ -78,9 +76,8 @@ namespace RWL {
         std::cout << Val;
     }
 
-    int integer_node::evaluate() {
+    void integer_node::evaluate() {
         std::cout << "integer_node: operand = " << sym->get_string() << std::endl;
-        return Val;
     }
 
 //    id_node::id_node(std::string value) : id(value) {}
@@ -91,9 +88,8 @@ namespace RWL {
         std::cout << Val;
     }
 
-    std::string id_node::evaluate() {
-        std::cout << "id_node: " << Val << " = " << idTable[Val] << std::endl;
-        return Val;
+    void id_node::evaluate() {
+        std::cout << "id_node: " << idTable[Val] << std::endl;
     }
 
 //    string_node::string_node(std::string value) : Val(value) {}
@@ -122,15 +118,13 @@ namespace RWL {
         std::cout << ")";
     }
 
-    int plus_node::evaluate() {
-        int left_num, right_num;
+    void plus_node::evaluate() {
 
-        left_num = left->evaluate();
-        right_num = right->evaluate();
-
-        Val = left_num + right_num;
-        std::cout << "plus_node: " << left_num << " + " << right_num << " = " << Val << "\n";
-        return Val;
+        std::cout << "plus_node: ";
+        left->print();
+        std::cout << " ";
+        right->print();
+        std::cout << std::endl;
     }
 
 
@@ -146,15 +140,11 @@ namespace RWL {
         std::cout << ")";
     }
 
-    int minus_node::evaluate() {
-        int left_num, right_num;
-
-        left_num = left->evaluate();
-        right_num = right->evaluate();
-
-        Val = left_num - right_num;
-        std::cout << "minus_node: " << left_num << " - " << right_num << " = " << Val << "\n";
-        return Val;
+    void minus_node::evaluate() {
+        std::cout << "minus_node: ";
+        left->print();
+        std::cout  << " ";
+        right->print();
     }
 
 
@@ -170,15 +160,8 @@ namespace RWL {
         std::cout << ")";
     }
 
-    int times_node::evaluate() {
-        int left_num, right_num;
-
-        left_num = left->evaluate();
-        right_num = right->evaluate();
-
-        Val = left_num * right_num;
-        std::cout << "times_node: " << left_num << " * " << right_num << " = " << Val << "\n";
-        return Val;
+    void times_node::evaluate() {
+        std::cout << "times_node: "; left->print(); std::cout << " "; right->print();
     }
 
 
@@ -195,21 +178,8 @@ namespace RWL {
         std::cout << ")";
     }
 
-    int divide_node::evaluate() {
-        int left_num, right_num;
-
-        left_num = left->evaluate();
-        right_num = right->evaluate();
-
-        if (right_num) {
-            Val = (float) left_num / (float) right_num;
-            std::cout << "divide_node: " << left_num << " / " << right_num << " = " << Val << "\n";
-            return Val;
-        } else {
-            std::cout << "divide_node: division by zero -> " << left_num << " / " << 0 << std::endl;
-            // you have to include stdlib.h for exit
-            exit(1);
-        }
+    void divide_node::evaluate() {
+        std::cout << "divide_node: "; left->print(); std::cout << " "; right->print();
     }
 
 // unary_minus_node inherits the characteristics of node and adds its own evaluate function
@@ -220,12 +190,9 @@ namespace RWL {
 
     }
 
-    int unary_minus_node::evaluate() {
-        int expValue = _exp->evaluate();
-        Val = -expValue;
-
-        std::cout << "unary_minus_node: " << "-\t" << expValue << " = " << Val << "\n";
-        return Val;
+    void unary_minus_node::evaluate() {
+        std::cout << "unary_minus_node: " << "-\t";
+        _exp->print();
     }
 
 //    assignment_stmt::assignment_stmt(std::string name, exp_node<int> *expression)
@@ -235,15 +202,16 @@ namespace RWL {
 //            : id((std::string) symbol->get_string()), exp(expression) {}
 
     void assignment_stmt::print() {
-        std::cout << id.evaluate() << " = ";
+        id.evaluate(); std::cout << " = ";
         exp->print();
         std::cout << std::endl;
     }
 
     void assignment_stmt::evaluate() {
-        int result = exp->evaluate();
-        std::cout << "assignment_node: " << id.evaluate() << " = " << result << std::endl << std::endl;
-        idTable[id.evaluate()] = result;
+        std::cout << "assignment_node: ";
+        id.evaluate();
+//        std::cout << " = " << result << std::endl << std::endl;
+//        idTable[id.evaluate()] = result;
     }
 
     print_stmt::print_stmt(std::string name) : id(name) {}
