@@ -202,14 +202,13 @@ namespace RWL {
 //            : id((std::string) symbol->get_string()), exp(expression) {}
 
     void assignment_stmt::print() {
-        id.evaluate(); std::cout << " = ";
         exp->print();
         std::cout << std::endl;
     }
 
     void assignment_stmt::evaluate() {
-        std::cout << "assignment_node: ";
-        id.evaluate();
+        std::cout << "assignment_node: " << sym->get_string() << " = ";
+        exp->print();
 //        std::cout << " = " << result << std::endl << std::endl;
 //        idTable[id.evaluate()] = result;
     }
