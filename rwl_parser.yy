@@ -61,7 +61,7 @@
   Symbol symbol;
   char *id;
   char *string_const;
-    integer_node *intnode;
+    exp_node *expnode;
   char *error;
   std::list<RWL::statement *> *stmts;
   RWL::statement *st;
@@ -86,7 +86,7 @@
 %token <symbol> INTEGER_CONST 291
 %token <boolean> BOOL_CONST 292
 
-%type <intnode> int_exp
+%type <expnode> exp
 %type <stmts> stmtlist
 %type <st> stmt
 %type <prog> program
@@ -135,20 +135,20 @@ stmt:
        }
 
    
-       | WORD ASSIGN int_exp
+       | WORD ASSIGN exp
 
         {
         std::cout << "descending!!!" << std::endl;
         $$ = new assignment_stmt($1, $3);
         }
 
-        | int_exp {std::cout << "expression detected: "; std::cout << std::endl;}
+        | exp {std::cout << "expression detected: "; std::cout << std::endl;}
          
 
 
    ;
 
-  int_exp:  INTEGER_CONST {
+  exp:  INTEGER_CONST {
       std::cout << "INTEGER expression detected: "; $1->print(std::cout); std::cout << std::endl;
       $$ = new integer_node($1);
     }

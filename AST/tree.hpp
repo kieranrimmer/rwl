@@ -210,13 +210,13 @@ namespace RWL {
     class assignment_stmt : public statement {
     protected:
         id_node id;
-        integer_node *exp;
+        exp_node *exp;
         id_node *id_exp;
         string_node *str_exp;
     public:
         assignment_stmt(std::string name, int expr) : id(name)  { exp = new integer_node(expr); };
 
-        assignment_stmt(Symbol name, integer_node *expr) : id(name->get_string())  { exp = expr; };
+        assignment_stmt(Symbol name, exp_node *expr) : id(name->get_string())  { exp = expr; };
         assignment_stmt(Symbol name, id_node *expr) : id(name->get_string())  { id_exp = expr; };
         assignment_stmt(Symbol name, string_node *expr) : id(name->get_string())  { str_exp = expr; };
 //        assignment_stmt(Symbol name, exp_node<int> *expr) : id(name->get_string())  { exp = expr; };
