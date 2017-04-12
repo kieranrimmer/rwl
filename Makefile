@@ -16,10 +16,13 @@ LLVMCONFIG = $(LLVM_DIR)/bin/llvm-config
 
 LLVM_INCDIRS = -I/Users/kieranrimmer/packages/llvm/include -I/Users/kieranrimmer/packages/build/include
 
+LLVM_COMPILE_ONLY = `$(LLVMCONFIG) --cppflags`
+
 LLVM_FLAGS = `$(LLVMCONFIG) --cppflags --ldflags --system-libs --libs core`
 
 CFLAGS = -Wno-deprecated-register -O0 $(CDEBUG) $(CSTD)
 CXXFLAGS = -Wno-deprecated-register -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_FLAGS)
+CXXFLAGS_COMPILE_ONLY = -Wno-deprecated-register -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_COMPILE_ONLY)
 
 
 CPPOBJ = main rwl_driver
@@ -55,13 +58,13 @@ rwl: $(FILES)
 parser: rwl_parser.yy
 	${CXX} -c string_table/string_table.cpp -o string_table.o
 	${CXX} -c util/util.cpp -o util.o
-	${CXX} $(CXXFLAGS) -c AST/tree.cpp -o tree.o
+	${CXX} $(CXXFLAGS_COMPILE_ONLY) -c AST/tree.cpp -o tree.o
 	bison -d -v rwl_parser.yy
-	$(CXX) $(CXXFLAGS) -c -o parser.o rwl_parser.tab.cc
+	$(CXX) $(CXXFLAGS_COMPILE_ONLY) -c -o parser.o rwl_parser.tab.cc
 
 lexer: rwl_lexer.l
 	flex --outfile=rwl_lexer.yy.cc  $<
-	$(CXX)  $(CXXFLAGS) -c rwl_lexer.yy.cc -o lexer.o
+	$(CXX)  $(CXXFLAGS_COMPILE_ONLY) -c rwl_lexer.yy.cc -o lexer.o
 
 
 .PHONY: test
