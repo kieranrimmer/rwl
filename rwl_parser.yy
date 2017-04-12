@@ -122,16 +122,9 @@ stmt:
 
 
 
-  PRINT WORD { 
-    $$ = new print_stmt($2->get_string());
+  PRINT exp {
+    $$ = new print_stmt($2);
     std::cout << "PRINT WORD" << std::endl;
-       }
-
-       |
-
-       PRINT INTEGER_CONST { 
-    $$ = new print_stmt($2->get_string());
-    std::cout << "PRINT INTEGER" << std::endl;
        }
 
    
@@ -142,8 +135,9 @@ stmt:
         $$ = new assignment_stmt($1, $3);
         }
 
-        | exp {std::cout << "expression detected: "; std::cout << std::endl;}
-         
+        | exp {std::cout << "expression detected here: "; $1->print(); std::cout  << std::endl;}
+
+
 
 
    ;
@@ -152,6 +146,17 @@ stmt:
       std::cout << "INTEGER expression detected: "; $1->print(std::cout); std::cout << std::endl;
       $$ = new integer_node($1);
     }
+
+    |
+
+    WORD {
+        std::cout << "WORD expression detected: "; $1->print(std::cout); std::cout << std::endl;
+
+        $$ = new id_node($1);
+        std::cout << "WORD expression detection complete " << std::endl;
+    }
+
+
 
 
 ;

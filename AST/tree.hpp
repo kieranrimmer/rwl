@@ -82,6 +82,7 @@ namespace RWL {
         Value *codegen() override;
     };
 
+
     class operator_node : public exp_node {
     public:
         exp_node *left;
@@ -223,9 +224,13 @@ namespace RWL {
 
     class print_stmt : public statement {
     protected:
+        Symbol sym;
         std::string id;
+        exp_node *exp;
     public:
         print_stmt(std::string id);
+        print_stmt(Symbol _sym) : sym(_sym) {};
+        print_stmt(exp_node *_exp) : exp(_exp) {};
 
         print_stmt(int num);
 

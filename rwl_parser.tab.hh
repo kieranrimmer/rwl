@@ -153,7 +153,7 @@ namespace RWL {
   Symbol symbol;
   char *id;
   char *string_const;
-    integer_node *intnode;
+    exp_node *expnode;
   char *error;
   std::list<RWL::statement *> *stmts;
   RWL::statement *st;
