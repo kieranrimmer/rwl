@@ -186,7 +186,7 @@ namespace RWL {
 //    unary_minus_node::unary_minus_node(exp_node *L) : exp(L) {}
 
     void unary_minus_node::print() {
-        std::cout << "-" << exp;
+        std::cout << "-"; _exp->print();
 
     }
 

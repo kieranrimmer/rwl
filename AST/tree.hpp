@@ -56,7 +56,7 @@ namespace RWL {
 
         number_node(int value): Val(value) {};
 
-        void print();
+        void print() override;
 
         void evaluate() override;
 
@@ -75,7 +75,7 @@ namespace RWL {
 
         integer_node(Symbol value);
 
-        void print();
+        void print() override;
 
         void evaluate() override;
 
@@ -100,7 +100,7 @@ namespace RWL {
     public:
         unary_minus_node(exp_node *exp) : _exp(exp) {};
 
-        void print();
+        void print() override;
 
         void evaluate() override;
 
@@ -120,7 +120,7 @@ namespace RWL {
 
 
 
-        void print();
+        void print() override;
 
         void evaluate() override;
 
@@ -136,11 +136,11 @@ namespace RWL {
 
         string_node(std::string value) : Val(value) {};
 
-        string_node(Symbol value): sym(value), Val((std::string) value->get_string()) {};
+        string_node(Symbol value): Val((std::string) value->get_string()), sym(value)  {};
 
 
 
-        void print();
+        void print() override;
 
         void evaluate() override;
 
@@ -154,7 +154,7 @@ namespace RWL {
         // plus_node's constructor just uses node's constructor
         plus_node(exp_node *L, exp_node *R) : operator_node(L, R) {};
 
-        void print();
+        void print() override;
 
         void evaluate() override;
         Value *codegen() override;
@@ -167,7 +167,7 @@ namespace RWL {
 
         minus_node(exp_node *L, exp_node *R) : operator_node(L, R) {};
 
-        void print();
+        void print() override;
 
         void evaluate() override;
         Value *codegen() override;
@@ -180,7 +180,7 @@ namespace RWL {
 
         times_node(exp_node *L, exp_node *R) : operator_node(L, R) {};
 
-        void print();
+        void print() override;
 
         void evaluate() override;
         Value *codegen() override;
@@ -193,7 +193,7 @@ namespace RWL {
 
         divide_node(exp_node *L, exp_node *R) : operator_node(L, R) {};
 
-        void print();
+        void print() override;
 
         void evaluate() override;
         Value *codegen() override;
@@ -216,7 +216,7 @@ namespace RWL {
 
         assignment_stmt(Symbol name, exp_node *expr) : sym(name)  { exp = expr; };
 
-        void print();
+        void print() override;
 
         void evaluate() override;
         virtual Value *codegen() override;
