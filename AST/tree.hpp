@@ -46,34 +46,12 @@ namespace RWL {
         virtual Value *codegen() = 0;
     };
 
-
-
-    class number_node : public exp_node {
-
-    public:
-
-        int Val;
-
-        number_node(int value): Val(value) {};
-
-        void print() override;
-
-        void evaluate() override;
-
-        Value *codegen() override;
-    };
-
     class integer_node : public exp_node {
 
     public:
-        int Val;
         Symbol sym;
 
-        integer_node(int value): Val(value) {};
-
-        integer_node(char *value);
-
-        integer_node(Symbol value);
+        integer_node(Symbol value) : sym(value) {};
 
         void print() override;
 
@@ -109,16 +87,15 @@ namespace RWL {
 
     class id_node : public exp_node {
 
+    protected:
 
-    public:
-        std::string Val;
         Symbol sym;
 
-        id_node(std::string value) : Val(value) {};
+    public:
 
-        id_node(Symbol value) : Val((std::string) value->get_string()), sym(value) {}
+        Symbol get_symbol() { return sym; }
 
-
+        id_node(Symbol value) : sym(value) {}
 
         void print() override;
 
@@ -129,16 +106,13 @@ namespace RWL {
 
     class string_node : public exp_node {
 
-    public:
+    protected:
 
-        std::string Val;
         Symbol sym;
 
-        string_node(std::string value) : Val(value) {};
+    public:
 
-        string_node(Symbol value): Val((std::string) value->get_string()), sym(value)  {};
-
-
+        string_node(Symbol value): sym(value)  {};
 
         void print() override;
 
@@ -147,8 +121,8 @@ namespace RWL {
         Value *codegen() override;
     };
 
-// plus_node inherits the characteristics of node and adds its own evaluate function
     class plus_node : public operator_node {
+
     public:
 
         // plus_node's constructor just uses node's constructor
@@ -210,11 +184,11 @@ namespace RWL {
 
     class assignment_stmt : public statement {
     protected:
-        Symbol sym;
+        id_node *_id;
         exp_node *exp;
     public:
 
-        assignment_stmt(Symbol name, exp_node *expr) : sym(name)  { exp = expr; };
+        assignment_stmt(Symbol name, exp_node *expr) { _id = new id_node(name); exp = expr; };
 
         void print() override;
 
@@ -225,14 +199,10 @@ namespace RWL {
     class print_stmt : public statement {
     protected:
         Symbol sym;
-        std::string id;
         exp_node *exp;
     public:
-        print_stmt(std::string id);
         print_stmt(Symbol _sym) : sym(_sym) {};
         print_stmt(exp_node *_exp) : exp(_exp) {};
-
-        print_stmt(int num);
 
         virtual void evaluate() override;
         virtual Value *codegen() override;
