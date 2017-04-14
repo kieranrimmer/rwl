@@ -522,7 +522,7 @@ namespace RWL {
       yyfinal_ = 3, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 33  ///< Number of tokens.
+      yyntokens_ = 35  ///< Number of tokens.
     };
 
 

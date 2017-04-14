@@ -138,5 +138,11 @@ RWL::RWL_Driver::print( std::ostream &stream )
    stream << blue << "Characters: " << norm << chars << "\n";
    stream << red << "Root: " << norm << root << "\n";
    root->evaluate();
+   std::cout << "Id table:" <<std::endl;
+   idtable.print();
+   std::cout << "Int table:" <<std::endl;
+   inttable.print();
+   std::cout << "String table:" <<std::endl;
+   stringtable.print();
    return(stream);
 }

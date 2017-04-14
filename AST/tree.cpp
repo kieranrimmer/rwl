@@ -16,10 +16,6 @@ namespace RWL {
     static std::unique_ptr<Module> TheModule;
     static std::map<std::string, Value *> NamedValues;
 
-//    Value *number_node::codegen() {
-//        return ConstantInt::get(TheContext, APSInt(Val));
-//    }
-
 
     void string_node::evaluate() {
         std::cout << "string_node: operand = " << sym->get_string() << std::endl;
@@ -49,15 +45,15 @@ namespace RWL {
     }
 
     void id_node::print() {
-        std::cout << sym->get_string();
+        std::cout << sym->get_string() << std::endl;
     }
 
     void id_node::evaluate() {
-        std::cout << "id_node: " << idTable[sym->get_string()] << std::endl;
+        std::cout << "id_node: " << sym->get_string() << std::endl;
     }
 
     void string_node::print() {
-        std::cout << sym->get_string();
+        std::cout << sym->get_string() << std::endl;
     }
 
     void plus_node::print() {
@@ -140,7 +136,7 @@ namespace RWL {
 
 
     void print_stmt::evaluate() {
-        std::cout << "print_node: " << sym->get_string() << " = " << idTable[sym->get_string()] << std::endl;
+        std::cout << "print_node: " << sym->get_string() << " = " << sym->get_string() << std::endl;
     }
 
     void pgm::evaluate() {
@@ -153,6 +149,5 @@ namespace RWL {
         }
     }
 
-    std::map<std::string, float> idTable;
 
 }

@@ -219,7 +219,6 @@ namespace RWL {
     };
 
 // the object at the base of our tree
-    extern std::map<std::string, float> idTable;
     extern RWL::pgm *root;
 
 }

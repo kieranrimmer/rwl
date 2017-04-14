@@ -128,17 +128,22 @@ print (?i:print)
                 return( token::WORD );
             }
 
-[a-zA-Z]+   {
-               /**
-                * Section 10.1.5.1 of the 3.0.2 Bison Manual says the 
-                * following should work:
-                * yylval.build( yytext );
-                * but it doesn't.
-                * ref: http://goo.gl/KLn0w2
-                */
-               yylval->symbol = stringtable.add_string(yytext);
-               return( token::WORD );
-            }
+"."	{ return (int)'.'; }
+";"	{ return (int)';'; }
+","	{ return (int)','; }
+")"	{ return (int)')'; }
+"("	{ return (int)'('; }
+"}"	{ return (int)'}'; }
+"{"	{ return (int)'{'; }
+"<"	{ return (int)'<'; }
+":"	{ return (int)':'; }
+"+"	{ return (int)'+'; }
+"-"	{ return (int)'-'; }
+"*"	{ return (int)'*'; }
+"/"	{ return (int)'/'; }
+"~"	{ return (int)'~'; }
+"@"	{ return (int)'@'; }
+
 
 {ws}   {}
 

@@ -709,16 +709,28 @@ namespace RWL {
   case 11:
 #line 152 "rwl_parser.yy" // lalr1.cc:859
     {
+
+    std::cout << "function expression detected: "; (yystack_[2].value.symbol)->print(std::cout); std::cout << std::endl;
+
+            (yylhs.value.expnode) = new id_node((yystack_[2].value.symbol));
+            std::cout << "function expression detection complete " << std::endl;
+    }
+#line 719 "rwl_parser.tab.cc" // lalr1.cc:859
+    break;
+
+  case 12:
+#line 164 "rwl_parser.yy" // lalr1.cc:859
+    {
         std::cout << "WORD expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
 
         (yylhs.value.expnode) = new id_node((yystack_[0].value.symbol));
         std::cout << "WORD expression detection complete " << std::endl;
     }
-#line 718 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 730 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
 
-#line 722 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 734 "rwl_parser.tab.cc" // lalr1.cc:859
             default:
               break;
             }
@@ -980,21 +992,21 @@ namespace RWL {
   const signed char
   RWL_Parser::yypact_[] =
   {
-     -25,     4,     0,   -25,   -22,   -14,   -25,   -24,   -25,   -18,
-     -25,   -25,   -24,   -25,   -25,   -25,   -25
+     -25,     5,     0,   -25,   -21,   -18,   -25,   -23,   -25,   -20,
+     -25,   -25,   -23,   -24,   -22,   -25,   -25,   -25,   -25
   };
 
   const unsigned char
   RWL_Parser::yydefact_[] =
   {
-       6,     0,     0,     1,     0,    11,     3,     0,    10,     0,
-       9,     5,     0,    11,     7,     4,     8
+       6,     0,     0,     1,     0,    12,     3,     0,    10,     0,
+       9,     5,     0,     0,    12,     7,     4,     8,    11
   };
 
   const signed char
   RWL_Parser::yypgoto_[] =
   {
-     -25,   -25,   -25,   -25,    -4
+     -25,   -25,   -25,   -25,    -3
   };
 
   const signed char
@@ -1006,8 +1018,8 @@ namespace RWL {
   const signed char
   RWL_Parser::yytable_[] =
   {
-      -2,     4,    13,    14,     3,    11,    12,     8,    16,    15,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+      -2,     4,    12,    14,    15,     3,    11,    16,     8,    17,
+      18,    13,     0,     0,     0,    13,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     5,     6,     0,     7,
        0,     8
   };
@@ -1015,8 +1027,8 @@ namespace RWL {
   const signed char
   RWL_Parser::yycheck_[] =
   {
-       0,     1,    26,     7,     0,    27,    20,    31,    12,    27,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+       0,     1,    20,    26,     7,     0,    27,    27,    31,    12,
+      34,    33,    -1,    -1,    -1,    33,    -1,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    26,    27,    -1,    29,
       -1,    31
   };
@@ -1024,22 +1036,22 @@ namespace RWL {
   const unsigned char
   RWL_Parser::yystos_[] =
   {
-       0,    34,    35,     0,     1,    26,    27,    29,    31,    36,
-      37,    27,    20,    26,    37,    27,    37
+       0,    36,    37,     0,     1,    26,    27,    29,    31,    38,
+      39,    27,    20,    33,    26,    39,    27,    39,    34
   };
 
   const unsigned char
   RWL_Parser::yyr1_[] =
   {
-       0,    33,    34,    35,    35,    35,    35,    36,    36,    36,
-      37,    37
+       0,    35,    36,    37,    37,    37,    37,    38,    38,    38,
+      39,    39,    39
   };
 
   const unsigned char
   RWL_Parser::yyr2_[] =
   {
        0,     2,     1,     2,     3,     3,     0,     2,     3,     1,
-       1,     1
+       1,     3,     1
   };
 
 
@@ -1053,7 +1065,8 @@ namespace RWL {
   "IN", "INHERITS", "LET", "LOOP", "POOL", "THEN", "WHILE", "CASE", "ESAC",
   "OF", "DARROW", "NEW", "ISVOID", "ASSIGN", "NOT", "LE", "ERROR", "UPPER",
   "LOWER", "WORD", "NEWLINE", "CHAR", "PRINT", "STRING", "INTEGER_CONST",
-  "BOOL_CONST", "$accept", "program", "stmtlist", "stmt", "exp", YY_NULLPTR
+  "BOOL_CONST", "'('", "')'", "$accept", "program", "stmtlist", "stmt",
+  "exp", YY_NULLPTR
   };
 
 #if YYDEBUG
@@ -1061,7 +1074,7 @@ namespace RWL {
   RWL_Parser::yyrline_[] =
   {
        0,    99,    99,   102,   106,   112,   117,   125,   131,   138,
-     145,   152
+     145,   152,   164
   };
 
   // Print the state stack on the debug stream.
@@ -1106,7 +1119,7 @@ namespace RWL {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+      33,    34,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -1146,8 +1159,8 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:1167
 } // RWL
-#line 1150 "rwl_parser.tab.cc" // lalr1.cc:1167
-#line 166 "rwl_parser.yy" // lalr1.cc:1168
+#line 1163 "rwl_parser.tab.cc" // lalr1.cc:1167
+#line 178 "rwl_parser.yy" // lalr1.cc:1168
 
 
 

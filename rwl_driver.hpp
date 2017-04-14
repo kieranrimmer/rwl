@@ -8,6 +8,7 @@
 #include "rwl_scanner.hpp"
 #include "AST/tree.hpp"
 #include "rwl_parser.tab.hh"
+#include "string_table/string_table.hpp"
 
 namespace RWL{
 
