@@ -124,7 +124,7 @@ print (?i:print)
 {IF} { return (token::IF); }
 
 {name}      {
-                yylval->symbol = stringtable.add_string(yytext);
+                yylval->symbol = idtable.add_string(yytext);
                 return( token::WORD );
             }
 

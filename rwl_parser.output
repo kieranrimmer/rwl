@@ -23,7 +23,6 @@ Terminals unused in grammar
    UPPER
    LOWER
    CHAR
-   STRING
    BOOL_CONST
 
 
@@ -45,6 +44,7 @@ Grammar
     9 exp: INTEGER_CONST
    10    | WORD '(' ')'
    11    | WORD
+   12    | STRING
 
 
 Terminals, with rules where they appear
@@ -80,7 +80,7 @@ WORD (286) 7 10 11
 NEWLINE (287) 2 3 4
 CHAR (288)
 PRINT (289) 6
-STRING (290)
+STRING (290) 12
 INTEGER_CONST (291) 9
 BOOL_CONST (292)
 
@@ -96,7 +96,7 @@ stmtlist (37)
 stmt (38)
     on left: 6 7 8, on right: 3
 exp (39)
-    on left: 9 10 11, on right: 6 7 8
+    on left: 9 10 11 12, on right: 6 7 8
 
 
 State 0
@@ -127,12 +127,13 @@ State 2
     WORD           shift, and go to state 5
     NEWLINE        shift, and go to state 6
     PRINT          shift, and go to state 7
-    INTEGER_CONST  shift, and go to state 8
+    STRING         shift, and go to state 8
+    INTEGER_CONST  shift, and go to state 9
 
     "end of file"  reduce using rule 1 (program)
 
-    stmt  go to state 9
-    exp   go to state 10
+    stmt  go to state 10
+    exp   go to state 11
 
 
 State 3
@@ -146,7 +147,7 @@ State 4
 
     4 stmtlist: stmtlist error . NEWLINE
 
-    NEWLINE  shift, and go to state 11
+    NEWLINE  shift, and go to state 12
 
 
 State 5
@@ -155,8 +156,8 @@ State 5
    10 exp: WORD . '(' ')'
    11    | WORD .
 
-    ASSIGN  shift, and go to state 12
-    '('     shift, and go to state 13
+    ASSIGN  shift, and go to state 13
+    '('     shift, and go to state 14
 
     $default  reduce using rule 11 (exp)
 
@@ -172,89 +173,98 @@ State 7
 
     6 stmt: PRINT . exp
 
-    WORD           shift, and go to state 14
-    INTEGER_CONST  shift, and go to state 8
+    WORD           shift, and go to state 15
+    STRING         shift, and go to state 8
+    INTEGER_CONST  shift, and go to state 9
 
-    exp  go to state 15
+    exp  go to state 16
 
 
 State 8
+
+   12 exp: STRING .
+
+    $default  reduce using rule 12 (exp)
+
+
+State 9
 
     9 exp: INTEGER_CONST .
 
     $default  reduce using rule 9 (exp)
 
 
-State 9
+State 10
 
     3 stmtlist: stmtlist stmt . NEWLINE
 
-    NEWLINE  shift, and go to state 16
+    NEWLINE  shift, and go to state 17
 
 
-State 10
+State 11
 
     8 stmt: exp .
 
     $default  reduce using rule 8 (stmt)
 
 
-State 11
+State 12
 
     4 stmtlist: stmtlist error NEWLINE .
 
     $default  reduce using rule 4 (stmtlist)
 
 
-State 12
+State 13
 
     7 stmt: WORD ASSIGN . exp
 
-    WORD           shift, and go to state 14
-    INTEGER_CONST  shift, and go to state 8
+    WORD           shift, and go to state 15
+    STRING         shift, and go to state 8
+    INTEGER_CONST  shift, and go to state 9
 
-    exp  go to state 17
-
-
-State 13
-
-   10 exp: WORD '(' . ')'
-
-    ')'  shift, and go to state 18
+    exp  go to state 18
 
 
 State 14
 
+   10 exp: WORD '(' . ')'
+
+    ')'  shift, and go to state 19
+
+
+State 15
+
    10 exp: WORD . '(' ')'
    11    | WORD .
 
-    '('  shift, and go to state 13
+    '('  shift, and go to state 14
 
     $default  reduce using rule 11 (exp)
 
 
-State 15
+State 16
 
     6 stmt: PRINT exp .
 
     $default  reduce using rule 6 (stmt)
 
 
-State 16
+State 17
 
     3 stmtlist: stmtlist stmt NEWLINE .
 
     $default  reduce using rule 3 (stmtlist)
 
 
-State 17
+State 18
 
     7 stmt: WORD ASSIGN exp .
 
     $default  reduce using rule 7 (stmt)
 
 
-State 18
+State 19
 
    10 exp: WORD '(' ')' .
 

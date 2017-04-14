@@ -168,6 +168,15 @@ stmt:
         std::cout << "WORD expression detection complete " << std::endl;
     }
 
+    |
+
+    STRING {
+        std::cout << "STRING expression detected: "; $1->print(std::cout); std::cout << std::endl;
+
+        $$ = new string_node($1);
+        std::cout << "STRING expression detection complete " << std::endl;
+    }
+
 
 
 

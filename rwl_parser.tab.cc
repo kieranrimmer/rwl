@@ -729,8 +729,19 @@ namespace RWL {
 #line 730 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
+  case 13:
+#line 173 "rwl_parser.yy" // lalr1.cc:859
+    {
+        std::cout << "STRING expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
 
-#line 734 "rwl_parser.tab.cc" // lalr1.cc:859
+        (yylhs.value.expnode) = new string_node((yystack_[0].value.symbol));
+        std::cout << "STRING expression detection complete " << std::endl;
+    }
+#line 741 "rwl_parser.tab.cc" // lalr1.cc:859
+    break;
+
+
+#line 745 "rwl_parser.tab.cc" // lalr1.cc:859
             default:
               break;
             }
@@ -985,73 +996,73 @@ namespace RWL {
   }
 
 
-  const signed char RWL_Parser::yypact_ninf_ = -25;
+  const signed char RWL_Parser::yypact_ninf_ = -28;
 
   const signed char RWL_Parser::yytable_ninf_ = -3;
 
   const signed char
   RWL_Parser::yypact_[] =
   {
-     -25,     5,     0,   -25,   -21,   -18,   -25,   -23,   -25,   -20,
-     -25,   -25,   -23,   -24,   -22,   -25,   -25,   -25,   -25
+     -28,     4,     0,   -28,   -22,   -18,   -28,   -20,   -28,   -28,
+     -19,   -28,   -28,   -20,   -27,   -21,   -28,   -28,   -28,   -28
   };
 
   const unsigned char
   RWL_Parser::yydefact_[] =
   {
-       6,     0,     0,     1,     0,    12,     3,     0,    10,     0,
-       9,     5,     0,     0,    12,     7,     4,     8,    11
+       6,     0,     0,     1,     0,    12,     3,     0,    13,    10,
+       0,     9,     5,     0,     0,    12,     7,     4,     8,    11
   };
 
   const signed char
   RWL_Parser::yypgoto_[] =
   {
-     -25,   -25,   -25,   -25,    -3
+     -28,   -28,   -28,   -28,    -4
   };
 
   const signed char
   RWL_Parser::yydefgoto_[] =
   {
-      -1,     1,     2,     9,    10
+      -1,     1,     2,    10,    11
   };
 
   const signed char
   RWL_Parser::yytable_[] =
   {
-      -2,     4,    12,    14,    15,     3,    11,    16,     8,    17,
-      18,    13,     0,     0,     0,    13,     0,     0,     0,     0,
+      -2,     4,    13,    16,     3,    12,    15,    19,    17,    18,
+       8,     9,    14,     0,     0,    14,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     5,     6,     0,     7,
-       0,     8
+       8,     9
   };
 
   const signed char
   RWL_Parser::yycheck_[] =
   {
-       0,     1,    20,    26,     7,     0,    27,    27,    31,    12,
-      34,    33,    -1,    -1,    -1,    33,    -1,    -1,    -1,    -1,
+       0,     1,    20,     7,     0,    27,    26,    34,    27,    13,
+      30,    31,    33,    -1,    -1,    33,    -1,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    26,    27,    -1,    29,
-      -1,    31
+      30,    31
   };
 
   const unsigned char
   RWL_Parser::yystos_[] =
   {
-       0,    36,    37,     0,     1,    26,    27,    29,    31,    38,
-      39,    27,    20,    33,    26,    39,    27,    39,    34
+       0,    36,    37,     0,     1,    26,    27,    29,    30,    31,
+      38,    39,    27,    20,    33,    26,    39,    27,    39,    34
   };
 
   const unsigned char
   RWL_Parser::yyr1_[] =
   {
        0,    35,    36,    37,    37,    37,    37,    38,    38,    38,
-      39,    39,    39
+      39,    39,    39,    39
   };
 
   const unsigned char
   RWL_Parser::yyr2_[] =
   {
        0,     2,     1,     2,     3,     3,     0,     2,     3,     1,
-       1,     3,     1
+       1,     3,     1,     1
   };
 
 
@@ -1074,7 +1085,7 @@ namespace RWL {
   RWL_Parser::yyrline_[] =
   {
        0,    99,    99,   102,   106,   112,   117,   125,   131,   138,
-     145,   152,   164
+     145,   152,   164,   173
   };
 
   // Print the state stack on the debug stream.
@@ -1159,8 +1170,8 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:1167
 } // RWL
-#line 1163 "rwl_parser.tab.cc" // lalr1.cc:1167
-#line 178 "rwl_parser.yy" // lalr1.cc:1168
+#line 1174 "rwl_parser.tab.cc" // lalr1.cc:1167
+#line 187 "rwl_parser.yy" // lalr1.cc:1168
 
 
 
