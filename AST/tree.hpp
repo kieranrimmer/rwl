@@ -47,6 +47,25 @@ namespace RWL {
         virtual Value *codegen() = 0;
     };
 
+    class declaration_node: public tree_node {
+    public:
+        Symbol type;
+        Symbol name;
+        exp_node *initialisation;
+
+        declaration_node(Symbol t, Symbol n, exp_node *exp) : type(t), name(n) { initialisation = exp; }
+    };
+
+    class function_node: public tree_node {
+    public:
+        Symbol sym;
+
+        void print()  { std::cout << "function node: " << sym->get_string() << std::endl; };
+
+        void evaluate() { print(); }
+
+    };
+
     class integer_node : public exp_node {
 
     public:

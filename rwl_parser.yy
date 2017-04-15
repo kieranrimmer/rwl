@@ -66,6 +66,7 @@
   std::list<RWL::exp_node *> *stmts;
   RWL::exp_node *st;
   RWL::pgm *prog;
+  RWL::function_node *function;
 }
 
 %error-verbose
@@ -85,10 +86,10 @@
 %token <symbol> STRING 290
 %token <symbol> INTEGER_CONST 291
 %token <boolean> BOOL_CONST 292
+%token <symbol> TYPE_DECL 293
 
 %type <expnode> exp
-%type <stmts> stmtlist
-%type <st> stmt
+%type <stmts> explist
 %type <prog> program
 
 %locations
@@ -96,20 +97,20 @@
 %%
 
 
-program : stmtlist { $$ = new pgm($1); root = $$; }
+program : explist { $$ = new pgm($1); root = $$; }
 ;
 
-stmtlist : stmtlist NEWLINE    /* empty line */
+explist : explist NEWLINE    /* empty line */
      { // just copy up the stmtlist when a blank line occurs
              $$ = $1;
            }
-         | stmtlist stmt NEWLINE
+         | explist exp NEWLINE
             { // copy up the list and add the stmt to it
               $$ = $1;
               std::cout << "statement detected: "; $2->print(); std::cout << std::endl;
               $1->push_back($2);
             }
-         | stmtlist error NEWLINE
+         | explist error NEWLINE
      { // just copy up the stmtlist when an error occurs
              $$ = $1;              
              yyclearin; } 
@@ -117,32 +118,27 @@ stmtlist : stmtlist NEWLINE    /* empty line */
            { $$ = new std::list<exp_node *>(); }  /* empty string */
 ;
 
-stmt: 
 
 
 
 
-  PRINT exp {
-    $$ = new print_stmt($2);
-    std::cout << "PRINT WORD" << std::endl;
-       }
-
-   
-       | WORD ASSIGN exp
-
-        {
-        std::cout << "descending!!!" << std::endl;
-        $$ = new assignment_stmt($1, $3);
-        }
-
-        | exp {std::cout << "expression detected here: "; $1->print(); std::cout  << std::endl;}
-
-
-
-
-   ;
 
   exp:
+
+  PRINT exp {
+      $$ = new print_stmt($2);
+      std::cout << "PRINT WORD" << std::endl;
+         }
+
+
+         | WORD ASSIGN exp
+
+          {
+          std::cout << "descending!!!" << std::endl;
+          $$ = new assignment_stmt($1, $3);
+          }
+
+          |
 
   INTEGER_CONST {
       std::cout << "INTEGER expression detected: "; $1->print(std::cout); std::cout << std::endl;

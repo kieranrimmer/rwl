@@ -36,6 +36,8 @@ DELETE (?i:delete)
 IMPORT (i?:import)
 SC ";"
 
+type_declarator (int|string|boolean)
+
 GT >
 GTE >=
 LT <
@@ -91,6 +93,12 @@ print (?i:print)
 
 {cpp_comment}  {  }
 
+{type_declarator} {
+                    std::cout << "detected type declarator: " << yytext << std::endl;
+                    yylval->symbol = idtable.add_string(yytext);
+                    return (token::TYPE_DECL);
+                  }
+
 {integer}    {
   std::cout << "detected integer: " << yytext << std::endl;
   yylval->symbol = inttable.add_string(yytext);
@@ -111,6 +119,8 @@ print (?i:print)
   yylval->boolean = 0;
   return token::BOOL_CONST;
 }
+
+
 
 [a-z]       {
                return( token::LOWER );
