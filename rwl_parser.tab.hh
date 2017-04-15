@@ -155,8 +155,8 @@ namespace RWL {
   char *string_const;
     exp_node *expnode;
   char *error;
-  std::list<RWL::statement *> *stmts;
-  RWL::statement *st;
+  std::list<RWL::exp_node *> *stmts;
+  RWL::exp_node *st;
   RWL::pgm *prog;
 
 #line 163 "rwl_parser.tab.hh" // lalr1.cc:377

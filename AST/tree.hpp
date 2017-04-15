@@ -173,16 +173,7 @@ namespace RWL {
         Value *codegen() override;
     };
 
-    class statement {
-    public:
-        virtual void print() {}
-
-        virtual void evaluate() = 0;
-        virtual Value *codegen() = 0;
-
-    };
-
-    class assignment_stmt : public statement {
+    class assignment_stmt : public exp_node {
     protected:
         id_node *_id;
         exp_node *exp;
@@ -196,7 +187,7 @@ namespace RWL {
         virtual Value *codegen() override;
     };
 
-    class print_stmt : public statement {
+    class print_stmt : public exp_node {
     protected:
         Symbol sym;
         exp_node *exp;
@@ -204,15 +195,17 @@ namespace RWL {
         print_stmt(Symbol _sym) : sym(_sym) {};
         print_stmt(exp_node *_exp) : exp(_exp) {};
 
+        void print() override { std::cout << "Print node: " << std::endl << "\tsym:" << sym << std::endl << "\texp: " << std::endl; exp->print(); std::cout << "End print node" << std::endl;  };
+
         virtual void evaluate() override;
         virtual Value *codegen() override;
     };
 
     class pgm {
     protected:
-        std::list<statement *> *stmts;
+        std::list<exp_node *> *exps;
     public:
-        pgm(std::list<statement *> *stmtlist) : stmts(stmtlist) {};
+        pgm(std::list<exp_node *> *explist) : exps(explist) {};
 
         void evaluate();
         Value *codegen();

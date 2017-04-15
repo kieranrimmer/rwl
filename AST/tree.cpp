@@ -140,12 +140,12 @@ namespace RWL {
     }
 
     void pgm::evaluate() {
-        std::list<statement *>::iterator stmtIter;
+        std::list<exp_node *>::iterator expIter;
         std::cout << "Program root node..." << std::endl;
-        for (stmtIter = stmts->begin(); stmtIter != stmts->end();
-             stmtIter++) {
-            (*stmtIter)->print();
-            (*stmtIter)->evaluate();
+        for (expIter = exps->begin(); expIter != exps->end();
+             expIter++) {
+            (*expIter)->print();
+            (*expIter)->evaluate();
         }
     }
 

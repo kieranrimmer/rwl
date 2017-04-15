@@ -669,7 +669,7 @@ namespace RWL {
 
   case 6:
 #line 117 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.stmts) = new std::list<statement *>(); }
+    { (yylhs.value.stmts) = new std::list<exp_node *>(); }
 #line 674 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
@@ -698,7 +698,7 @@ namespace RWL {
     break;
 
   case 10:
-#line 145 "rwl_parser.yy" // lalr1.cc:859
+#line 147 "rwl_parser.yy" // lalr1.cc:859
     {
       std::cout << "INTEGER expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
       (yylhs.value.expnode) = new integer_node((yystack_[0].value.symbol));
@@ -707,7 +707,7 @@ namespace RWL {
     break;
 
   case 11:
-#line 152 "rwl_parser.yy" // lalr1.cc:859
+#line 154 "rwl_parser.yy" // lalr1.cc:859
     {
 
     std::cout << "function expression detected: "; (yystack_[2].value.symbol)->print(std::cout); std::cout << std::endl;
@@ -719,7 +719,7 @@ namespace RWL {
     break;
 
   case 12:
-#line 164 "rwl_parser.yy" // lalr1.cc:859
+#line 166 "rwl_parser.yy" // lalr1.cc:859
     {
         std::cout << "WORD expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
 
@@ -730,7 +730,7 @@ namespace RWL {
     break;
 
   case 13:
-#line 173 "rwl_parser.yy" // lalr1.cc:859
+#line 175 "rwl_parser.yy" // lalr1.cc:859
     {
         std::cout << "STRING expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
 
@@ -1085,7 +1085,7 @@ namespace RWL {
   RWL_Parser::yyrline_[] =
   {
        0,    99,    99,   102,   106,   112,   117,   125,   131,   138,
-     145,   152,   164,   173
+     147,   154,   166,   175
   };
 
   // Print the state stack on the debug stream.
@@ -1171,7 +1171,7 @@ namespace RWL {
 #line 5 "rwl_parser.yy" // lalr1.cc:1167
 } // RWL
 #line 1174 "rwl_parser.tab.cc" // lalr1.cc:1167
-#line 187 "rwl_parser.yy" // lalr1.cc:1168
+#line 189 "rwl_parser.yy" // lalr1.cc:1168
 
 
 

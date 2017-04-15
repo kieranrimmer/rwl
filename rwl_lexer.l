@@ -63,6 +63,7 @@ alpha   [A-Za-z]
 dig     [0-9]
 integer [0-9]+
 name    ({alpha}|{dig}|\$)({alpha}|{dig}|[_.\-/$])*
+disallowed_name {name}([aeiou]|os)
 num1    [-+]?{dig}+\.?([eE][-+]?{dig}+)?
 num2    [-+]?{dig}*\.{dig}+([eE][-+]?{dig}+)?
 number  {num1}|{num2}
@@ -122,6 +123,8 @@ print (?i:print)
 
 
 {IF} { return (token::IF); }
+
+{disallowed_name} { yylval->error = strdup(yytext); std::cout << "Disallowed name: " << yytext << "!!!" <<std::endl; return (token::ERROR); }
 
 {name}      {
                 yylval->symbol = idtable.add_string(yytext);

@@ -63,8 +63,8 @@
   char *string_const;
     exp_node *expnode;
   char *error;
-  std::list<RWL::statement *> *stmts;
-  RWL::statement *st;
+  std::list<RWL::exp_node *> *stmts;
+  RWL::exp_node *st;
   RWL::pgm *prog;
 }
 
@@ -114,7 +114,7 @@ stmtlist : stmtlist NEWLINE    /* empty line */
              $$ = $1;              
              yyclearin; } 
          |  
-           { $$ = new std::list<statement *>(); }  /* empty string */
+           { $$ = new std::list<exp_node *>(); }  /* empty string */
 ;
 
 stmt: 
@@ -142,7 +142,9 @@ stmt:
 
    ;
 
-  exp:  INTEGER_CONST {
+  exp:
+
+  INTEGER_CONST {
       std::cout << "INTEGER expression detected: "; $1->print(std::cout); std::cout << std::endl;
       $$ = new integer_node($1);
     }
