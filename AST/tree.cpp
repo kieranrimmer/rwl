@@ -97,7 +97,7 @@ namespace RWL {
     }
 
     void times_node::evaluate() {
-        std::cout << "times_node: "; left->print(); std::cout << " "; right->print();
+        std::cout << blue << "times_node: " << norm; left->print(); std::cout << " "; right->print();
     }
 
     void divide_node::print() {
@@ -128,8 +128,7 @@ namespace RWL {
     }
 
     void assignment_stmt::evaluate() {
-        std::cout << "assignment_node: " << _id->get_symbol()->get_string() << " = ";
-        std::cout << "assignment_node: " << _id->get_symbol()->get_string() << " = ";
+        std::cout << blue << "assignment_node: " << norm << _id->get_symbol()->get_string() << " = ";
         exp->print();
     }
 

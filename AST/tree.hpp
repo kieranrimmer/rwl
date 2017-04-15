@@ -21,6 +21,7 @@
 #include "llvm/IR/Verifier.h"
 
 #include "../string_table/string_table.hpp"
+#include "../rwl_util.hpp"
 
 using Value=llvm::Value;
 

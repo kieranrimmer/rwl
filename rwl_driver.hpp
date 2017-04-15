@@ -9,6 +9,7 @@
 #include "AST/tree.hpp"
 #include "rwl_parser.tab.hh"
 #include "string_table/string_table.hpp"
+#include "rwl_util.hpp"
 
 namespace RWL{
 
@@ -49,10 +50,8 @@ private:
    RWL::RWL_Parser  *parser  = nullptr;
    RWL::RWL_Scanner *scanner = nullptr;
    
-   const std::string red   = "\033[1;31m";
-   const std::string blue  = "\033[1;36m";
-   const std::string norm  = "\033[0m";
+
 };
 
-} /* end namespace MC */
+}
 #endif /* END __RWLDRIVER_HPP__ */
