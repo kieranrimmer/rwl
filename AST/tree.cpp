@@ -35,7 +35,6 @@ namespace RWL {
     Value *string_node::codegen() { return nullptr; }
     Value *assignment_stmt::codegen() { return nullptr; }
     Value *operator_node::codegen() { return nullptr; }
-//    template <class Elem> Value *list_node<Elem>::codegen() { return nullptr; }
 
     void integer_node::print() {
         std::cout << sym->get_string();
@@ -138,20 +137,6 @@ namespace RWL {
     void print_stmt::evaluate() {
         std::cout << "print_node: " << sym->get_string() << " = " << sym->get_string() << std::endl;
     }
-
-//    template <class Elem> void list_node<Elem>::evaluate() {
-//        std::list<exp_node *>::iterator expIter;
-//        std::cout << "Expression list node (block)..." << std::endl;
-//        for (expIter = elements->begin(); expIter != elements->end();
-//             expIter++) {
-//            (*expIter)->print();
-//            (*expIter)->evaluate();
-//        }
-//    }
-
-//    template <class Elem> void list_node<Elem>::print() {
-//       evaluate();
-//    }
 
 
 

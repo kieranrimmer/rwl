@@ -66,8 +66,8 @@ namespace RWL {
         }
 
         void evaluate() override {
-            std::list<exp_node *>::iterator expIter;
-            std::cout << "Expression list node (block)..." << std::endl;
+            typename std::list<Elem>::iterator expIter;
+            std::cout << "templated list node (block) []..." << std::endl;
             for (expIter = elements->begin(); expIter != elements->end();
                  expIter++) {
                 (*expIter)->print();
