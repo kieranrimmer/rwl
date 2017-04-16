@@ -51,7 +51,9 @@ namespace RWL {
 
         virtual Value *codegen() = 0;
 
-        virtual void dump(ostream& stream, int n) = 0;
+        virtual void dump(ostream& stream, int n) { stream << "dumping from exp_node" << std::endl; print(); };
+
+        virtual int len() { return 0; }
     };
 
     typedef exp_node *Expression;
@@ -77,7 +79,7 @@ namespace RWL {
 
         virtual list_node<Elem> *copy_list() = 0;
         virtual ~list_node() { }
-        virtual int len() = 0;
+        int len() override  { return 0; }
 
         virtual Elem nth_length(int n, int &len) = 0;
 
@@ -93,7 +95,7 @@ namespace RWL {
 
         void evaluate() override {
 //            typename std::list<Elem>::iterator expIter;
-//            std::cout << red << "templated list node (block), with " << elements->size() << " formal parameters" << norm << std::endl;
+            std::cout << red << "templated list node (block), with  formal parameters" << norm << std::endl;
 //            for (expIter = elements->begin(); expIter != elements->end();
 //                 expIter++) {
 //                std::cout << blue << "@ element #" << (*expIter) << norm << std::endl;
@@ -299,6 +301,8 @@ namespace RWL {
 ///////////////////////////////////////////////////////////////////////////
     template <class Elem> void single_list_node<Elem>::dump(ostream& stream, int n)
     {
+        elem->print();
+        stream << "indside dump() for single list node" << std::endl;
         elem->dump(stream, n);
     }
 
@@ -363,6 +367,7 @@ namespace RWL {
         size = len();
         stream << pad(n) << "list\n";
         for (i = 0; i < size; i++)
+//            std::cout << "i = " << i << std::endl;
             nth(i)->dump(stream, n+2);
         stream << pad(n) << "(end_of_list)\n";
     }
