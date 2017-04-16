@@ -47,11 +47,17 @@ namespace RWL {
         virtual Value *codegen() = 0;
     };
 
-    class declaration_node: public tree_node {
+    class declaration_node: public exp_node {
     public:
         Symbol type;
         Symbol name;
         exp_node *initialisation;
+
+        void print() override  { std::cout << "declaration node: " << type->get_string() << std::endl; };
+
+        void evaluate() override { print(); }
+
+        Value *codegen() override { return nullptr; }
 
         declaration_node(Symbol t, Symbol n, exp_node *exp) : type(t), name(n) { initialisation = exp; }
     };

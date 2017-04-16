@@ -140,6 +140,12 @@ explist : explist NEWLINE    /* empty line */
 
           |
 
+          TYPE_DECL WORD ASSIGN exp {
+          std::cout << "found variable definition!!!" << std::endl;
+          $$ = new declaration_node($1, $2, $4);
+          }
+          |
+
   INTEGER_CONST {
       std::cout << "INTEGER expression detected: "; $1->print(std::cout); std::cout << std::endl;
       $$ = new integer_node($1);
