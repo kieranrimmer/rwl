@@ -35,6 +35,7 @@ namespace RWL {
     Value *string_node::codegen() { return nullptr; }
     Value *assignment_stmt::codegen() { return nullptr; }
     Value *operator_node::codegen() { return nullptr; }
+    Value *exp_list_node::codegen() { return nullptr; }
 
     void integer_node::print() {
         std::cout << sym->get_string();
@@ -137,6 +138,22 @@ namespace RWL {
     void print_stmt::evaluate() {
         std::cout << "print_node: " << sym->get_string() << " = " << sym->get_string() << std::endl;
     }
+
+    void exp_list_node::evaluate() {
+        std::list<exp_node *>::iterator expIter;
+        std::cout << "Program root node..." << std::endl;
+        for (expIter = exps->begin(); expIter != exps->end();
+             expIter++) {
+            (*expIter)->print();
+            (*expIter)->evaluate();
+        }
+    }
+
+    void exp_list_node::print() {
+       evaluate();
+    }
+
+
 
     void pgm::evaluate() {
         std::list<exp_node *>::iterator expIter;

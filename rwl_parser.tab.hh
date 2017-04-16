@@ -211,7 +211,8 @@ namespace RWL {
         STRING = 290,
         INTEGER_CONST = 291,
         BOOL_CONST = 292,
-        TYPE_DECL = 293
+        TYPE_DECL = 293,
+        DEF = 294
       };
     };
 
@@ -519,12 +520,12 @@ namespace RWL {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 33,     ///< Last index in yytable_.
+      yylast_ = 34,     ///< Last index in yytable_.
       yynnts_ = 4,  ///< Number of nonterminal symbols.
       yyfinal_ = 3, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 36  ///< Number of tokens.
+      yyntokens_ = 39  ///< Number of tokens.
     };
 
 
@@ -536,7 +537,7 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:377
 } // RWL
-#line 540 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 541 "rwl_parser.tab.hh" // lalr1.cc:377
 
 
 

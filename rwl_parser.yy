@@ -87,6 +87,7 @@
 %token <symbol> INTEGER_CONST 291
 %token <boolean> BOOL_CONST 292
 %token <symbol> TYPE_DECL 293
+%token DEF 294
 
 %type <expnode> exp
 %type <stmts> explist
@@ -143,6 +144,12 @@ explist : explist NEWLINE    /* empty line */
           TYPE_DECL WORD ASSIGN exp {
           std::cout << "found variable definition!!!" << std::endl;
           $$ = new declaration_node($1, $2, $4);
+          }
+          |
+
+          DEF TYPE_DECL WORD '(' ')' '{' exp '}' {
+                std::cout << red << "found function declaration!!!" << norm << std::endl;
+                $$ = new function_node($2, $3, $7);
           }
           |
 

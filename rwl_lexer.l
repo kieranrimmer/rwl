@@ -35,8 +35,9 @@ NEW (?i:new)
 DELETE (?i:delete)
 IMPORT (i?:import)
 SC ";"
+DEF def
 
-type_declarator (int|string|boolean)
+type_declarator (int|string|boolean|void)
 
 GT >
 GTE >=
@@ -92,6 +93,10 @@ print (?i:print)
 
 
 {cpp_comment}  {  }
+
+{DEF} {
+    return (token::DEF);
+}
 
 {type_declarator} {
                     std::cout << "detected type declarator: " << yytext << std::endl;

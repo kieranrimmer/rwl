@@ -40,17 +40,20 @@ Grammar
     6 exp: PRINT exp
     7    | WORD ASSIGN exp
     8    | TYPE_DECL WORD ASSIGN exp
-    9    | INTEGER_CONST
-   10    | WORD '(' ')'
-   11    | WORD
-   12    | STRING
+    9    | DEF TYPE_DECL WORD '(' ')' '{' exp '}'
+   10    | INTEGER_CONST
+   11    | WORD '(' ')'
+   12    | WORD
+   13    | STRING
 
 
 Terminals, with rules where they appear
 
 "end of file" (0) 0
-'(' (40) 10
-')' (41) 10
+'(' (40) 9 11
+')' (41) 9 11
+'{' (123) 9
+'}' (125) 9
 error (256) 4
 CLASS (258)
 ELSE (259)
@@ -75,26 +78,27 @@ LE (282)
 ERROR (283)
 UPPER (284)
 LOWER (285)
-WORD (286) 7 8 10 11
+WORD (286) 7 8 9 11 12
 NEWLINE (287) 2 3 4
 CHAR (288)
 PRINT (289) 6
-STRING (290) 12
-INTEGER_CONST (291) 9
+STRING (290) 13
+INTEGER_CONST (291) 10
 BOOL_CONST (292)
-TYPE_DECL (293) 8
+TYPE_DECL (293) 8 9
+DEF (294) 9
 
 
 Nonterminals, with rules where they appear
 
-$accept (36)
+$accept (39)
     on left: 0
-program (37)
+program (40)
     on left: 1, on right: 0
-explist (38)
+explist (41)
     on left: 2 3 4 5, on right: 1 2 3 4
-exp (39)
-    on left: 6 7 8 9 10 11 12, on right: 3 6 7 8
+exp (42)
+    on left: 6 7 8 9 10 11 12 13, on right: 3 6 7 8 9
 
 
 State 0
@@ -128,10 +132,11 @@ State 2
     STRING         shift, and go to state 8
     INTEGER_CONST  shift, and go to state 9
     TYPE_DECL      shift, and go to state 10
+    DEF            shift, and go to state 11
 
     "end of file"  reduce using rule 1 (program)
 
-    exp  go to state 11
+    exp  go to state 12
 
 
 State 3
@@ -145,19 +150,19 @@ State 4
 
     4 explist: explist error . NEWLINE
 
-    NEWLINE  shift, and go to state 12
+    NEWLINE  shift, and go to state 13
 
 
 State 5
 
     7 exp: WORD . ASSIGN exp
-   10    | WORD . '(' ')'
-   11    | WORD .
+   11    | WORD . '(' ')'
+   12    | WORD .
 
-    ASSIGN  shift, and go to state 13
-    '('     shift, and go to state 14
+    ASSIGN  shift, and go to state 14
+    '('     shift, and go to state 15
 
-    $default  reduce using rule 11 (exp)
+    $default  reduce using rule 12 (exp)
 
 
 State 6
@@ -176,46 +181,54 @@ State 7
     STRING         shift, and go to state 8
     INTEGER_CONST  shift, and go to state 9
     TYPE_DECL      shift, and go to state 10
+    DEF            shift, and go to state 11
 
-    exp  go to state 15
+    exp  go to state 16
 
 
 State 8
 
-   12 exp: STRING .
+   13 exp: STRING .
 
-    $default  reduce using rule 12 (exp)
+    $default  reduce using rule 13 (exp)
 
 
 State 9
 
-    9 exp: INTEGER_CONST .
+   10 exp: INTEGER_CONST .
 
-    $default  reduce using rule 9 (exp)
+    $default  reduce using rule 10 (exp)
 
 
 State 10
 
     8 exp: TYPE_DECL . WORD ASSIGN exp
 
-    WORD  shift, and go to state 16
+    WORD  shift, and go to state 17
 
 
 State 11
 
-    3 explist: explist exp . NEWLINE
+    9 exp: DEF . TYPE_DECL WORD '(' ')' '{' exp '}'
 
-    NEWLINE  shift, and go to state 17
+    TYPE_DECL  shift, and go to state 18
 
 
 State 12
+
+    3 explist: explist exp . NEWLINE
+
+    NEWLINE  shift, and go to state 19
+
+
+State 13
 
     4 explist: explist error NEWLINE .
 
     $default  reduce using rule 4 (explist)
 
 
-State 13
+State 14
 
     7 exp: WORD ASSIGN . exp
 
@@ -224,53 +237,61 @@ State 13
     STRING         shift, and go to state 8
     INTEGER_CONST  shift, and go to state 9
     TYPE_DECL      shift, and go to state 10
+    DEF            shift, and go to state 11
 
-    exp  go to state 18
-
-
-State 14
-
-   10 exp: WORD '(' . ')'
-
-    ')'  shift, and go to state 19
+    exp  go to state 20
 
 
 State 15
+
+   11 exp: WORD '(' . ')'
+
+    ')'  shift, and go to state 21
+
+
+State 16
 
     6 exp: PRINT exp .
 
     $default  reduce using rule 6 (exp)
 
 
-State 16
+State 17
 
     8 exp: TYPE_DECL WORD . ASSIGN exp
 
-    ASSIGN  shift, and go to state 20
+    ASSIGN  shift, and go to state 22
 
 
-State 17
+State 18
+
+    9 exp: DEF TYPE_DECL . WORD '(' ')' '{' exp '}'
+
+    WORD  shift, and go to state 23
+
+
+State 19
 
     3 explist: explist exp NEWLINE .
 
     $default  reduce using rule 3 (explist)
 
 
-State 18
+State 20
 
     7 exp: WORD ASSIGN exp .
 
     $default  reduce using rule 7 (exp)
 
 
-State 19
+State 21
 
-   10 exp: WORD '(' ')' .
+   11 exp: WORD '(' ')' .
 
-    $default  reduce using rule 10 (exp)
+    $default  reduce using rule 11 (exp)
 
 
-State 20
+State 22
 
     8 exp: TYPE_DECL WORD ASSIGN . exp
 
@@ -279,12 +300,62 @@ State 20
     STRING         shift, and go to state 8
     INTEGER_CONST  shift, and go to state 9
     TYPE_DECL      shift, and go to state 10
+    DEF            shift, and go to state 11
 
-    exp  go to state 21
+    exp  go to state 24
 
 
-State 21
+State 23
+
+    9 exp: DEF TYPE_DECL WORD . '(' ')' '{' exp '}'
+
+    '('  shift, and go to state 25
+
+
+State 24
 
     8 exp: TYPE_DECL WORD ASSIGN exp .
 
     $default  reduce using rule 8 (exp)
+
+
+State 25
+
+    9 exp: DEF TYPE_DECL WORD '(' . ')' '{' exp '}'
+
+    ')'  shift, and go to state 26
+
+
+State 26
+
+    9 exp: DEF TYPE_DECL WORD '(' ')' . '{' exp '}'
+
+    '{'  shift, and go to state 27
+
+
+State 27
+
+    9 exp: DEF TYPE_DECL WORD '(' ')' '{' . exp '}'
+
+    WORD           shift, and go to state 5
+    PRINT          shift, and go to state 7
+    STRING         shift, and go to state 8
+    INTEGER_CONST  shift, and go to state 9
+    TYPE_DECL      shift, and go to state 10
+    DEF            shift, and go to state 11
+
+    exp  go to state 28
+
+
+State 28
+
+    9 exp: DEF TYPE_DECL WORD '(' ')' '{' exp . '}'
+
+    '}'  shift, and go to state 29
+
+
+State 29
+
+    9 exp: DEF TYPE_DECL WORD '(' ')' '{' exp '}' .
+
+    $default  reduce using rule 9 (exp)

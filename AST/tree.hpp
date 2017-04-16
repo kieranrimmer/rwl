@@ -47,13 +47,27 @@ namespace RWL {
         virtual Value *codegen() = 0;
     };
 
+    class exp_list_node: public exp_node {
+    public:
+        std::list<exp_node *> *exps;
+
+        exp_list_node(std::list<exp_node *> *explist) : exps(explist) {}
+
+        exp_list_node() {}
+
+        void print() override;
+        void evaluate() override;
+        Value *codegen() override;
+
+    };
+
     class declaration_node: public exp_node {
     public:
         Symbol type;
         Symbol name;
         exp_node *initialisation;
 
-        void print() override  { std::cout << "declaration node: " << type->get_string() << std::endl; };
+        void print() override  { std::cout << "declaration node: type: " << type->get_string() << ", variable name: " << name->get_string() << ", intitialisation: "; initialisation->print(); std::cout << std::endl; }
 
         void evaluate() override { print(); }
 
@@ -62,13 +76,19 @@ namespace RWL {
         declaration_node(Symbol t, Symbol n, exp_node *exp) : type(t), name(n) { initialisation = exp; }
     };
 
-    class function_node: public tree_node {
+    class function_node: public exp_node {
     public:
-        Symbol sym;
+        Symbol returnType;
+        Symbol name;
+        exp_node *body;
 
-        void print()  { std::cout << "function node: " << sym->get_string() << std::endl; };
+        void print() override  { std::cout << "function node: return type: " << returnType->get_string() << ", function name: " << name->get_string() << ", function body: "; body->print(); std::cout << std::endl; }
 
-        void evaluate() { print(); }
+        void evaluate() override { print(); }
+
+        Value *codegen() override { return nullptr; }
+
+        function_node(Symbol t, Symbol n, exp_node *exp) : returnType(t), name(n) { body = exp; }
 
     };
 
