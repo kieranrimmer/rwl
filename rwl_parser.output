@@ -37,25 +37,31 @@ Grammar
     4        | explist error NEWLINE
     5        | %empty
 
-    6 exp: PRINT exp
-    7    | '{' explist '}'
-    8    | WORD ASSIGN exp
-    9    | TYPE_DECL WORD ASSIGN exp
-   10    | DEF TYPE_DECL WORD '(' ')' '{' exp '}'
-   11    | INTEGER_CONST
-   12    | WORD '(' ')'
-   13    | WORD
-   14    | STRING
+    6 explist_params: explist_params ',' exp
+    7               | exp
+    8               | explist_params error
+    9               | %empty
+
+   10 exp: PRINT exp
+   11    | '{' explist '}'
+   12    | WORD ASSIGN exp
+   13    | TYPE_DECL WORD ASSIGN exp
+   14    | DEF TYPE_DECL WORD '(' explist_params ')' '{' exp '}'
+   15    | INTEGER_CONST
+   16    | WORD '(' ')'
+   17    | WORD
+   18    | STRING
 
 
 Terminals, with rules where they appear
 
 "end of file" (0) 0
-'(' (40) 10 12
-')' (41) 10 12
-'{' (123) 7 10
-'}' (125) 7 10
-error (256) 4
+'(' (40) 14 16
+')' (41) 14 16
+',' (44) 6
+'{' (123) 11 14
+'}' (125) 11 14
+error (256) 4 8
 CLASS (258)
 ELSE (259)
 FI (260)
@@ -73,33 +79,35 @@ OF (271)
 DARROW (272)
 NEW (273)
 ISVOID (274)
-ASSIGN (280) 8 9
+ASSIGN (280) 12 13
 NOT (281)
 LE (282)
 ERROR (283)
 UPPER (284)
 LOWER (285)
-WORD (286) 8 9 10 12 13
+WORD (286) 12 13 14 16 17
 NEWLINE (287) 2 3 4
 CHAR (288)
-PRINT (289) 6
-STRING (290) 14
-INTEGER_CONST (291) 11
+PRINT (289) 10
+STRING (290) 18
+INTEGER_CONST (291) 15
 BOOL_CONST (292)
-TYPE_DECL (293) 9 10
-DEF (294) 10
+TYPE_DECL (293) 13 14
+DEF (294) 14
 
 
 Nonterminals, with rules where they appear
 
-$accept (39)
+$accept (40)
     on left: 0
-program (40)
+program (41)
     on left: 1, on right: 0
-explist (41)
-    on left: 2 3 4 5, on right: 1 2 3 4 7
-exp (42)
-    on left: 6 7 8 9 10 11 12 13 14, on right: 3 6 8 9 10
+explist (42)
+    on left: 2 3 4 5, on right: 1 2 3 4 11
+explist_params (43)
+    on left: 6 7 8 9, on right: 6 8 14
+exp (44)
+    on left: 10 11 12 13 14 15 16 17 18, on right: 3 6 7 10 12 13 14
 
 
 State 0
@@ -157,14 +165,14 @@ State 4
 
 State 5
 
-    8 exp: WORD . ASSIGN exp
-   12    | WORD . '(' ')'
-   13    | WORD .
+   12 exp: WORD . ASSIGN exp
+   16    | WORD . '(' ')'
+   17    | WORD .
 
     ASSIGN  shift, and go to state 15
     '('     shift, and go to state 16
 
-    $default  reduce using rule 13 (exp)
+    $default  reduce using rule 17 (exp)
 
 
 State 6
@@ -176,7 +184,7 @@ State 6
 
 State 7
 
-    6 exp: PRINT . exp
+   10 exp: PRINT . exp
 
     WORD           shift, and go to state 5
     PRINT          shift, and go to state 7
@@ -191,35 +199,35 @@ State 7
 
 State 8
 
-   14 exp: STRING .
+   18 exp: STRING .
 
-    $default  reduce using rule 14 (exp)
+    $default  reduce using rule 18 (exp)
 
 
 State 9
 
-   11 exp: INTEGER_CONST .
+   15 exp: INTEGER_CONST .
 
-    $default  reduce using rule 11 (exp)
+    $default  reduce using rule 15 (exp)
 
 
 State 10
 
-    9 exp: TYPE_DECL . WORD ASSIGN exp
+   13 exp: TYPE_DECL . WORD ASSIGN exp
 
     WORD  shift, and go to state 18
 
 
 State 11
 
-   10 exp: DEF . TYPE_DECL WORD '(' ')' '{' exp '}'
+   14 exp: DEF . TYPE_DECL WORD '(' explist_params ')' '{' exp '}'
 
     TYPE_DECL  shift, and go to state 19
 
 
 State 12
 
-    7 exp: '{' . explist '}'
+   11 exp: '{' . explist '}'
 
     $default  reduce using rule 5 (explist)
 
@@ -242,7 +250,7 @@ State 14
 
 State 15
 
-    8 exp: WORD ASSIGN . exp
+   12 exp: WORD ASSIGN . exp
 
     WORD           shift, and go to state 5
     PRINT          shift, and go to state 7
@@ -257,28 +265,28 @@ State 15
 
 State 16
 
-   12 exp: WORD '(' . ')'
+   16 exp: WORD '(' . ')'
 
     ')'  shift, and go to state 23
 
 
 State 17
 
-    6 exp: PRINT exp .
+   10 exp: PRINT exp .
 
-    $default  reduce using rule 6 (exp)
+    $default  reduce using rule 10 (exp)
 
 
 State 18
 
-    9 exp: TYPE_DECL WORD . ASSIGN exp
+   13 exp: TYPE_DECL WORD . ASSIGN exp
 
     ASSIGN  shift, and go to state 24
 
 
 State 19
 
-   10 exp: DEF TYPE_DECL . WORD '(' ')' '{' exp '}'
+   14 exp: DEF TYPE_DECL . WORD '(' explist_params ')' '{' exp '}'
 
     WORD  shift, and go to state 25
 
@@ -288,7 +296,7 @@ State 20
     2 explist: explist . NEWLINE
     3        | explist . exp NEWLINE
     4        | explist . error NEWLINE
-    7 exp: '{' explist . '}'
+   11 exp: '{' explist . '}'
 
     error          shift, and go to state 4
     WORD           shift, and go to state 5
@@ -313,21 +321,21 @@ State 21
 
 State 22
 
-    8 exp: WORD ASSIGN exp .
-
-    $default  reduce using rule 8 (exp)
-
-
-State 23
-
-   12 exp: WORD '(' ')' .
+   12 exp: WORD ASSIGN exp .
 
     $default  reduce using rule 12 (exp)
 
 
+State 23
+
+   16 exp: WORD '(' ')' .
+
+    $default  reduce using rule 16 (exp)
+
+
 State 24
 
-    9 exp: TYPE_DECL WORD ASSIGN . exp
+   13 exp: TYPE_DECL WORD ASSIGN . exp
 
     WORD           shift, and go to state 5
     PRINT          shift, and go to state 7
@@ -342,42 +350,28 @@ State 24
 
 State 25
 
-   10 exp: DEF TYPE_DECL WORD . '(' ')' '{' exp '}'
+   14 exp: DEF TYPE_DECL WORD . '(' explist_params ')' '{' exp '}'
 
     '('  shift, and go to state 28
 
 
 State 26
 
-    7 exp: '{' explist '}' .
+   11 exp: '{' explist '}' .
 
-    $default  reduce using rule 7 (exp)
+    $default  reduce using rule 11 (exp)
 
 
 State 27
 
-    9 exp: TYPE_DECL WORD ASSIGN exp .
+   13 exp: TYPE_DECL WORD ASSIGN exp .
 
-    $default  reduce using rule 9 (exp)
+    $default  reduce using rule 13 (exp)
 
 
 State 28
 
-   10 exp: DEF TYPE_DECL WORD '(' . ')' '{' exp '}'
-
-    ')'  shift, and go to state 29
-
-
-State 29
-
-   10 exp: DEF TYPE_DECL WORD '(' ')' . '{' exp '}'
-
-    '{'  shift, and go to state 30
-
-
-State 30
-
-   10 exp: DEF TYPE_DECL WORD '(' ')' '{' . exp '}'
+   14 exp: DEF TYPE_DECL WORD '(' . explist_params ')' '{' exp '}'
 
     WORD           shift, and go to state 5
     PRINT          shift, and go to state 7
@@ -387,18 +381,90 @@ State 30
     DEF            shift, and go to state 11
     '{'            shift, and go to state 12
 
-    exp  go to state 31
+    $default  reduce using rule 9 (explist_params)
+
+    explist_params  go to state 29
+    exp             go to state 30
+
+
+State 29
+
+    6 explist_params: explist_params . ',' exp
+    8               | explist_params . error
+   14 exp: DEF TYPE_DECL WORD '(' explist_params . ')' '{' exp '}'
+
+    error  shift, and go to state 31
+    ','    shift, and go to state 32
+    ')'    shift, and go to state 33
+
+
+State 30
+
+    7 explist_params: exp .
+
+    $default  reduce using rule 7 (explist_params)
 
 
 State 31
 
-   10 exp: DEF TYPE_DECL WORD '(' ')' '{' exp . '}'
+    8 explist_params: explist_params error .
 
-    '}'  shift, and go to state 32
+    $default  reduce using rule 8 (explist_params)
 
 
 State 32
 
-   10 exp: DEF TYPE_DECL WORD '(' ')' '{' exp '}' .
+    6 explist_params: explist_params ',' . exp
 
-    $default  reduce using rule 10 (exp)
+    WORD           shift, and go to state 5
+    PRINT          shift, and go to state 7
+    STRING         shift, and go to state 8
+    INTEGER_CONST  shift, and go to state 9
+    TYPE_DECL      shift, and go to state 10
+    DEF            shift, and go to state 11
+    '{'            shift, and go to state 12
+
+    exp  go to state 34
+
+
+State 33
+
+   14 exp: DEF TYPE_DECL WORD '(' explist_params ')' . '{' exp '}'
+
+    '{'  shift, and go to state 35
+
+
+State 34
+
+    6 explist_params: explist_params ',' exp .
+
+    $default  reduce using rule 6 (explist_params)
+
+
+State 35
+
+   14 exp: DEF TYPE_DECL WORD '(' explist_params ')' '{' . exp '}'
+
+    WORD           shift, and go to state 5
+    PRINT          shift, and go to state 7
+    STRING         shift, and go to state 8
+    INTEGER_CONST  shift, and go to state 9
+    TYPE_DECL      shift, and go to state 10
+    DEF            shift, and go to state 11
+    '{'            shift, and go to state 12
+
+    exp  go to state 36
+
+
+State 36
+
+   14 exp: DEF TYPE_DECL WORD '(' explist_params ')' '{' exp . '}'
+
+    '}'  shift, and go to state 37
+
+
+State 37
+
+   14 exp: DEF TYPE_DECL WORD '(' explist_params ')' '{' exp '}' .
+
+    $default  reduce using rule 14 (exp)

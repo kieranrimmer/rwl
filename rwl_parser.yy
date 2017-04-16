@@ -63,9 +63,9 @@
   char *string_const;
     exp_node *expnode;
   char *error;
-  std::list<RWL::exp_node *> *stmts;
-  RWL::exp_node *st;
-  RWL::exp_list_node *params;
+  std::list<RWL::Expression> *stmts;
+  RWL::Expression st;
+  RWL::Expressions params;
   RWL::pgm *prog;
   RWL::function_node *function;
 }
@@ -122,11 +122,11 @@ explist : explist NEWLINE    /* empty line */
 ;
 
 explist_params :
-         | explist_params, exp
+          explist_params ',' exp
             { // copy up the list and add the stmt to it
               $$ = $1;
-              std::cout << "statement detected: "; $2->print(); std::cout << std::endl;
-              $1->push_back($2);
+              std::cout << "statement detected: "; $3->print(); std::cout << std::endl;
+              $1->push_back($3);
             }
 
          | exp {
@@ -157,7 +157,7 @@ explist_params :
 
 
          | '{' explist '}' {
-            $$ = new exp_list_node($2);
+            $$ = new list_node<Expression>($2);
 
          }
 

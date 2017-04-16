@@ -155,9 +155,9 @@ namespace RWL {
   char *string_const;
     exp_node *expnode;
   char *error;
-  std::list<RWL::exp_node *> *stmts;
-  RWL::exp_node *st;
-  RWL::exp_list_node *params;
+  std::list<RWL::Expression> *stmts;
+  RWL::Expression st;
+  RWL::Expressions params;
   RWL::pgm *prog;
   RWL::function_node *function;
 
@@ -521,12 +521,12 @@ namespace RWL {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 78,     ///< Last index in yytable_.
+      yylast_ = 62,     ///< Last index in yytable_.
       yynnts_ = 5,  ///< Number of nonterminal symbols.
       yyfinal_ = 3, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 39  ///< Number of tokens.
+      yyntokens_ = 40  ///< Number of tokens.
     };
 
 

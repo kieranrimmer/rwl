@@ -46,7 +46,7 @@ all: rwl
 rwl: $(FILES)
 	$(MAKE) $(SOBJ)
 	$(MAKE) $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS) tree.o util.o string_table.o parser.o lexer.o $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS)  util.o string_table.o parser.o tree.o lexer.o $(LIBS)
 
 parser: rwl_parser.yy
 	${CXX} -c string_table/string_table.cpp -o string_table.o

@@ -47,21 +47,40 @@ namespace RWL {
         virtual Value *codegen() = 0;
     };
 
-    class exp_list_node: public exp_node {
+    typedef exp_node *Expression;
+
+
+
+    template <class Elem> class list_node: public exp_node {
     public:
-        std::list<exp_node *> *exps;
+        std::list<Elem> *elements;
 
-        exp_list_node(std::list<exp_node *> *explist) : exps(explist) {}
+        list_node(std::list<Elem> *explist) : elements(explist) {}
 
-        exp_list_node() {}
+        list_node() {}
 
 
 
-        void print() override;
-        void evaluate() override;
-        Value *codegen() override;
+        void print() override {
+            evaluate();
+        }
+
+        void evaluate() override {
+            std::list<exp_node *>::iterator expIter;
+            std::cout << "Expression list node (block)..." << std::endl;
+            for (expIter = elements->begin(); expIter != elements->end();
+                 expIter++) {
+                (*expIter)->print();
+                (*expIter)->evaluate();
+            }
+        }
+
+        Value *codegen() override { return nullptr; }
 
     };
+
+    typedef list_node<Expression> Expressions_class;
+    typedef Expressions_class *Expressions;
 
     class declaration_node: public exp_node {
     public:
