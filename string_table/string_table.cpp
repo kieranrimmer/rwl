@@ -2,7 +2,6 @@
 #include <assert.h>
 #include "string_table.hpp"
 
-extern char *pad(int n);
 
 //
 // Explicit template instantiations.
@@ -61,7 +60,7 @@ Symbol copy_Symbol(const Symbol s)
 
 void dump_Symbol(ostream& s, int n, Symbol sym)
 {
-  s << pad(n) << sym << endl;
+  s  << sym << endl;
 }
 
 StringEntry::StringEntry(char *s, int l, int i) : Entry(s,l,i) { }

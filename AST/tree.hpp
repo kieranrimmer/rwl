@@ -22,12 +22,15 @@
 
 #include "../string_table/string_table.hpp"
 #include "../rwl_util.hpp"
+#include "../util/util.hpp"
 
 using Value=llvm::Value;
 
 using namespace llvm;
 
 namespace RWL {
+
+    extern std::string pad(int n);
 
     class tree_node {
     protected:
@@ -47,6 +50,8 @@ namespace RWL {
         virtual void evaluate() = 0;
 
         virtual Value *codegen() = 0;
+
+        virtual void dump(ostream& stream, int n) = 0;
     };
 
     typedef exp_node *Expression;
@@ -55,9 +60,9 @@ namespace RWL {
 
     template <class Elem> class list_node: public exp_node {
     public:
-        std::list<Elem> *elements;
-
-        list_node(std::list<Elem> *explist) : elements(explist) {}
+//        std::list<Elem> *elements;
+//
+//        list_node(std::list<Elem> *explist) : elements(explist) {}
 
         list_node() {}
 
@@ -73,6 +78,7 @@ namespace RWL {
         virtual list_node<Elem> *copy_list() = 0;
         virtual ~list_node() { }
         virtual int len() = 0;
+
         virtual Elem nth_length(int n, int &len) = 0;
 
         static list_node<Elem> *nil();
@@ -86,21 +92,21 @@ namespace RWL {
         }
 
         void evaluate() override {
-            typename std::list<Elem>::iterator expIter;
-            std::cout << red << "templated list node (block), with " << elements->size() << " formal parameters" << norm << std::endl;
-            for (expIter = elements->begin(); expIter != elements->end();
-                 expIter++) {
-                std::cout << blue << "@ element #" << (*expIter) << norm << std::endl;
-                (*expIter)->print();
-                (*expIter)->evaluate();
-            }
+//            typename std::list<Elem>::iterator expIter;
+//            std::cout << red << "templated list node (block), with " << elements->size() << " formal parameters" << norm << std::endl;
+//            for (expIter = elements->begin(); expIter != elements->end();
+//                 expIter++) {
+//                std::cout << blue << "@ element #" << (*expIter) << norm << std::endl;
+//                (*expIter)->print();
+//                (*expIter)->evaluate();
+//            }
         }
 
         Value *codegen() override { return nullptr; }
 
     };
 
-    extern char *pad(int n);
+
 
 
 
@@ -109,7 +115,7 @@ namespace RWL {
         list_node<Elem> *copy_list();
         int len();
         Elem nth_length(int n, int &len);
-        void dump(ostream& stream, int n);
+        void dump(ostream& stream, int n) override;
     };
 
     template <class Elem> class single_list_node : public list_node<Elem> {
@@ -121,7 +127,7 @@ namespace RWL {
         list_node<Elem> *copy_list();
         int len();
         Elem nth_length(int n, int &len);
-        void dump(ostream& stream, int n);
+        void dump(ostream& stream, int n) override;
     };
 
 
@@ -137,7 +143,7 @@ namespace RWL {
         int len();
         Elem nth(int n);
         Elem nth_length(int n, int &len);
-        void dump(ostream& stream, int n);
+        void dump(ostream& stream, int n) override;
     };
 
 
@@ -410,6 +416,7 @@ namespace RWL {
 
         void evaluate() override { print(); }
         Value *codegen() override { return nullptr; }
+        void dump(ostream& stream, int n) override {}
 
     };
 
@@ -425,6 +432,7 @@ namespace RWL {
         void evaluate() override { print(); }
 
         Value *codegen() override { return nullptr; }
+        void dump(ostream& stream, int n) override {}
 
         declaration_node(Symbol t, Symbol n, exp_node *exp) : type(t), name(n) { initialisation = exp; }
     };
@@ -436,6 +444,7 @@ namespace RWL {
         Symbol name;
         Expressions formals;
         exp_node *body;
+        void dump(ostream& stream, int n) override {}
 
         void print() override  {
             std::cout << "function node: return type: " << returnType->get_string() << ", function name: " << name->get_string() << norm << std::endl;
@@ -469,6 +478,7 @@ namespace RWL {
         void print() override;
 
         void evaluate() override;
+        void dump(ostream& stream, int n) override {}
 
         Value *codegen() override;
     };
@@ -483,6 +493,7 @@ namespace RWL {
         // and stores the character representation of the operator.
         operator_node(exp_node *L, exp_node *R) : left(L), right(R) {};
         Value *codegen() override;
+        void dump(ostream& stream, int n) override {}
     };
 
     class unary_minus_node : public exp_node {
@@ -497,6 +508,7 @@ namespace RWL {
         void evaluate() override;
 
         Value *codegen() override;
+        void dump(ostream& stream, int n) override {}
     };
 
     class id_node : public exp_node {
@@ -518,6 +530,8 @@ namespace RWL {
         void evaluate() override;
 
         Value *codegen() override;
+
+        void dump(ostream& stream, int n) override {}
     };
 
     class string_node : public exp_node {
@@ -536,6 +550,7 @@ namespace RWL {
         void evaluate() override;
 
         Value *codegen() override;
+        void dump(ostream& stream, int n) override {}
     };
 
     class plus_node : public operator_node {
@@ -599,6 +614,7 @@ namespace RWL {
 
 
         assignment_stmt(Symbol name, exp_node *expr) { _id = new id_node(name); exp = expr; };
+        void dump(ostream& stream, int n) override {}
 
         void print() override;
 
@@ -614,6 +630,7 @@ namespace RWL {
         tree_node *copy() override { return nullptr; }
         print_stmt(Symbol _sym) : sym(_sym) {};
         print_stmt(exp_node *_exp) : exp(_exp) {};
+        void dump(ostream& stream, int n) override {}
 
         void print() override { std::cout << "Print node: " << std::endl << "\tsym:" << sym << std::endl << "\texp: " << std::endl; exp->print(); std::cout << "End print node" << std::endl;  };
 

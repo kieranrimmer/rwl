@@ -3,6 +3,8 @@
 
 #include <string>
 
-extern std::string pad(int);
+namespace RWL {
 
+    extern std::string pad(int);
+}
 #endif
