@@ -141,14 +141,30 @@ namespace RWL {
 
 
     void pgm::evaluate() {
-        std::list<exp_node *>::iterator expIter;
-        std::cout << "Program root node..." << std::endl;
-        for (expIter = exps->begin(); expIter != exps->end();
-             expIter++) {
-            (*expIter)->print();
-            (*expIter)->evaluate();
-        }
+        std::cout << "Program root node..." << exps->len() << std::endl;
+//        for(int i = exps->first(); exps->more(i); i = exps->next(i)) {
+//            (exps->nth(i))->print();
+//            (exps->nth(i))->evaluate();
+//        }
     }
+
+
+    Expressions nil_Expressions()
+    {
+        return new nil_node<Expression>();
+    }
+
+    Expressions single_Expressions(Expression e)
+    {
+        return new single_list_node<Expression>(e);
+    }
+
+    Expressions append_Expressions(Expressions p1, Expressions p2)
+    {
+        return new append_node<Expression>(p1, p2);
+    }
+
+    Expression block(Expressions a1) { return new block_node(a1); }
 
 
 }

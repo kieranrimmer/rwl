@@ -91,8 +91,8 @@
 %token DEF 294
 
 %type <expnode> exp
-%type <stmts> explist
-%type <stmts> explist_params
+%type <params> explist
+%type <params> explist_params
 %type <prog> program
 
 %locations
@@ -103,42 +103,18 @@
 program : explist { $$ = new pgm($1); root = $$; }
 ;
 
-explist : explist NEWLINE    /* empty line */
-     { // just copy up the stmtlist when a blank line occurs
-             $$ = $1;
-           }
+explist : explist NEWLINE    { $$ = single_Expressions($1); }
          | explist exp NEWLINE
-            { // copy up the list and add the stmt to it
-              $$ = $1;
-              std::cout << "statement detected: "; $2->print(); std::cout << std::endl;
-              $1->push_back($2);
-            }
-         | explist error NEWLINE
-     { // just copy up the stmtlist when an error occurs
-             $$ = $1;              
-             yyclearin; } 
-         |  
-           { $$ = new std::list<exp_node *>(); }  /* empty string */
+            { $$ = append_Expressions($1, single_Expressions($2)); }
+         | { $$ = nil_Expressions(); }  /* empty string */
 ;
 
 explist_params :
           explist_params ',' exp
-            { // copy up the list and add the stmt to it
-              $$ = $1;
-              std::cout << "statement detected: "; $3->print(); std::cout << std::endl;
-              $1->push_back($3);
-            }
+            { $$ = append_Expressions($1, single_Expressions($3)); }
 
-         | exp {
-            $$ = new std::list<exp_node *>();
-            $$->push_back($1);
-         }
-         | explist_params error
-     { // just copy up the stmtlist when an error occurs
-             $$ = $1;
-             yyclearin; }
-         |
-           { $$ = new std::list<exp_node *>(); }  /* empty string */
+         | exp { $$ = single_Expressions($1); }
+         | { $$ = nil_Expressions(); }
 ;
 
 
@@ -157,7 +133,7 @@ explist_params :
 
 
          | '{' explist '}' {
-            $$ = new list_node<Expression>($2);
+            $$ = block($2);
 
          }
 
