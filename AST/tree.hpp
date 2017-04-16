@@ -117,6 +117,7 @@ namespace RWL {
         list_node<Elem> *copy_list();
         int len();
         Elem nth_length(int n, int &len);
+        void print() override { std::cout <<  "nil node" << std::endl; }
         void dump(ostream& stream, int n) override;
     };
 
@@ -129,6 +130,7 @@ namespace RWL {
         list_node<Elem> *copy_list();
         int len();
         Elem nth_length(int n, int &len);
+        void print() override { std::cout <<  "single list node: " << std::endl; elem->print(); }
         void dump(ostream& stream, int n) override;
     };
 
@@ -145,6 +147,13 @@ namespace RWL {
         int len();
         Elem nth(int n);
         Elem nth_length(int n, int &len);
+        void print() override {
+            int i, size;
+            size = len();
+            std::cout <<  "append list node: " << std::endl;
+            for (i = 0; i < size; i++)
+                nth(i)->print();
+        }
         void dump(ostream& stream, int n) override;
     };
 

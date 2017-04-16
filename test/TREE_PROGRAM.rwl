@@ -6,5 +6,8 @@ mcilwraith
 smith
 string jkl = "new string"
 def string kr_fn(1, "kfed") { "return string" }
-{ string jkl = "new string" }
+{
+string xyz = "new string"
+int xy = 20
+}
 smith
