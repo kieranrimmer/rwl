@@ -12,3 +12,8 @@ kr = "awesome"
 string jkl = "new string"
 
 def string kr_fn() { "return string" }
+
+{
+string jkl = "new string"
+jkl = "other new string"
+}

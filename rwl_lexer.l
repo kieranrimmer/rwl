@@ -34,7 +34,6 @@ INHERITS (?i:inherits)
 NEW (?i:new)
 DELETE (?i:delete)
 IMPORT (i?:import)
-SC ";"
 DEF def
 
 type_declarator (int|string|boolean|void)

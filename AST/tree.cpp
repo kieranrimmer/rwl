@@ -141,7 +141,7 @@ namespace RWL {
 
     void exp_list_node::evaluate() {
         std::list<exp_node *>::iterator expIter;
-        std::cout << "Program root node..." << std::endl;
+        std::cout << "Expression list node (block)..." << std::endl;
         for (expIter = exps->begin(); expIter != exps->end();
              expIter++) {
             (*expIter)->print();

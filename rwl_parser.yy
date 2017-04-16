@@ -132,6 +132,14 @@ explist : explist NEWLINE    /* empty line */
          }
 
 
+         | '{' explist '}' {
+            $$ = new exp_list_node($2);
+
+         }
+
+
+
+
          | WORD ASSIGN exp
 
           {
