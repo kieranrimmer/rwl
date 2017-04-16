@@ -34,7 +34,6 @@ INHERITS (?i:inherits)
 NEW (?i:new)
 DELETE (?i:delete)
 IMPORT (i?:import)
-SC ";"
 DEF def
 
 type_declarator (int|string|boolean|void)
@@ -124,16 +123,6 @@ print (?i:print)
   yylval->boolean = 0;
   return token::BOOL_CONST;
 }
-
-
-
-[a-z]       {
-               return( token::LOWER );
-            }
-
-[A-Z]       {
-               return( token::UPPER );
-            }
 
 
 

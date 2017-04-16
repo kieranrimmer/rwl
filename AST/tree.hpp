@@ -55,6 +55,8 @@ namespace RWL {
 
         exp_list_node() {}
 
+
+
         void print() override;
         void evaluate() override;
         Value *codegen() override;
@@ -80,6 +82,7 @@ namespace RWL {
     public:
         Symbol returnType;
         Symbol name;
+        std::list<RWL::exp_node *> *formals;
         exp_node *body;
 
         void print() override  { std::cout << "function node: return type: " << returnType->get_string() << ", function name: " << name->get_string() << ", function body: "; body->print(); std::cout << std::endl; }
@@ -88,7 +91,7 @@ namespace RWL {
 
         Value *codegen() override { return nullptr; }
 
-        function_node(Symbol t, Symbol n, exp_node *exp) : returnType(t), name(n) { body = exp; }
+        function_node(Symbol t, Symbol n, std::list<RWL::exp_node *> *formal_list, exp_node *exp) : returnType(t), name(n) { formals = formal_list; body = exp; }
 
     };
 

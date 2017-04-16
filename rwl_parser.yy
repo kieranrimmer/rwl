@@ -65,6 +65,7 @@
   char *error;
   std::list<RWL::exp_node *> *stmts;
   RWL::exp_node *st;
+  RWL::exp_list_node *params;
   RWL::pgm *prog;
   RWL::function_node *function;
 }
@@ -91,6 +92,7 @@
 
 %type <expnode> exp
 %type <stmts> explist
+%type <stmts> explist_params
 %type <prog> program
 
 %locations
@@ -119,6 +121,28 @@ explist : explist NEWLINE    /* empty line */
            { $$ = new std::list<exp_node *>(); }  /* empty string */
 ;
 
+explist_params :
+         | explist_params, exp
+            { // copy up the list and add the stmt to it
+              $$ = $1;
+              std::cout << "statement detected: "; $2->print(); std::cout << std::endl;
+              $1->push_back($2);
+            }
+
+         | exp {
+            $$ = new std::list<exp_node *>();
+            $$->push_back($1);
+         }
+         | explist_params error
+     { // just copy up the stmtlist when an error occurs
+             $$ = $1;
+             yyclearin; }
+         |
+           { $$ = new std::list<exp_node *>(); }  /* empty string */
+;
+
+
+
 
 
 
@@ -130,6 +154,14 @@ explist : explist NEWLINE    /* empty line */
       $$ = new print_stmt($2);
       std::cout << "PRINT WORD" << std::endl;
          }
+
+
+         | '{' explist '}' {
+            $$ = new exp_list_node($2);
+
+         }
+
+
 
 
          | WORD ASSIGN exp
@@ -147,9 +179,9 @@ explist : explist NEWLINE    /* empty line */
           }
           |
 
-          DEF TYPE_DECL WORD '(' ')' '{' exp '}' {
+          DEF TYPE_DECL WORD '(' explist_params ')' '{' exp '}' {
                 std::cout << red << "found function declaration!!!" << norm << std::endl;
-                $$ = new function_node($2, $3, $7);
+                $$ = new function_node($2, $3, $5, $8);
           }
           |
 
