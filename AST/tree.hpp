@@ -67,9 +67,10 @@ namespace RWL {
 
         void evaluate() override {
             typename std::list<Elem>::iterator expIter;
-            std::cout << "templated list node (block) []..." << std::endl;
+            std::cout << red << "templated list node (block), with " << elements->size() << " formal parameters" << norm << std::endl;
             for (expIter = elements->begin(); expIter != elements->end();
                  expIter++) {
+                std::cout << blue << "@ element #" << (*expIter) << norm << std::endl;
                 (*expIter)->print();
                 (*expIter)->evaluate();
             }
@@ -104,7 +105,18 @@ namespace RWL {
         std::list<RWL::exp_node *> *formals;
         exp_node *body;
 
-        void print() override  { std::cout << "function node: return type: " << returnType->get_string() << ", function name: " << name->get_string() << ", function body: "; body->print(); std::cout << std::endl; }
+        void print() override  {
+            std::cout << "function node: return type: " << returnType->get_string() << ", function name: " << name->get_string() << norm << std::endl;
+            std::list<Expression>::iterator expIter;
+            for (expIter = formals->begin(); expIter != formals->end();
+                 expIter++) {
+                std::cout << blue << "@ formal parameter = " << norm;
+                (*expIter)->print();
+                std::cout << std::endl;
+            }
+            std::cout << ", function body: ";
+            body->print(); std::cout << std::endl;
+        }
 
         void evaluate() override { print(); }
 

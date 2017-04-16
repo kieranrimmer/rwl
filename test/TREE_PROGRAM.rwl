@@ -11,7 +11,7 @@ minto
 kr = "awesome"
 string jkl = "new string"
 
-def string kr_fn() { "return string" }
+def string kr_fn(1, "kfed") { "return string" }
 
 {
 string jkl = "new string"
