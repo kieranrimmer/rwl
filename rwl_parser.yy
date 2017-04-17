@@ -97,6 +97,10 @@
 %type <params> explist_params
 %type <prog> program
 
+
+%left ','
+%right ASSIGN
+
 %locations
 
 %%

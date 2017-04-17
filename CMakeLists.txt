@@ -5,5 +5,5 @@ include_directories(/Users/kieranrimmer/packages/llvm/include /Users/kieranrimme
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp rwl_util.hpp rwl_util.cpp)
+set(SOURCE_FILES main.cpp)
 add_executable(rwl ${SOURCE_FILES})
