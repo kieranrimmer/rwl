@@ -68,7 +68,7 @@ namespace RWL {
 
         list_node() {}
 
-        tree_node *copy() override          { return copy_list(); }
+        tree_node *copy() override          { return copy_list();  }
         Elem nth(int n);
         //
         // The next three define a simple iterator.
@@ -114,9 +114,9 @@ namespace RWL {
 
     template <class Elem> class nil_node : public list_node<Elem> {
     public:
-        list_node<Elem> *copy_list();
-        int len();
-        Elem nth_length(int n, int &len);
+        list_node<Elem> *copy_list() override;
+        int len() override;
+        Elem nth_length(int n, int &len) override;
         void print() override { std::cout <<  "nil node" << std::endl; }
         void dump(ostream& stream, int n) override;
     };
@@ -127,9 +127,9 @@ namespace RWL {
         single_list_node(Elem t) {
             elem = t;
         }
-        list_node<Elem> *copy_list();
-        int len();
-        Elem nth_length(int n, int &len);
+        list_node<Elem> *copy_list() override;
+        int len() override;
+        Elem nth_length(int n, int &len) override;
         void print() override { std::cout <<  "single list node: " << std::endl; elem->print(); }
         void dump(ostream& stream, int n) override;
     };
@@ -143,10 +143,10 @@ namespace RWL {
             some = l1;
             rest = l2;
         }
-        list_node<Elem> *copy_list();
-        int len();
+        list_node<Elem> *copy_list() override;
+        int len() override;
         Elem nth(int n);
-        Elem nth_length(int n, int &len);
+        Elem nth_length(int n, int &len) override;
         void print() override {
             int i, size;
             size = len();
@@ -516,8 +516,8 @@ namespace RWL {
 
     public:
         tree_node *copy() override { return nullptr; }
-        Symbol name;
         Symbol type;
+        Symbol name;
 
         formal_node(Symbol t, Symbol n) : type(t), name(n) {};
 
