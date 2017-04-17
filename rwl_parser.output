@@ -22,6 +22,7 @@ Terminals unused in grammar
    ERROR
    UPPER
    LOWER
+   NEWLINE
    CHAR
    BOOL_CONST
 
@@ -36,9 +37,9 @@ Grammar
 
     1 program: explist
 
-    2 explist: exp NEWLINE
-    3        | explist exp NEWLINE
-    4        | explist error NEWLINE
+    2 explist: exp
+    3        | explist exp
+    4        | explist error
     5        | %empty
 
     6 explist_params: explist_params ',' exp
@@ -51,7 +52,7 @@ Grammar
    12    | TYPE_DECL WORD ASSIGN exp
    13    | DEF TYPE_DECL WORD '(' explist_params ')' '{' exp '}'
    14    | INTEGER_CONST
-   15    | WORD '(' ')'
+   15    | WORD '(' explist_params ')'
    16    | WORD
    17    | STRING
 
@@ -89,7 +90,7 @@ ERROR (283)
 UPPER (284)
 LOWER (285)
 WORD (286) 11 12 13 15 16
-NEWLINE (287) 2 3 4
+NEWLINE (287)
 CHAR (288)
 PRINT (289) 9
 STRING (290) 17
@@ -108,7 +109,7 @@ program (41)
 explist (42)
     on left: 2 3 4 5, on right: 1 3 4 10
 explist_params (43)
-    on left: 6 7 8, on right: 6 13
+    on left: 6 7 8, on right: 6 13 15
 exp (44)
     on left: 9 10 11 12 13 14 15 16 17, on right: 2 3 6 7 9 11 12 13
 
@@ -142,7 +143,7 @@ State 0
 State 1
 
    11 exp: WORD . ASSIGN exp
-   15    | WORD . '(' ')'
+   15    | WORD . '(' explist_params ')'
    16    | WORD .
 
     ASSIGN  shift, and go to state 11
@@ -229,8 +230,8 @@ State 8
 State 9
 
     1 program: explist .
-    3 explist: explist . exp NEWLINE
-    4        | explist . error NEWLINE
+    3 explist: explist . exp
+    4        | explist . error
 
     error          shift, and go to state 18
     WORD           shift, and go to state 1
@@ -248,9 +249,9 @@ State 9
 
 State 10
 
-    2 explist: exp . NEWLINE
+    2 explist: exp .
 
-    NEWLINE  shift, and go to state 20
+    $default  reduce using rule 2 (explist)
 
 
 State 11
@@ -265,14 +266,25 @@ State 11
     DEF            shift, and go to state 6
     '{'            shift, and go to state 7
 
-    exp  go to state 21
+    exp  go to state 20
 
 
 State 12
 
-   15 exp: WORD '(' . ')'
+   15 exp: WORD '(' . explist_params ')'
 
-    ')'  shift, and go to state 22
+    WORD           shift, and go to state 1
+    PRINT          shift, and go to state 2
+    STRING         shift, and go to state 3
+    INTEGER_CONST  shift, and go to state 4
+    TYPE_DECL      shift, and go to state 5
+    DEF            shift, and go to state 6
+    '{'            shift, and go to state 7
+
+    $default  reduce using rule 8 (explist_params)
+
+    explist_params  go to state 21
+    exp             go to state 22
 
 
 State 13
@@ -298,8 +310,8 @@ State 15
 
 State 16
 
-    3 explist: explist . exp NEWLINE
-    4        | explist . error NEWLINE
+    3 explist: explist . exp
+    4        | explist . error
    10 exp: '{' explist . '}'
 
     error          shift, and go to state 18
@@ -324,37 +336,39 @@ State 17
 
 State 18
 
-    4 explist: explist error . NEWLINE
+    4 explist: explist error .
 
-    NEWLINE  shift, and go to state 26
+    $default  reduce using rule 4 (explist)
 
 
 State 19
 
-    3 explist: explist exp . NEWLINE
+    3 explist: explist exp .
 
-    NEWLINE  shift, and go to state 27
+    $default  reduce using rule 3 (explist)
 
 
 State 20
-
-    2 explist: exp NEWLINE .
-
-    $default  reduce using rule 2 (explist)
-
-
-State 21
 
    11 exp: WORD ASSIGN exp .
 
     $default  reduce using rule 11 (exp)
 
 
+State 21
+
+    6 explist_params: explist_params . ',' exp
+   15 exp: WORD '(' explist_params . ')'
+
+    ','  shift, and go to state 26
+    ')'  shift, and go to state 27
+
+
 State 22
 
-   15 exp: WORD '(' ')' .
+    7 explist_params: exp .
 
-    $default  reduce using rule 15 (exp)
+    $default  reduce using rule 7 (explist_params)
 
 
 State 23
@@ -388,16 +402,24 @@ State 25
 
 State 26
 
-    4 explist: explist error NEWLINE .
+    6 explist_params: explist_params ',' . exp
 
-    $default  reduce using rule 4 (explist)
+    WORD           shift, and go to state 1
+    PRINT          shift, and go to state 2
+    STRING         shift, and go to state 3
+    INTEGER_CONST  shift, and go to state 4
+    TYPE_DECL      shift, and go to state 5
+    DEF            shift, and go to state 6
+    '{'            shift, and go to state 7
+
+    exp  go to state 30
 
 
 State 27
 
-    3 explist: explist exp NEWLINE .
+   15 exp: WORD '(' explist_params ')' .
 
-    $default  reduce using rule 3 (explist)
+    $default  reduce using rule 15 (exp)
 
 
 State 28
@@ -421,29 +443,36 @@ State 29
 
     $default  reduce using rule 8 (explist_params)
 
-    explist_params  go to state 30
-    exp             go to state 31
+    explist_params  go to state 31
+    exp             go to state 22
 
 
 State 30
 
-    6 explist_params: explist_params . ',' exp
-   13 exp: DEF TYPE_DECL WORD '(' explist_params . ')' '{' exp '}'
+    6 explist_params: explist_params ',' exp .
 
-    ','  shift, and go to state 32
-    ')'  shift, and go to state 33
+    $default  reduce using rule 6 (explist_params)
 
 
 State 31
 
-    7 explist_params: exp .
+    6 explist_params: explist_params . ',' exp
+   13 exp: DEF TYPE_DECL WORD '(' explist_params . ')' '{' exp '}'
 
-    $default  reduce using rule 7 (explist_params)
+    ','  shift, and go to state 26
+    ')'  shift, and go to state 32
 
 
 State 32
 
-    6 explist_params: explist_params ',' . exp
+   13 exp: DEF TYPE_DECL WORD '(' explist_params ')' . '{' exp '}'
+
+    '{'  shift, and go to state 33
+
+
+State 33
+
+   13 exp: DEF TYPE_DECL WORD '(' explist_params ')' '{' . exp '}'
 
     WORD           shift, and go to state 1
     PRINT          shift, and go to state 2
@@ -456,43 +485,14 @@ State 32
     exp  go to state 34
 
 
-State 33
-
-   13 exp: DEF TYPE_DECL WORD '(' explist_params ')' . '{' exp '}'
-
-    '{'  shift, and go to state 35
-
-
 State 34
-
-    6 explist_params: explist_params ',' exp .
-
-    $default  reduce using rule 6 (explist_params)
-
-
-State 35
-
-   13 exp: DEF TYPE_DECL WORD '(' explist_params ')' '{' . exp '}'
-
-    WORD           shift, and go to state 1
-    PRINT          shift, and go to state 2
-    STRING         shift, and go to state 3
-    INTEGER_CONST  shift, and go to state 4
-    TYPE_DECL      shift, and go to state 5
-    DEF            shift, and go to state 6
-    '{'            shift, and go to state 7
-
-    exp  go to state 36
-
-
-State 36
 
    13 exp: DEF TYPE_DECL WORD '(' explist_params ')' '{' exp . '}'
 
-    '}'  shift, and go to state 37
+    '}'  shift, and go to state 35
 
 
-State 37
+State 35
 
    13 exp: DEF TYPE_DECL WORD '(' explist_params ')' '{' exp '}' .
 

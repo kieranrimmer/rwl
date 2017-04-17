@@ -157,7 +157,7 @@ print (?i:print)
 \n          {
                // Update line number
                loc->lines();
-               return( token::NEWLINE );
+               // return( token::NEWLINE );
             }
 
 .    { yylval->error = strdup(yytext); return (token::ERROR); }

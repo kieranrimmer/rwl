@@ -103,10 +103,10 @@
 program : explist { $$ = new pgm($1); root = $$; }
 ;
 
-explist : exp NEWLINE  { $$ = single_Expressions($1); }
-         | explist exp NEWLINE
+explist : exp  { $$ = single_Expressions($1); }
+         | explist exp
             { $$ = append_Expressions($1, single_Expressions($2)); }
-            | explist error NEWLINE
+            | explist error
                  { // just copy up the stmtlist when an error occurs
                          $$ = $1;
                          yyclearin; }
@@ -172,7 +172,7 @@ explist_params :
 
     |
 
-    WORD '(' ')' {
+    WORD '(' explist_params ')' {
 
     std::cout << "function expression detected: "; $1->print(std::cout); std::cout << std::endl;
 

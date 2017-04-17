@@ -1,4 +1,5 @@
 lol
+kfed = 33
 function_call()
 rimmer
 sneddon
@@ -7,7 +8,8 @@ smith
 string jkl = "new string"
 def string kr_fn(1, "kfed") { "return string" }
 {
-string xyz = "new string"
+string xyz = "newer string"
 int xy = 20
+xy = 10
 }
 smith

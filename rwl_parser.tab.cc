@@ -643,20 +643,20 @@ namespace RWL {
 
   case 3:
 #line 106 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.params) = single_Expressions((yystack_[1].value.expnode)); }
+    { (yylhs.value.params) = single_Expressions((yystack_[0].value.expnode)); }
 #line 648 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 4:
 #line 108 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.params) = append_Expressions((yystack_[2].value.params), single_Expressions((yystack_[1].value.expnode))); }
+    { (yylhs.value.params) = append_Expressions((yystack_[1].value.params), single_Expressions((yystack_[0].value.expnode))); }
 #line 654 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 5:
 #line 110 "rwl_parser.yy" // lalr1.cc:859
     { // just copy up the stmtlist when an error occurs
-                         (yylhs.value.params) = (yystack_[2].value.params);
+                         (yylhs.value.params) = (yystack_[1].value.params);
                          yyclearin; }
 #line 662 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
@@ -743,9 +743,9 @@ namespace RWL {
 #line 175 "rwl_parser.yy" // lalr1.cc:859
     {
 
-    std::cout << "function expression detected: "; (yystack_[2].value.symbol)->print(std::cout); std::cout << std::endl;
+    std::cout << "function expression detected: "; (yystack_[3].value.symbol)->print(std::cout); std::cout << std::endl;
 
-            (yylhs.value.expnode) = new id_node((yystack_[2].value.symbol));
+            (yylhs.value.expnode) = new id_node((yystack_[3].value.symbol));
             std::cout << "function expression detection complete " << std::endl;
     }
 #line 752 "rwl_parser.tab.cc" // lalr1.cc:859
@@ -1037,56 +1037,56 @@ namespace RWL {
   RWL_Parser::yypact_[] =
   {
      -22,   -18,   -22,   -29,   -29,   -23,   -28,   -22,     6,     0,
-     -14,   -22,   -21,   -29,    -4,    -9,     9,   -29,    -6,    -5,
-     -29,   -29,   -29,   -22,   -15,   -29,   -29,   -29,   -29,   -22,
-     -20,   -29,   -22,   -12,   -29,   -22,   -10,   -29
+     -29,   -22,   -22,   -29,    -7,   -10,     9,   -29,   -29,   -29,
+     -29,   -20,   -29,   -22,   -21,   -29,   -22,   -29,   -29,   -22,
+     -29,   -17,   -15,   -22,   -14,   -29
   };
 
   const unsigned char
   RWL_Parser::yydefact_[] =
   {
        6,    17,     0,    18,    15,     0,     0,     6,     0,     0,
-       0,     0,     0,    10,     0,     0,     0,     1,     0,     0,
-       3,    12,    16,     0,     0,    11,     5,     4,    13,     9,
-       0,     8,     0,     0,     7,     0,     0,    14
+       3,     0,     9,    10,     0,     0,     0,     1,     5,     4,
+      12,     0,     8,     0,     0,    11,     0,    16,    13,     9,
+       7,     0,     0,     0,     0,    14
   };
 
   const signed char
   RWL_Parser::yypgoto_[] =
   {
-     -29,   -29,    18,   -29,    39
+     -29,   -29,    17,    -4,    39
   };
 
   const signed char
   RWL_Parser::yydefgoto_[] =
   {
-      -1,     8,     9,    30,    10
+      -1,     8,     9,    21,    10
   };
 
   const signed char
   RWL_Parser::yytable_[] =
   {
       -2,    18,    11,    14,     1,    15,    17,     2,     3,     4,
-      18,     5,     6,    20,     7,    32,    23,    24,    22,    33,
-      12,    26,    27,    29,    35,    16,     1,    37,     0,     2,
+      18,     5,     6,    23,     7,    26,    24,    29,    26,    27,
+      12,    33,    32,    35,    16,    31,     1,     0,     0,     2,
        3,     4,     0,     5,     6,     1,     7,     0,     2,     3,
        4,    13,     5,     6,     0,     7,    25,     0,    19,     0,
-      21,     0,     0,     0,     0,    19,     0,     0,     0,     0,
-       0,     0,    28,     0,     0,     0,     0,     0,    31,     0,
-       0,    34,     0,     0,    36
+      20,    22,     0,     0,     0,    19,     0,     0,     0,     0,
+       0,     0,    28,     0,     0,    30,     0,     0,    22,     0,
+       0,     0,    34
   };
 
   const signed char
   RWL_Parser::yycheck_[] =
   {
        0,     1,    20,    26,    26,    33,     0,    29,    30,    31,
-       1,    33,    34,    27,    36,    35,    20,    26,    39,    39,
-      38,    27,    27,    38,    36,     7,    26,    37,    -1,    29,
+       1,    33,    34,    20,    36,    35,    26,    38,    35,    39,
+      38,    36,    39,    37,     7,    29,    26,    -1,    -1,    29,
       30,    31,    -1,    33,    34,    26,    36,    -1,    29,    30,
       31,     2,    33,    34,    -1,    36,    37,    -1,     9,    -1,
-      11,    -1,    -1,    -1,    -1,    16,    -1,    -1,    -1,    -1,
-      -1,    -1,    23,    -1,    -1,    -1,    -1,    -1,    29,    -1,
-      -1,    32,    -1,    -1,    35
+      11,    12,    -1,    -1,    -1,    16,    -1,    -1,    -1,    -1,
+      -1,    -1,    23,    -1,    -1,    26,    -1,    -1,    29,    -1,
+      -1,    -1,    33
   };
 
   const unsigned char
@@ -1094,8 +1094,8 @@ namespace RWL {
   {
        0,    26,    29,    30,    31,    33,    34,    36,    41,    42,
       44,    20,    38,    44,    26,    33,    42,     0,     1,    44,
-      27,    44,    39,    20,    26,    37,    27,    27,    44,    38,
-      43,    44,    35,    39,    44,    36,    44,    37
+      44,    43,    44,    20,    26,    37,    35,    39,    44,    38,
+      44,    43,    39,    36,    44,    37
   };
 
   const unsigned char
@@ -1108,8 +1108,8 @@ namespace RWL {
   const unsigned char
   RWL_Parser::yyr2_[] =
   {
-       0,     2,     1,     2,     3,     3,     0,     3,     1,     0,
-       2,     3,     3,     4,     9,     1,     3,     1,     1
+       0,     2,     1,     1,     2,     2,     0,     3,     1,     0,
+       2,     3,     3,     4,     9,     1,     4,     1,     1
   };
 
 
