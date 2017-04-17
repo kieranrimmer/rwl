@@ -192,7 +192,7 @@ formals :
 
     std::cout << "function expression detected: "; $1->print(std::cout); std::cout << std::endl;
 
-            $$ = new id_node($1);
+            $$ = new dispatch_node($1, $3);
             std::cout << "function expression detection complete " << std::endl;
     }
 

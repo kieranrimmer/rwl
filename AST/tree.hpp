@@ -475,6 +475,27 @@ namespace RWL {
 
     };
 
+    class dispatch_node: public exp_node {
+    public:
+        tree_node *copy() override { return nullptr; }
+        Symbol name;
+        Expressions actuals;
+        void dump(ostream& stream, int n) override {}
+
+        void print() override  {
+            std::cout << "dispatch node: function name: " << name->get_string() << norm << ", function params... " << std::endl;
+            actuals->print();
+            std::cout << std::endl;
+        }
+
+        void evaluate() override { print(); }
+
+        Value *codegen() override { return nullptr; }
+
+        dispatch_node(Symbol n, Expressions actual_list) : name(n) { actuals = actual_list; }
+
+    };
+
     class integer_node : public exp_node {
 
     public:

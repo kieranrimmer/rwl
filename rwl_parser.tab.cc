@@ -771,7 +771,7 @@ namespace RWL {
 
     std::cout << "function expression detected: "; (yystack_[3].value.symbol)->print(std::cout); std::cout << std::endl;
 
-            (yylhs.value.expnode) = new id_node((yystack_[3].value.symbol));
+            (yylhs.value.expnode) = new dispatch_node((yystack_[3].value.symbol), (yystack_[1].value.params));
             std::cout << "function expression detection complete " << std::endl;
     }
 #line 778 "rwl_parser.tab.cc" // lalr1.cc:859

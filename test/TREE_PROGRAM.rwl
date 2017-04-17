@@ -12,4 +12,5 @@ string xyz = "newer string"
 int xy = 20
 xy = 10
 }
+kr_fn(1, "who is that?")
 smith
