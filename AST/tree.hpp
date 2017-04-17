@@ -461,14 +461,8 @@ namespace RWL {
         void dump(ostream& stream, int n) override {}
 
         void print() override  {
-            std::cout << "function node: return type: " << returnType->get_string() << ", function name: " << name->get_string() << norm << std::endl;
-//            std::list<Expression>::iterator expIter;
-//            for (expIter = formals->begin(); expIter != formals->end();
-//                 expIter++) {
-//                std::cout << blue << "@ formal parameter = " << norm;
-//                (*expIter)->print();
-//                std::cout << std::endl;
-//            }
+            std::cout << "function node: return type: " << returnType->get_string() << ", function name: " << name->get_string() << norm << ", function params... " << std::endl;
+            formals->print();
             std::cout << ", function body: ";
             body->print(); std::cout << std::endl;
         }
