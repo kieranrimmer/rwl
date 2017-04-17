@@ -6,7 +6,7 @@ sneddon
 mcilwraith
 smith
 string jkl = "new string"
-def string kr_fn(1, "kfed") { "return string" }
+def string kr_fn(int i, string kfed) { "return string" }
 {
 string xyz = "newer string"
 int xy = 20

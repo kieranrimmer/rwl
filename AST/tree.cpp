@@ -35,6 +35,7 @@ namespace RWL {
     Value *string_node::codegen() { return nullptr; }
     Value *assignment_stmt::codegen() { return nullptr; }
     Value *operator_node::codegen() { return nullptr; }
+    Value *formal_node::codegen() { return nullptr; }
 
     void integer_node::print() {
         std::cout << sym->get_string();
@@ -42,6 +43,14 @@ namespace RWL {
 
     void integer_node::evaluate() {
         std::cout << "integer_node: operand = " << sym->get_string() << std::endl;
+    }
+
+    void formal_node::print() {
+        std::cout << "formal_node: type = " << type->get_string() << ", name = " << name->get_string() << std::endl;
+    }
+
+    void formal_node::evaluate() {
+        std::cout << "formal_node: type = " << type->get_string() << ", name = " << name->get_string() << std::endl;
     }
 
     void id_node::print() {

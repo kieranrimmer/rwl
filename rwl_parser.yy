@@ -91,6 +91,8 @@
 %token DEF 294
 
 %type <expnode> exp
+%type <expnode> formal
+%type <params> formals
 %type <params> explist
 %type <params> explist_params
 %type <prog> program
@@ -121,6 +123,20 @@ explist_params :
          | { $$ = nil_Expressions(); }
 ;
 
+
+formal :
+    TYPE_DECL WORD {
+        $$ = new formal_node($1, $2);
+    }
+    ;
+
+formals :
+
+    formals ',' formal { $$ = append_Expressions($1, single_Expressions($3)); }
+
+                                | formal { $$ = single_Expressions($1); }
+                                | { $$ = nil_Expressions(); }
+;
 
 
 
@@ -159,7 +175,7 @@ explist_params :
           }
           |
 
-          DEF TYPE_DECL WORD '(' explist_params ')' '{' exp '}' {
+          DEF TYPE_DECL WORD '(' formals ')' '{' exp '}' {
                 std::cout << red << "found function declaration!!!" << norm << std::endl;
                 $$ = new function_node($2, $3, $5, $8);
           }

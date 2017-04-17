@@ -491,6 +491,23 @@ namespace RWL {
         Value *codegen() override;
     };
 
+    class formal_node : public exp_node {
+
+    public:
+        tree_node *copy() override { return nullptr; }
+        Symbol name;
+        Symbol type;
+
+        formal_node(Symbol t, Symbol n) : type(t), name(n) {};
+
+        void print() override;
+
+        void evaluate() override;
+        void dump(ostream& stream, int n) override {}
+
+        Value *codegen() override;
+    };
+
 
     class operator_node : public exp_node {
     public:
