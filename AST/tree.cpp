@@ -16,11 +16,6 @@ namespace RWL {
     static std::unique_ptr<Module> TheModule;
     static std::map<std::string, Value *> NamedValues;
 
-
-    void string_node::evaluate() {
-        std::cout << "string_node: operand = " << sym->get_string() << std::endl;
-    }
-
     Value *integer_node::codegen() {
         return ConstantInt::get(TheContext, APSInt(sym->get_string()));
     }
@@ -41,24 +36,12 @@ namespace RWL {
         std::cout << sym->get_string();
     }
 
-    void integer_node::evaluate() {
-        std::cout << "integer_node: operand = " << sym->get_string() << std::endl;
-    }
-
     void formal_node::print() {
-        std::cout << "formal_node: type = " << type->get_string() << ", name = " << name->get_string() << std::endl;
-    }
-
-    void formal_node::evaluate() {
         std::cout << "formal_node: type = " << type->get_string() << ", name = " << name->get_string() << std::endl;
     }
 
     void id_node::print() {
         std::cout << sym->get_string() << std::endl;
-    }
-
-    void id_node::evaluate() {
-        std::cout << "id_node: " << sym->get_string() << std::endl;
     }
 
     void string_node::print() {
@@ -73,28 +56,12 @@ namespace RWL {
         std::cout << ")";
     }
 
-    void plus_node::evaluate() {
-
-        std::cout << "plus_node: ";
-        left->print();
-        std::cout << " ";
-        right->print();
-        std::cout << std::endl;
-    }
-
     void minus_node::print() {
         std::cout << "(";
         left->print();
         std::cout << " - ";
         right->print();
         std::cout << ")";
-    }
-
-    void minus_node::evaluate() {
-        std::cout << "minus_node: ";
-        left->print();
-        std::cout  << " ";
-        right->print();
     }
 
     void times_node::print() {
@@ -105,9 +72,6 @@ namespace RWL {
         std::cout << ")";
     }
 
-    void times_node::evaluate() {
-        std::cout << blue << "times_node: " << norm; left->print(); std::cout << " "; right->print();
-    }
 
     void divide_node::print() {
         std::cout << "(";
@@ -117,18 +81,9 @@ namespace RWL {
         std::cout << ")";
     }
 
-    void divide_node::evaluate() {
-        std::cout << "divide_node: "; left->print(); std::cout << " "; right->print();
-    }
-
     void unary_minus_node::print() {
         std::cout << "-"; _exp->print();
 
-    }
-
-    void unary_minus_node::evaluate() {
-        std::cout << "unary_minus_node: " << "-\t";
-        _exp->print();
     }
 
     void assignment_stmt::print() {
@@ -136,20 +91,10 @@ namespace RWL {
         std::cout << std::endl;
     }
 
-    void assignment_stmt::evaluate() {
-        std::cout << blue << "assignment_node: " << norm << _id->get_symbol()->get_string() << " = ";
-        exp->print();
-    }
 
 
 
-    void print_stmt::evaluate() {
-        std::cout << "print_node: " << sym->get_string() << " = " << sym->get_string() << std::endl;
-    }
-
-
-
-    void pgm::evaluate() {
+    void pgm::print() {
         std::cout << "Program root node..." << exps->len() << std::endl;
         for(int i = exps->first(); exps->more(i); i = exps->next(i)) {
             Expression exp = exps->nth(i);

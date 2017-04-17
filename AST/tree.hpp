@@ -45,9 +45,6 @@ namespace RWL {
         // print function for pretty printing an expression
         virtual void print() = 0;
 
-        // evaluation function for a leaf, replaced for interior nodes
-        virtual void evaluate() = 0;
-
         virtual Value *codegen() = 0;
 
 
@@ -88,18 +85,7 @@ namespace RWL {
 
 
         void print() override {
-            evaluate();
-        }
-
-        void evaluate() override {
-//            typename std::list<Elem>::iterator expIter;
             std::cout << red << "templated list node (block), with  formal parameters" << norm << std::endl;
-//            for (expIter = elements->begin(); expIter != elements->end();
-//                 expIter++) {
-//                std::cout << blue << "@ element #" << (*expIter) << norm << std::endl;
-//                (*expIter)->print();
-//                (*expIter)->evaluate();
-//            }
         }
 
         Value *codegen() override { return nullptr; }
@@ -374,7 +360,6 @@ namespace RWL {
         tree_node *copy() override { return nullptr; }
         void print() override  { body->print(); }
 
-        void evaluate() override { print(); }
         Value *codegen() override { return nullptr; }
 
     };
@@ -387,8 +372,6 @@ namespace RWL {
         exp_node *initialisation;
 
         void print() override  { std::cout << "declaration node: type: " << type->get_string() << ", variable name: " << name->get_string() << ", intitialisation: "; initialisation->print(); std::cout << std::endl; }
-
-        void evaluate() override { print(); }
 
         Value *codegen() override { return nullptr; }
 
@@ -410,8 +393,6 @@ namespace RWL {
             body->print(); std::cout << std::endl;
         }
 
-        void evaluate() override { print(); }
-
         Value *codegen() override { return nullptr; }
 
         function_node(Symbol t, Symbol n, Expressions formal_list, exp_node *exp) : returnType(t), name(n) { formals = formal_list; body = exp; }
@@ -430,8 +411,6 @@ namespace RWL {
             std::cout << std::endl;
         }
 
-        void evaluate() override { print(); }
-
         Value *codegen() override { return nullptr; }
 
         dispatch_node(Symbol n, Expressions actual_list) : name(n) { actuals = actual_list; }
@@ -448,8 +427,6 @@ namespace RWL {
 
         void print() override;
 
-        void evaluate() override;
-
         Value *codegen() override;
     };
 
@@ -463,8 +440,6 @@ namespace RWL {
         formal_node(Symbol t, Symbol n) : type(t), name(n) {};
 
         void print() override;
-
-        void evaluate() override;
 
         Value *codegen() override;
     };
@@ -490,8 +465,6 @@ namespace RWL {
 
         void print() override;
 
-        void evaluate() override;
-
         Value *codegen() override;
     };
 
@@ -511,8 +484,6 @@ namespace RWL {
 
         void print() override;
 
-        void evaluate() override;
-
         Value *codegen() override;
 
     };
@@ -530,8 +501,6 @@ namespace RWL {
 
         void print() override;
 
-        void evaluate() override;
-
         Value *codegen() override;
     };
 
@@ -544,12 +513,10 @@ namespace RWL {
 
         void print() override;
 
-        void evaluate() override;
         Value *codegen() override;
     };
 
 
-// minus_node inherits the characteristics of node and adds its own evaluate function
     class minus_node : public operator_node {
     public:
 
@@ -557,12 +524,10 @@ namespace RWL {
 
         void print() override;
 
-        void evaluate() override;
         Value *codegen() override;
     };
 
 
-// times_node inherits the characteristics of node and adds its own evaluate function
     class times_node : public operator_node {
     public:
 
@@ -570,12 +535,10 @@ namespace RWL {
 
         void print() override;
 
-        void evaluate() override;
         Value *codegen() override;
     };
 
 
-// divide_node inherits the characteristics of node and adds its own evaluate function
     class divide_node : public operator_node {
     public:
 
@@ -583,7 +546,6 @@ namespace RWL {
 
         void print() override;
 
-        void evaluate() override;
         Value *codegen() override;
     };
 
@@ -599,7 +561,6 @@ namespace RWL {
 
         void print() override;
 
-        void evaluate() override;
         virtual Value *codegen() override;
     };
 
@@ -614,7 +575,6 @@ namespace RWL {
 
         void print() override { std::cout << "Print node: " << std::endl << "\tsym:" << sym << std::endl << "\texp: " << std::endl; exp->print(); std::cout << "End print node" << std::endl;  };
 
-        virtual void evaluate() override;
         virtual Value *codegen() override;
     };
 
@@ -624,8 +584,10 @@ namespace RWL {
     public:
         pgm(Expressions explist) { exps = explist; }
 
-        void evaluate();
         Value *codegen();
+
+        void print();
+
     };
 
 // the object at the base of our tree

@@ -118,7 +118,7 @@ namespace RWL {
         stream << blue << "Words: " << norm << words << "\n";
         stream << blue << "Characters: " << norm << chars << "\n";
         stream << red << "Root: " << norm << root << "\n";
-        root->evaluate();
+        root->print();
         std::cout << "Id table:" << std::endl;
         idtable.print();
         std::cout << "Int table:" << std::endl;
