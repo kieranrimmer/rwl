@@ -72,11 +72,9 @@
 
 %error-verbose
 
-%token CLASS 258 ELSE 259 FI 260 IF 261 IN 262 
-    %token INHERITS 263 LET 264 LOOP 265 POOL 266 THEN 267 WHILE 268
-    %token CASE 269 ESAC 270 OF 271 DARROW 272 NEW 273 ISVOID 274
-    %token ASSIGN 280 NOT 281 LE 282 ERROR 283
-
+%token CLASS 258 ELSE 259 FI 260 IF 261 IN 262 INHERITS 263 LET 264 LOOP 265 POOL 266 THEN 267 WHILE 268
+%token CASE 269 ESAC 270 OF 271 DARROW 272 NEW 273 ISVOID 274
+%token ASSIGN 280 NOT 281 LE 282 ERROR 283
 %token               END    0     "end of file"
 %token               UPPER  284
 %token               LOWER 285
@@ -98,8 +96,7 @@
 %type <prog> program
 
 
-%left ','
-%right ASSIGN
+
 
 %locations
 
@@ -160,6 +157,11 @@ formals :
             $$ = block($2);
 
          }
+
+         | IF '(' exp ')' THEN exp ELSE exp FI
+             { $$ = cond($3, $6, $8); }
+             | WHILE '(' exp ')' LOOP exp POOL
+             { $$ = loop($3, $6); }
 
 
 

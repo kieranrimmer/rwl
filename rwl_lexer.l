@@ -1,6 +1,7 @@
 %{
 /* C++ string header, for string ops below */
 #include <string>
+#include <iostream>
 
 /* Implementation of yyFlexScanner */ 
 #include "rwl_scanner.hpp"
@@ -34,6 +35,12 @@ INHERITS (?i:inherits)
 NEW (?i:new)
 DELETE (?i:delete)
 IMPORT (i?:import)
+then (?i:then)
+ELSE (?i:else)
+FI (?i:fi)
+WHILE (?i:while)
+LOOP (?i:loop)
+POOL (?i:pool)
 DEF def
 
 type_declarator (int|string|boolean|void)
@@ -69,7 +76,6 @@ disallowed_name {name}([aeiou]|os)
 num1    [-+]?{dig}+\.?([eE][-+]?{dig}+)?
 num2    [-+]?{dig}*\.{dig}+([eE][-+]?{dig}+)?
 number  {num1}|{num2}
-ELSE    (?i:else)
 print (?i:print)
 
 
@@ -96,6 +102,14 @@ print (?i:print)
 {DEF} {
     return (token::DEF);
 }
+
+{IF} { std::cout << "IF detected!!!" << std::endl; return (token::IF); }
+{then} { std::cout << "THEN detected!!!" << std::endl; return (token::THEN); }
+{ELSE} { return (token::ELSE); }
+{FI} { return (token::FI); }
+{WHILE} { return (token::WHILE); }
+{LOOP} { return (token::LOOP); }
+{POOL} { return (token::POOL); }
 
 {type_declarator} {
                     std::cout << "detected type declarator: " << yytext << std::endl;
@@ -126,7 +140,8 @@ print (?i:print)
 
 
 
-{IF} { return (token::IF); }
+
+
 
 {disallowed_name} { yylval->error = strdup(yytext); std::cout << "Disallowed name: " << yytext << "!!!" <<std::endl; return (token::ERROR); }
 

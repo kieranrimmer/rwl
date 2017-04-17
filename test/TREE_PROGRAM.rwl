@@ -14,3 +14,6 @@ xy = 10
 }
 kr_fn(1, "who is that?")
 smith
+if ( "yo" )
+then "awesome" ELSE "perfect" FI
+WHILE ( x = 1 ) LOOP x = 2 POOL

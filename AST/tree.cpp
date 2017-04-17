@@ -122,5 +122,15 @@ namespace RWL {
 
     Expression block(Expressions a1) { return new block_node(a1); }
 
+    Expression cond(Expression pred, Expression then_exp, Expression else_exp)
+    {
+        return new cond_node(pred, then_exp, else_exp);
+    }
+
+    Expression loop(Expression pred, Expression body)
+    {
+        return new loop_node(pred, body);
+    }
+
 
 }
