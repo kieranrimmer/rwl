@@ -151,11 +151,9 @@ namespace RWL {
 
     void pgm::evaluate() {
         std::cout << "Program root node..." << exps->len() << std::endl;
-        exps->dump(std::cout, 80);
         for(int i = exps->first(); exps->more(i); i = exps->next(i)) {
             Expression exp = exps->nth(i);
-            std::cout << "Iterating through exp #" << i << ": " << exp << ", " << exp->len() << " "; exp->dump(std::cout, 80); std::cout << std::endl;
-            (exps->nth(i))->dump(std::cout, 80);
+            std::cout << "Iterating through exp #" << i << ": " << exp << ", " << exp->len() << " "; std::cout << std::endl;
             (exps->nth(i))->print();
 
         }

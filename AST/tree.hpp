@@ -50,7 +50,6 @@ namespace RWL {
 
         virtual Value *codegen() = 0;
 
-        virtual void dump(ostream& stream, int n) { stream << "dumping from exp_node" << std::endl; print(); };
 
         virtual int len() { return 0; }
     };
@@ -117,7 +116,6 @@ namespace RWL {
         int len() override;
         Elem nth_length(int n, int &len) override;
         void print() override { std::cout <<  "nil node" << std::endl; }
-        void dump(ostream& stream, int n) override;
     };
 
     template <class Elem> class single_list_node : public list_node<Elem> {
@@ -130,7 +128,6 @@ namespace RWL {
         int len() override;
         Elem nth_length(int n, int &len) override;
         void print() override { std::cout <<  "single list node: " << std::endl; elem->print(); }
-        void dump(ostream& stream, int n) override;
     };
 
 
@@ -153,7 +150,6 @@ namespace RWL {
             for (i = 0; i < size; i++)
                 nth(i)->print();
         }
-        void dump(ostream& stream, int n) override;
     };
 
 
@@ -246,19 +242,6 @@ namespace RWL {
 
 ///////////////////////////////////////////////////////////////////////////
 //
-// nil_node::dump
-//
-// dump for list node
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> void nil_node<Elem>::dump(ostream& stream, int n)
-    {
-        stream << pad(n) << "(nil)\n";
-    }
-
-
-///////////////////////////////////////////////////////////////////////////
-//
 // single_list_node::copy_list
 //
 // return the deep copy of the single_list_node
@@ -297,21 +280,6 @@ namespace RWL {
             return NULL;
         else
             return elem;
-    }
-
-
-///////////////////////////////////////////////////////////////////////////
-//
-// single_list_node::dump
-//
-// dump for list node
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> void single_list_node<Elem>::dump(ostream& stream, int n)
-    {
-        elem->print();
-        stream << "indside dump() for single list node" << std::endl;
-        elem->dump(stream, n);
     }
 
 
@@ -359,27 +327,6 @@ namespace RWL {
         }
         return tmp;
     }
-
-
-///////////////////////////////////////////////////////////////////////////
-//
-// append_node::dump
-//
-// dump for list node
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> void append_node<Elem>::dump(ostream& stream, int n)
-    {
-        int i, size;
-
-        size = len();
-        stream << pad(n) << "list\n";
-        for (i = 0; i < size; i++)
-//            std::cout << "i = " << i << std::endl;
-            nth(i)->dump(stream, n+2);
-        stream << pad(n) << "(end_of_list)\n";
-    }
-
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -429,7 +376,6 @@ namespace RWL {
 
         void evaluate() override { print(); }
         Value *codegen() override { return nullptr; }
-        void dump(ostream& stream, int n) override {}
 
     };
 
@@ -445,7 +391,6 @@ namespace RWL {
         void evaluate() override { print(); }
 
         Value *codegen() override { return nullptr; }
-        void dump(ostream& stream, int n) override {}
 
         declaration_node(Symbol t, Symbol n, exp_node *exp) : type(t), name(n) { initialisation = exp; }
     };
@@ -457,7 +402,6 @@ namespace RWL {
         Symbol name;
         Expressions formals;
         exp_node *body;
-        void dump(ostream& stream, int n) override {}
 
         void print() override  {
             std::cout << "function node: return type: " << returnType->get_string() << ", function name: " << name->get_string() << norm << ", function params... " << std::endl;
@@ -479,7 +423,6 @@ namespace RWL {
         tree_node *copy() override { return nullptr; }
         Symbol name;
         Expressions actuals;
-        void dump(ostream& stream, int n) override {}
 
         void print() override  {
             std::cout << "dispatch node: function name: " << name->get_string() << norm << ", function params... " << std::endl;
@@ -506,7 +449,6 @@ namespace RWL {
         void print() override;
 
         void evaluate() override;
-        void dump(ostream& stream, int n) override {}
 
         Value *codegen() override;
     };
@@ -523,7 +465,6 @@ namespace RWL {
         void print() override;
 
         void evaluate() override;
-        void dump(ostream& stream, int n) override {}
 
         Value *codegen() override;
     };
@@ -538,7 +479,6 @@ namespace RWL {
         // and stores the character representation of the operator.
         operator_node(exp_node *L, exp_node *R) : left(L), right(R) {};
         Value *codegen() override;
-        void dump(ostream& stream, int n) override {}
     };
 
     class unary_minus_node : public exp_node {
@@ -553,7 +493,6 @@ namespace RWL {
         void evaluate() override;
 
         Value *codegen() override;
-        void dump(ostream& stream, int n) override {}
     };
 
     class id_node : public exp_node {
@@ -576,7 +515,6 @@ namespace RWL {
 
         Value *codegen() override;
 
-        void dump(ostream& stream, int n) override {}
     };
 
     class string_node : public exp_node {
@@ -595,7 +533,6 @@ namespace RWL {
         void evaluate() override;
 
         Value *codegen() override;
-        void dump(ostream& stream, int n) override {}
     };
 
     class plus_node : public operator_node {
@@ -659,7 +596,6 @@ namespace RWL {
 
 
         assignment_stmt(Symbol name, exp_node *expr) { _id = new id_node(name); exp = expr; };
-        void dump(ostream& stream, int n) override {}
 
         void print() override;
 
@@ -675,7 +611,6 @@ namespace RWL {
         tree_node *copy() override { return nullptr; }
         print_stmt(Symbol _sym) : sym(_sym) {};
         print_stmt(exp_node *_exp) : exp(_exp) {};
-        void dump(ostream& stream, int n) override {}
 
         void print() override { std::cout << "Print node: " << std::endl << "\tsym:" << sym << std::endl << "\texp: " << std::endl; exp->print(); std::cout << "End print node" << std::endl;  };
 
