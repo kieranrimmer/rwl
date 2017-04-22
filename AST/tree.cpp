@@ -9,7 +9,6 @@ using namespace llvm;
 
 namespace RWL {
 
-
     // IR code generation
     static LLVMContext TheContext;
     static IRBuilder<> Builder(TheContext);
@@ -131,6 +130,5 @@ namespace RWL {
     {
         return new loop_node(pred, body);
     }
-
 
 }
