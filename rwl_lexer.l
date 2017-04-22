@@ -6,6 +6,7 @@
 /* Implementation of yyFlexScanner */ 
 #include "rwl_scanner.hpp"
 #include "string_table/string_table.hpp"
+
 #undef  YY_DECL
 #define YY_DECL int RWL::RWL_Scanner::yylex( RWL::RWL_Parser::semantic_type * const lval, RWL::RWL_Parser::location_type *loc )
 
@@ -20,6 +21,8 @@ using token = RWL::RWL_Parser::token;
 
 /* update location on matching */
 #define YY_USER_ACTION loc->step(); loc->columns(yyleng);
+
+ extern int node_lineno;
 
 %}
 
@@ -172,6 +175,8 @@ print (?i:print)
 \n          {
                // Update line number
                loc->lines();
+               ++node_lineno;
+               std::cout << "loc = " << loc << ", node_lineno = " << node_lineno << std::endl;
                // return( token::NEWLINE );
             }
 

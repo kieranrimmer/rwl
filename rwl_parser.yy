@@ -45,6 +45,7 @@
 
 // for keeping track of line numbers in the program we are parsing
   int line_num = 1;
+  extern int node_lineno;
 
 #undef yylex
 #define yylex scanner.yylex
@@ -235,5 +236,5 @@ formals :
 void 
 RWL::RWL_Parser::error( const location_type &l, const std::string &err_message )
 {
-   std::cerr << "Error: " << err_message << " at " << l << "\n";
+   std::cerr << "Error: " << err_message << " at " << l  << "counted line number = " << std::endl;
 }

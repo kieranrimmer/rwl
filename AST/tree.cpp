@@ -9,6 +9,8 @@ using namespace llvm;
 
 namespace RWL {
 
+    int node_lineno = 1;
+
     // IR code generation
     static LLVMContext TheContext;
     static IRBuilder<> Builder(TheContext);
@@ -30,6 +32,11 @@ namespace RWL {
     Value *assignment_stmt::codegen() { return nullptr; }
     Value *operator_node::codegen() { return nullptr; }
     Value *formal_node::codegen() { return nullptr; }
+
+    tree_node::tree_node()
+    {
+        line_no = node_lineno;
+    }
 
     void integer_node::print() {
         std::cout << sym->get_string();
@@ -97,7 +104,7 @@ namespace RWL {
         std::cout << "Program root node..." << exps->len() << std::endl;
         for(int i = exps->first(); exps->more(i); i = exps->next(i)) {
             Expression exp = exps->nth(i);
-            std::cout << "Iterating through exp #" << i << ": " << exp << ", " << exp->len() << " "; std::cout << std::endl;
+            std::cout << "Iterating through exp #" << i << ": " << exp << ", " << exp->len() << " " << ", line number = " << exp->get_line_no() << std::endl;
             (exps->nth(i))->print();
 
         }

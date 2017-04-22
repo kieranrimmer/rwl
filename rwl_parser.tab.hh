@@ -146,7 +146,7 @@ namespace RWL {
     /// Symbol semantic values.
     union semantic_type
     {
-    #line 58 "rwl_parser.yy" // lalr1.cc:377
+    #line 59 "rwl_parser.yy" // lalr1.cc:377
 
   char *num;
   int boolean;

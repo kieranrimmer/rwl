@@ -27,7 +27,26 @@ using Value=llvm::Value;
 
 using namespace llvm;
 
+
+
 namespace RWL {
+
+//    #define yylineno curr_lineno;
+
+    extern int node_lineno;
+
+    class tree_node;
+    class exp_node;
+    template <class Elem> class list_node;
+    template <class Elem> class nil_node;
+    template <class Elem> class single_list_node;
+    template <class Elem> class append_node;
+
+
+
+    typedef exp_node *Expression;
+    typedef list_node<Expression> Expressions_class;
+    typedef Expressions_class *Expressions;
 
     extern std::string pad(int n);
 
@@ -35,23 +54,29 @@ namespace RWL {
     protected:
         int line_no;
     public:
+        tree_node();
+
+        virtual tree_node *copy() = 0;
+
+        virtual void print() = 0;
+
+        virtual Value *codegen() = 0;
+
+        virtual int len() { return 0; }
+
+        virtual void semant(Expressions xps) {};
+
+        int get_line_no() { return line_no; }
+
     };
 
     class exp_node: public tree_node {
     public:
 
-        virtual tree_node *copy() = 0;
 
-        // print function for pretty printing an expression
-        virtual void print() = 0;
-
-        virtual Value *codegen() = 0;
-
-
-        virtual int len() { return 0; }
     };
 
-    typedef exp_node *Expression;
+
 
 
 
@@ -346,8 +371,7 @@ namespace RWL {
         return new append_node<Elem>(l, list(x));
     }
 
-    typedef list_node<Expression> Expressions_class;
-    typedef Expressions_class *Expressions;
+
 
     class block_node : public exp_node {
     protected:
@@ -616,6 +640,8 @@ namespace RWL {
         Value *codegen();
 
         void print();
+
+        void semant(Expressions xps);
 
     };
 
