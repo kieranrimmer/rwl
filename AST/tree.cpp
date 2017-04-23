@@ -138,4 +138,19 @@ namespace RWL {
         return new loop_node(pred, body);
     }
 
+    Formals nil_Formals()
+    {
+        return new nil_node<Formal>();
+    }
+
+    Formals single_Formals(Formal e)
+    {
+        return new single_list_node<Formal>(e);
+    }
+
+    Formals append_Formals(Formals p1, Formals p2)
+    {
+        return new append_node<Formal>(p1, p2);
+    }
+
 }

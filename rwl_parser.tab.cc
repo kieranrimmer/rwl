@@ -637,25 +637,25 @@ namespace RWL {
           switch (yyn)
             {
   case 2:
-#line 107 "rwl_parser.yy" // lalr1.cc:859
+#line 109 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.prog) = new pgm((yystack_[0].value.params)); root = (yylhs.value.prog); }
 #line 643 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 3:
-#line 110 "rwl_parser.yy" // lalr1.cc:859
+#line 112 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.params) = single_Expressions((yystack_[0].value.expnode)); }
 #line 649 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 4:
-#line 112 "rwl_parser.yy" // lalr1.cc:859
+#line 114 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.params) = append_Expressions((yystack_[1].value.params), single_Expressions((yystack_[0].value.expnode))); }
 #line 655 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 5:
-#line 114 "rwl_parser.yy" // lalr1.cc:859
+#line 116 "rwl_parser.yy" // lalr1.cc:859
     { // just copy up the stmtlist when an error occurs
                          (yylhs.value.params) = (yystack_[1].value.params);
                          yyclearin; }
@@ -663,57 +663,57 @@ namespace RWL {
     break;
 
   case 6:
-#line 117 "rwl_parser.yy" // lalr1.cc:859
+#line 119 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.params) = nil_Expressions(); }
 #line 669 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 7:
-#line 122 "rwl_parser.yy" // lalr1.cc:859
+#line 124 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.params) = append_Expressions((yystack_[2].value.params), single_Expressions((yystack_[0].value.expnode))); }
 #line 675 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 8:
-#line 124 "rwl_parser.yy" // lalr1.cc:859
+#line 126 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.params) = single_Expressions((yystack_[0].value.expnode)); }
 #line 681 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 9:
-#line 125 "rwl_parser.yy" // lalr1.cc:859
+#line 127 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.params) = nil_Expressions(); }
 #line 687 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 10:
-#line 130 "rwl_parser.yy" // lalr1.cc:859
+#line 132 "rwl_parser.yy" // lalr1.cc:859
     {
-        (yylhs.value.expnode) = new formal_node((yystack_[1].value.symbol), (yystack_[0].value.symbol));
+        (yylhs.value.formal_) = new formal_node((yystack_[1].value.symbol), (yystack_[0].value.symbol));
     }
 #line 695 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 11:
-#line 137 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.params) = append_Expressions((yystack_[2].value.params), single_Expressions((yystack_[0].value.expnode))); }
+#line 139 "rwl_parser.yy" // lalr1.cc:859
+    { (yylhs.value.formals_) = append_Formals((yystack_[2].value.formals_), single_Formals((yystack_[0].value.formal_))); }
 #line 701 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 12:
-#line 139 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.params) = single_Expressions((yystack_[0].value.expnode)); }
+#line 141 "rwl_parser.yy" // lalr1.cc:859
+    { (yylhs.value.formals_) = single_Formals((yystack_[0].value.formal_)); }
 #line 707 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 13:
-#line 140 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.params) = nil_Expressions(); }
+#line 142 "rwl_parser.yy" // lalr1.cc:859
+    { (yylhs.value.formals_) = nil_Formals(); }
 #line 713 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 14:
-#line 151 "rwl_parser.yy" // lalr1.cc:859
+#line 153 "rwl_parser.yy" // lalr1.cc:859
     {
       (yylhs.value.expnode) = new print_stmt((yystack_[0].value.expnode));
       std::cout << "PRINT WORD" << std::endl;
@@ -722,7 +722,7 @@ namespace RWL {
     break;
 
   case 15:
-#line 157 "rwl_parser.yy" // lalr1.cc:859
+#line 159 "rwl_parser.yy" // lalr1.cc:859
     {
             (yylhs.value.expnode) = block((yystack_[1].value.params));
 
@@ -731,19 +731,19 @@ namespace RWL {
     break;
 
   case 16:
-#line 163 "rwl_parser.yy" // lalr1.cc:859
+#line 165 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.expnode) = cond((yystack_[6].value.expnode), (yystack_[3].value.expnode), (yystack_[1].value.expnode)); }
 #line 737 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 17:
-#line 165 "rwl_parser.yy" // lalr1.cc:859
+#line 167 "rwl_parser.yy" // lalr1.cc:859
     { (yylhs.value.expnode) = loop((yystack_[4].value.expnode), (yystack_[1].value.expnode)); }
 #line 743 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 18:
-#line 172 "rwl_parser.yy" // lalr1.cc:859
+#line 174 "rwl_parser.yy" // lalr1.cc:859
     {
           std::cout << "descending!!!" << std::endl;
           (yylhs.value.expnode) = new assignment_stmt((yystack_[2].value.symbol), (yystack_[0].value.expnode));
@@ -752,7 +752,7 @@ namespace RWL {
     break;
 
   case 19:
-#line 179 "rwl_parser.yy" // lalr1.cc:859
+#line 181 "rwl_parser.yy" // lalr1.cc:859
     {
           std::cout << "found variable definition!!!" << std::endl;
           (yylhs.value.expnode) = new declaration_node((yystack_[3].value.symbol), (yystack_[2].value.symbol), (yystack_[0].value.expnode));
@@ -761,16 +761,16 @@ namespace RWL {
     break;
 
   case 20:
-#line 185 "rwl_parser.yy" // lalr1.cc:859
+#line 187 "rwl_parser.yy" // lalr1.cc:859
     {
                 std::cout << red << "found function declaration!!!" << norm << std::endl;
-                (yylhs.value.expnode) = new function_node((yystack_[7].value.symbol), (yystack_[6].value.symbol), (yystack_[4].value.params), (yystack_[1].value.expnode));
+                (yylhs.value.expnode) = new function_node((yystack_[7].value.symbol), (yystack_[6].value.symbol), (yystack_[4].value.formals_), (yystack_[1].value.expnode));
           }
 #line 770 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 21:
-#line 191 "rwl_parser.yy" // lalr1.cc:859
+#line 193 "rwl_parser.yy" // lalr1.cc:859
     {
       std::cout << "INTEGER expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
       (yylhs.value.expnode) = new integer_node((yystack_[0].value.symbol));
@@ -779,7 +779,7 @@ namespace RWL {
     break;
 
   case 22:
-#line 198 "rwl_parser.yy" // lalr1.cc:859
+#line 200 "rwl_parser.yy" // lalr1.cc:859
     {
 
     std::cout << "function expression detected: "; (yystack_[3].value.symbol)->print(std::cout); std::cout << std::endl;
@@ -791,7 +791,7 @@ namespace RWL {
     break;
 
   case 23:
-#line 210 "rwl_parser.yy" // lalr1.cc:859
+#line 212 "rwl_parser.yy" // lalr1.cc:859
     {
         std::cout << "WORD expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
 
@@ -802,7 +802,7 @@ namespace RWL {
     break;
 
   case 24:
-#line 219 "rwl_parser.yy" // lalr1.cc:859
+#line 221 "rwl_parser.yy" // lalr1.cc:859
     {
         std::cout << "STRING expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
 
@@ -1181,9 +1181,9 @@ namespace RWL {
   const unsigned char
   RWL_Parser::yyrline_[] =
   {
-       0,   107,   107,   110,   111,   113,   117,   121,   124,   125,
-     130,   137,   139,   140,   151,   157,   162,   164,   170,   179,
-     185,   191,   198,   210,   219
+       0,   109,   109,   112,   113,   115,   119,   123,   126,   127,
+     132,   139,   141,   142,   153,   159,   164,   166,   172,   181,
+     187,   193,   200,   212,   221
   };
 
   // Print the state stack on the debug stream.
@@ -1269,7 +1269,7 @@ namespace RWL {
 #line 5 "rwl_parser.yy" // lalr1.cc:1167
 } // RWL
 #line 1272 "rwl_parser.tab.cc" // lalr1.cc:1167
-#line 233 "rwl_parser.yy" // lalr1.cc:1168
+#line 235 "rwl_parser.yy" // lalr1.cc:1168
 
 
 

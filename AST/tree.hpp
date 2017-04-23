@@ -22,6 +22,7 @@
 
 #include "../string_table/string_table.hpp"
 #include "../util/util.hpp"
+#include "../symtab.hpp"
 
 using Value=llvm::Value;
 
@@ -37,6 +38,7 @@ namespace RWL {
 
     class tree_node;
     class exp_node;
+    class formal_node;
     template <class Elem> class list_node;
     template <class Elem> class nil_node;
     template <class Elem> class single_list_node;
@@ -47,6 +49,10 @@ namespace RWL {
     typedef exp_node *Expression;
     typedef list_node<Expression> Expressions_class;
     typedef Expressions_class *Expressions;
+
+    typedef formal_node *Formal;
+    typedef list_node<Formal> Formals_class;
+    typedef Formals_class *Formals;
 
     extern std::string pad(int n);
 
@@ -475,9 +481,10 @@ namespace RWL {
         tree_node *copy() override { return nullptr; }
         Symbol returnType;
         Symbol name;
-        Expressions formals;
+        Formals formals;
         exp_node *body;
         void semant(Expressions exprs) override;
+        void publish(ExpressionTableP expressions);
 
         void print() override  {
             std::cout << "function node: return type: " << returnType->get_string() << ", function name: " << name->get_string() << norm << ", function params... " << std::endl;
@@ -488,7 +495,7 @@ namespace RWL {
 
         Value *codegen() override { return nullptr; }
 
-        function_node(Symbol t, Symbol n, Expressions formal_list, exp_node *exp) : returnType(t), name(n) { formals = formal_list; body = exp; }
+        function_node(Symbol t, Symbol n, Formals formal_list, exp_node *exp) : returnType(t), name(n) { formals = formal_list; body = exp; }
 
     };
 
@@ -538,6 +545,8 @@ namespace RWL {
 
         Value *codegen() override;
         void semant(Expressions exprs) override;
+        Symbol get_name() { return name; }
+        void publish(ExpressionTableP) {}
     };
 
 
@@ -700,6 +709,11 @@ namespace RWL {
 
 // the object at the base of our tree
     extern RWL::pgm *root;
+
+
+    Formals nil_Formals();
+    Formals single_Formals(Formal);
+    Formals append_Formals(Formals, Formals);
 
 
     Expressions nil_Expressions();

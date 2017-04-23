@@ -157,11 +157,13 @@ namespace RWL {
   char *error;
   std::list<RWL::Expression> *stmts;
   RWL::Expression st;
+  RWL::Formal formal_;
+  RWL::Formals formals_;
   RWL::Expressions params;
   RWL::pgm *prog;
   RWL::function_node *function;
 
-#line 165 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 167 "rwl_parser.tab.hh" // lalr1.cc:377
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -538,7 +540,7 @@ namespace RWL {
 
 #line 5 "rwl_parser.yy" // lalr1.cc:377
 } // RWL
-#line 542 "rwl_parser.tab.hh" // lalr1.cc:377
+#line 544 "rwl_parser.tab.hh" // lalr1.cc:377
 
 
 

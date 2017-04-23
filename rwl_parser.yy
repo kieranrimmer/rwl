@@ -66,6 +66,8 @@
   char *error;
   std::list<RWL::Expression> *stmts;
   RWL::Expression st;
+  RWL::Formal formal_;
+  RWL::Formals formals_;
   RWL::Expressions params;
   RWL::pgm *prog;
   RWL::function_node *function;
@@ -90,8 +92,8 @@
 %token DEF 294
 
 %type <expnode> exp
-%type <expnode> formal
-%type <params> formals
+%type <formal_> formal
+%type <formals_> formals
 %type <params> explist
 %type <params> explist_params
 %type <prog> program
@@ -134,10 +136,10 @@ formal :
 
 formals :
 
-    formals ',' formal { $$ = append_Expressions($1, single_Expressions($3)); }
+    formals ',' formal { $$ = append_Formals($1, single_Formals($3)); }
 
-                                | formal { $$ = single_Expressions($1); }
-                                | { $$ = nil_Expressions(); }
+                                | formal { $$ = single_Formals($1); }
+                                | { $$ = nil_Formals(); }
 ;
 
 

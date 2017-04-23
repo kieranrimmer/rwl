@@ -25,6 +25,9 @@ using namespace std;
 
 namespace RWL {
 
+    class ExpressionTable;
+    typedef ExpressionTable *ExpressionTableP;
+
     template<class SYM, class DAT>
     class SymtabEntry {
     private:
