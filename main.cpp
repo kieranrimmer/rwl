@@ -30,6 +30,7 @@ main( const int argc, const char **argv )
          /** assume file, prod code, use stat to check **/
          driver.parse( argv[1] );
       }
+      driver.semant();
       driver.print( std::cout ) << "\n";
    }
    else

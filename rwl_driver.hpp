@@ -11,47 +11,57 @@
 #include "string_table/string_table.hpp"
 #include "util/util.hpp"
 
-namespace RWL{
+namespace RWL {
 
-class RWL_Driver{
-public:
-   RWL_Driver() = default;
+    class RWL_Driver {
+    public:
+        RWL_Driver() = default;
 
-   virtual ~RWL_Driver();
-   
-   /** 
-    * parse - parse from a file
-    * @param filename - valid string with input file
-    */
-   void parse( const char * const filename );
-   /** 
-    * parse - parse from a c++ input stream
-    * @param is - std::istream&, valid input stream
-    */
-   void parse( std::istream &iss );
+        virtual ~RWL_Driver();
 
-   void add_upper();
-   void add_lower();
-   void add_word( const std::string &word );
-   void add_newline();
-   void add_char();
+        /**
+         * parse - parse from a file
+         * @param filename - valid string with input file
+         */
+        void parse(const char *const filename);
 
-   std::ostream& print(std::ostream &stream);
-   std::ostream& declare_start(std::ostream &stream);
-private:
+        /**
+         * parse - parse from a c++ input stream
+         * @param is - std::istream&, valid input stream
+         */
+        void parse(std::istream &iss);
 
-   void parse_helper( std::istream &stream );
+        void add_upper();
 
-   std::size_t  chars      = 0;
-   std::size_t  words      = 0;
-   std::size_t  lines      = 0;
-   std::size_t  uppercase  = 0;
-   std::size_t  lowercase  = 0;
-   RWL::RWL_Parser  *parser  = nullptr;
-   RWL::RWL_Scanner *scanner = nullptr;
-   
+        void add_lower();
 
-};
+        void add_word(const std::string &word);
+
+        void add_newline();
+
+        void add_char();
+
+        void semant();
+
+
+        std::ostream &print(std::ostream &stream);
+
+        std::ostream &declare_start(std::ostream &stream);
+
+    private:
+
+        void parse_helper(std::istream &stream);
+
+        std::size_t chars = 0;
+        std::size_t words = 0;
+        std::size_t lines = 0;
+        std::size_t uppercase = 0;
+        std::size_t lowercase = 0;
+        RWL::RWL_Parser *parser = nullptr;
+        RWL::RWL_Scanner *scanner = nullptr;
+
+
+    };
 
 }
 #endif /* END __RWLDRIVER_HPP__ */

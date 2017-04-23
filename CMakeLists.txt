@@ -5,5 +5,5 @@ include_directories(/Users/kieranrimmer/packages/llvm/include /Users/kieranrimme
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp symtab.hpp list.hpp)
+set(SOURCE_FILES main.cpp symtab.hpp list.hpp semant.cpp semant.hpp)
 add_executable(rwl ${SOURCE_FILES})

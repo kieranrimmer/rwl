@@ -109,6 +109,10 @@ namespace RWL {
         return (stream);
     }
 
+    void RWL_Driver::semant() {
+        root->semant();
+    }
+
     std::ostream &
     RWL_Driver::print(std::ostream &stream) {
         stream << red << "Results: " << norm << "\n";

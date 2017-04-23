@@ -64,7 +64,7 @@ namespace RWL {
 
         virtual int len() { return 0; }
 
-        virtual void semant(Expressions xps) {};
+        virtual void semant(Expressions xps) = 0;
 
         int get_line_no() { return line_no; }
 
@@ -127,6 +127,7 @@ namespace RWL {
         int len() override;
         Elem nth_length(int n, int &len) override;
         void print() override { std::cout <<  "nil node" << std::endl; }
+        void semant(Expressions exprs) override;
     };
 
     template <class Elem> class single_list_node : public list_node<Elem> {
@@ -139,6 +140,7 @@ namespace RWL {
         int len() override;
         Elem nth_length(int n, int &len) override;
         void print() override { std::cout <<  "single list node: " << std::endl; elem->print(); }
+        void semant(Expressions exprs) override;
     };
 
 
@@ -146,14 +148,20 @@ namespace RWL {
     private:
         list_node<Elem> *some, *rest;
     public:
+
         append_node(list_node<Elem> *l1, list_node<Elem> *l2) {
             some = l1;
             rest = l2;
         }
+
         list_node<Elem> *copy_list() override;
+
         int len() override;
+
         Elem nth(int n);
+
         Elem nth_length(int n, int &len) override;
+
         void print() override {
             int i, size;
             size = len();
@@ -161,7 +169,30 @@ namespace RWL {
             for (i = 0; i < size; i++)
                 nth(i)->print();
         }
+
+        void semant(Expressions exprs) override;
     };
+
+    template <class Elem> void nil_node<Elem>::semant(Expressions exprs)
+    {
+        std::cout << "semant() called on nil node" << std::endl;
+    }
+
+    template <class Elem> void single_list_node<Elem>::semant(Expressions exprs)
+    {
+        std::cout << "semant() called on single list node" << std::endl;
+        elem->semant(exprs);
+    }
+
+    template <class Elem> void append_node<Elem>::semant(Expressions exprs)
+    {
+        std::cout << "semant() called on append node" << std::endl;
+        some->semant(exprs);
+        rest->semant(exprs);
+
+    }
+
+
 
 
     template <class Elem> single_list_node<Elem> *list(Elem x);
@@ -386,6 +417,8 @@ namespace RWL {
 
         Value *codegen() override { return nullptr; }
 
+        void semant(Expressions exprs) override;
+
     };
 
     class declaration_node: public exp_node {
@@ -400,6 +433,9 @@ namespace RWL {
         Value *codegen() override { return nullptr; }
 
         declaration_node(Symbol t, Symbol n, exp_node *exp) : type(t), name(n) { initialisation = exp; }
+
+        void semant(Expressions exprs) override;
+
     };
 
     class loop_node: public exp_node {
@@ -414,6 +450,8 @@ namespace RWL {
         Value *codegen() override { return nullptr; }
 
         loop_node(Expression p, Expression b) : predicate(p), body(b) { }
+
+        void semant(Expressions exprs) override;
     };
 
     class cond_node: public exp_node {
@@ -429,6 +467,7 @@ namespace RWL {
         Value *codegen() override { return nullptr; }
 
         cond_node(Expression p, Expression ib, Expression tb) : predicate(p), if_body(ib), then_body(tb) { }
+        void semant(Expressions exprs) override;
     };
 
     class function_node: public exp_node {
@@ -438,6 +477,7 @@ namespace RWL {
         Symbol name;
         Expressions formals;
         exp_node *body;
+        void semant(Expressions exprs) override;
 
         void print() override  {
             std::cout << "function node: return type: " << returnType->get_string() << ", function name: " << name->get_string() << norm << ", function params... " << std::endl;
@@ -467,6 +507,7 @@ namespace RWL {
         Value *codegen() override { return nullptr; }
 
         dispatch_node(Symbol n, Expressions actual_list) : name(n) { actuals = actual_list; }
+        void semant(Expressions exprs) override;
 
     };
 
@@ -481,6 +522,7 @@ namespace RWL {
         void print() override;
 
         Value *codegen() override;
+        void semant(Expressions exprs) override;
     };
 
     class formal_node : public exp_node {
@@ -495,6 +537,7 @@ namespace RWL {
         void print() override;
 
         Value *codegen() override;
+        void semant(Expressions exprs) override;
     };
 
 
@@ -507,6 +550,7 @@ namespace RWL {
         // and stores the character representation of the operator.
         operator_node(exp_node *L, exp_node *R) : left(L), right(R) {};
         Value *codegen() override;
+        void semant(Expressions exprs) override;
     };
 
     class unary_minus_node : public exp_node {
@@ -519,6 +563,7 @@ namespace RWL {
         void print() override;
 
         Value *codegen() override;
+        void semant(Expressions exprs) override;
     };
 
     class id_node : public exp_node {
@@ -538,6 +583,7 @@ namespace RWL {
         void print() override;
 
         Value *codegen() override;
+        void semant(Expressions exprs) override;
 
     };
 
@@ -555,6 +601,7 @@ namespace RWL {
         void print() override;
 
         Value *codegen() override;
+        void semant(Expressions exprs) override;
     };
 
     class plus_node : public operator_node {
@@ -567,6 +614,7 @@ namespace RWL {
         void print() override;
 
         Value *codegen() override;
+        void semant(Expressions exprs) override;
     };
 
 
@@ -578,6 +626,7 @@ namespace RWL {
         void print() override;
 
         Value *codegen() override;
+        void semant(Expressions exprs) override;
     };
 
 
@@ -589,6 +638,7 @@ namespace RWL {
         void print() override;
 
         Value *codegen() override;
+        void semant(Expressions exprs) override;
     };
 
 
@@ -600,6 +650,7 @@ namespace RWL {
         void print() override;
 
         Value *codegen() override;
+        void semant(Expressions exprs) override;
     };
 
     class assignment_stmt : public exp_node {
@@ -615,6 +666,7 @@ namespace RWL {
         void print() override;
 
         virtual Value *codegen() override;
+        void semant(Expressions exprs) override;
     };
 
     class print_stmt : public exp_node {
@@ -629,6 +681,7 @@ namespace RWL {
         void print() override { std::cout << "Print node: " << std::endl << "\tsym:" << sym << std::endl << "\texp: " << std::endl; exp->print(); std::cout << "End print node" << std::endl;  };
 
         virtual Value *codegen() override;
+        void semant(Expressions exprs) override;
     };
 
     class pgm {
@@ -641,7 +694,7 @@ namespace RWL {
 
         void print();
 
-        void semant(Expressions xps);
+        void semant();
 
     };
 
