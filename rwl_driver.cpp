@@ -6,6 +6,8 @@
 
 namespace RWL {
 
+    Symbol filename_symbol;
+
     RWL_Driver::~RWL_Driver() {
         delete (scanner);
         scanner = nullptr;
@@ -16,6 +18,7 @@ namespace RWL {
     void
     RWL_Driver::parse(const char *const filename) {
         assert(filename != nullptr);
+        filename_symbol = idtable.add_string(strdup(filename));
         std::ifstream in_file(filename);
         if (!in_file.good()) {
             exit(EXIT_FAILURE);
@@ -30,6 +33,7 @@ namespace RWL {
             return;
         }
         //else
+        filename_symbol = idtable.add_string(strdup("stdin"));
         parse_helper(stream);
         return;
     }

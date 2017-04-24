@@ -35,6 +35,7 @@ namespace RWL {
 //    #define yylineno curr_lineno;
 
     extern int node_lineno;
+    extern Symbol filename_symbol;
 
     class tree_node;
     class exp_node;
@@ -43,6 +44,9 @@ namespace RWL {
     template <class Elem> class nil_node;
     template <class Elem> class single_list_node;
     template <class Elem> class append_node;
+
+
+
 
 
 
@@ -55,6 +59,28 @@ namespace RWL {
     typedef Formals_class *Formals;
 
     extern std::string pad(int n);
+
+    extern Symbol filename_symbol;
+
+    class pgm {
+    protected:
+        Expressions exps;
+        Symbol filename;
+    public:
+        pgm(Expressions explist) { exps = explist; filename = filename_symbol; }
+
+        Value *codegen();
+
+        void print();
+
+        void semant();
+
+        Symbol get_filename() { return filename; }
+
+    };
+
+// the object at the base of our tree
+    extern pgm *root;
 
     class tree_node {
     protected:
@@ -73,6 +99,8 @@ namespace RWL {
         virtual void semant(Expressions xps) = 0;
 
         int get_line_no() { return line_no; }
+
+        virtual Symbol get_filename() { return root->get_filename(); }
 
     };
 
@@ -693,22 +721,8 @@ namespace RWL {
         void semant(Expressions exprs) override;
     };
 
-    class pgm {
-    protected:
-        Expressions exps;
-    public:
-        pgm(Expressions explist) { exps = explist; }
 
-        Value *codegen();
 
-        void print();
-
-        void semant();
-
-    };
-
-// the object at the base of our tree
-    extern RWL::pgm *root;
 
 
     Formals nil_Formals();

@@ -43,7 +43,6 @@ namespace RWL {
 
         void semant();
 
-
         std::ostream &print(std::ostream &stream);
 
         std::ostream &declare_start(std::ostream &stream);
@@ -62,6 +61,8 @@ namespace RWL {
 
 
     };
+
+
 
 }
 #endif /* END __RWLDRIVER_HPP__ */

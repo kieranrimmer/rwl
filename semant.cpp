@@ -67,6 +67,23 @@ namespace RWL {
         False       = idtable.add_string("false");
     }
 
+    ostream& ExpressionTable::semant_error(Expression c)
+    {
+        return semant_error(c->get_filename(),c);
+    }
+
+    ostream& ExpressionTable::semant_error(Symbol filename, tree_node *t)
+    {
+        error_stream << filename << ":" << t->get_line_no() << ": ";
+        return semant_error();
+    }
+
+    ostream& ExpressionTable::semant_error()
+    {
+        semant_errors++;
+        return error_stream;
+    }
+
     void function_node::publish(ExpressionTableP expTable)
     {
         SymbolTable<Symbol, Entry> params;
