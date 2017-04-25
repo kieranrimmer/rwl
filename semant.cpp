@@ -95,9 +95,9 @@ namespace RWL {
 
             if (params.lookup(formal->get_name()) != NULL)
             {
-//                expTable->semant_error(formal) <<
-//                                                                          "Duplicated parameter name " << formal->get_name()
-//                                                                          << " in method " << name << std::endl;
+                expTable->semant_error(formal) <<
+                                                                          "Duplicated parameter name " << formal->get_name()
+                                                                          << " in method " << name << std::endl;
                 return;
             }
 
