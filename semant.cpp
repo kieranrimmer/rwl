@@ -96,8 +96,8 @@ namespace RWL {
             if (params.lookup(formal->get_name()) != NULL)
             {
                 expTable->semant_error(formal) <<
-                                                                          "Duplicated parameter name " << formal->get_name()
-                                                                          << " in method " << name << std::endl;
+                  "Duplicated parameter name " << formal->get_name()
+                  << " in method " << name << std::endl;
                 return;
             }
 
@@ -115,45 +115,55 @@ namespace RWL {
 
     void pgm::semant() {
         ExpressionTableP expTab = new ExpressionTable(exps);
-        exps->semant(exps);
+        exps->semant(expTab);
     }
 
-    void block_node::semant(Expressions exprs) {}
+    Symbol block_node::semant(ExpressionTableP expTab) {
+        return body->semant(expTab);
+    }
 
-    void declaration_node::semant(Expressions exprs) {}
+    Symbol declaration_node::semant(ExpressionTableP expTab) {
+//        if (!expTab->is_subclass(expTab->get_class(type), expTab->get_class(type_decl)))
+//        {
+//            expTab->semant_error(expTab->get_current_class()) <<
+//                                                                      "Wrong type in attribute initialization: " << name
+//                                                                      << " expected " << type_decl << " was " << type << std::endl;
+//        }
+        return nullptr;
+    }
 
-    void loop_node::semant(Expressions exprs) {}
+    Symbol loop_node::semant(ExpressionTableP expTab) {}
 
-    void cond_node::semant(Expressions exprs) {}
+    Symbol cond_node::semant(ExpressionTableP expTab) {}
 
-    void function_node::semant(Expressions exprs) {
+    Symbol function_node::semant(ExpressionTableP expTab) {
         std::cout << blue << "entered function_node semant() function" << std::endl;
     }
 
-    void dispatch_node::semant(Expressions exprs) {}
+    Symbol dispatch_node::semant(ExpressionTableP expTab) {}
 
-    void integer_node::semant(Expressions exprs) {}
+    Symbol integer_node::semant(ExpressionTableP expTab) {}
 
-    void formal_node::semant(Expressions exprs) {}
+    Symbol formal_node::semant(ExpressionTableP expTab) {}
 
-    void operator_node::semant(Expressions exprs) {}
+    Symbol operator_node::semant(ExpressionTableP expTab) {}
 
-    void unary_minus_node::semant(Expressions exprs) {}
+    Symbol unary_minus_node::semant(ExpressionTableP expTab) {}
 
-    void id_node::semant(Expressions exprs) {}
+    Symbol id_node::semant(ExpressionTableP expTab) {}
 
-    void string_node::semant(Expressions exprs) {}
+    Symbol string_node::semant(ExpressionTableP expTab) {}
 
-    void plus_node::semant(Expressions exprs) {}
+    Symbol plus_node::semant(ExpressionTableP expTab) {}
 
-    void minus_node::semant(Expressions exprs) {}
+    Symbol minus_node::semant(ExpressionTableP expTab) {}
 
-    void times_node::semant(Expressions exprs) {}
+    Symbol times_node::semant(ExpressionTableP expTab) {}
 
-    void divide_node::semant(Expressions exprs) {}
+    Symbol divide_node::semant(ExpressionTableP expTab) {}
 
-    void assignment_stmt::semant(Expressions exprs) {}
+    Symbol assignment_stmt::semant(ExpressionTableP expTab) {}
 
-    void print_stmt::semant(Expressions exprs) {}
+    Symbol print_stmt::semant(ExpressionTableP expTab) {}
 
 }
