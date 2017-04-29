@@ -224,8 +224,8 @@ namespace RWL {
         std::cout << "semant() called on append node" << std::endl;
         Symbol retVal = some->semant(exprs);
         Symbol restSym = rest->semant(exprs);
-//        std::cout << "append_node::semant() retVal = " << retVal << std::endl;
-//        std::cout << "append_node::semant() restSym = " << restSym << std::endl;
+        std::cout << "append_node::semant() retVal = " << retVal << std::endl;
+        std::cout << "append_node::semant() restSym = " << restSym << std::endl;
         return restSym == nullptr ? retVal : restSym;
 
     }

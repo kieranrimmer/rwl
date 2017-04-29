@@ -124,13 +124,7 @@ namespace RWL {
     }
 
     Symbol declaration_node::semant(ExpressionTableP expTab) {
-//        if (!expTab->is_subclass(expTab->get_class(type), expTab->get_class(type_decl)))
-//        {
-//            expTab->semant_error(expTab->get_current_class()) <<
-//                                                                      "Wrong type in attribute initialization: " << name
-//                                                                      << " expected " << type_decl << " was " << type << std::endl;
-//        }
-        return nullptr;
+        return True;
     }
 
     Symbol loop_node::semant(ExpressionTableP expTab) {
