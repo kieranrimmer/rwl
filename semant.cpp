@@ -114,6 +114,7 @@ namespace RWL {
     }
 
     void pgm::semant() {
+        initialize_constants();
         ExpressionTableP expTab = new ExpressionTable(exps);
         exps->semant(expTab);
     }
@@ -132,38 +133,69 @@ namespace RWL {
         return nullptr;
     }
 
-    Symbol loop_node::semant(ExpressionTableP expTab) {}
+    Symbol loop_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol cond_node::semant(ExpressionTableP expTab) {}
+    Symbol cond_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
     Symbol function_node::semant(ExpressionTableP expTab) {
         std::cout << blue << "entered function_node semant() function" << std::endl;
+        return True;
     }
 
-    Symbol dispatch_node::semant(ExpressionTableP expTab) {}
+    Symbol dispatch_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol integer_node::semant(ExpressionTableP expTab) {}
+    Symbol integer_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol formal_node::semant(ExpressionTableP expTab) {}
+    Symbol formal_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol operator_node::semant(ExpressionTableP expTab) {}
+    Symbol operator_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol unary_minus_node::semant(ExpressionTableP expTab) {}
+    Symbol unary_minus_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol id_node::semant(ExpressionTableP expTab) {}
+    Symbol id_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol string_node::semant(ExpressionTableP expTab) {}
+    Symbol string_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol plus_node::semant(ExpressionTableP expTab) {}
+    Symbol plus_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol minus_node::semant(ExpressionTableP expTab) {}
+    Symbol minus_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol times_node::semant(ExpressionTableP expTab) {}
+    Symbol times_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol divide_node::semant(ExpressionTableP expTab) {}
+    Symbol divide_node::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol assignment_stmt::semant(ExpressionTableP expTab) {}
+    Symbol assignment_stmt::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
-    Symbol print_stmt::semant(ExpressionTableP expTab) {}
+    Symbol print_stmt::semant(ExpressionTableP expTab) {
+        return True;
+    }
 
 }
