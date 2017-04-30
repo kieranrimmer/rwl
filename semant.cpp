@@ -128,6 +128,18 @@ namespace RWL {
         params.exitscope();
     }
 
+    void formal_node::publish(ExpressionTableP expTable)
+    {
+        if (name == self)
+        {
+            expTable->semant_error() <<
+                                                                      "Using keyword as parameter name: " << name
+                                                                      << std::endl;
+            return;
+        }
+        expTable->symbols_.addid(name, type);
+    }
+
     ExpressionTable::ExpressionTable(Expressions exps): semant_errors(0) , error_stream(std::cerr) {
         expressions_ = exps;
         symbols_.enterscope();
@@ -159,16 +171,13 @@ namespace RWL {
     Symbol function_node::semant(ExpressionTableP expTab) {
         std::cout << blue << "entered function_node semant() function" << std::endl;
         publish(expTab);
-//        expTab->functions_.addid(name, this);
         return True;
     }
 
     Symbol dispatch_node::semant(ExpressionTableP expTab) {
-
         function_node *f = expTab->get_function(name);
         std::cout << "dispatch_node::semant()" << std::endl;
         std::cout << "dispatch_node::semant() -- function_node found: " << f->name->get_string() << std::endl;
-
         return f->name;
     }
 

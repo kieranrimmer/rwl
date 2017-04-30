@@ -582,7 +582,7 @@ namespace RWL {
         Value *codegen() override;
         Symbol semant(ExpressionTableP exprs) override;
         Symbol get_name() { return name; }
-        void publish(ExpressionTableP) {}
+        void publish(ExpressionTableP);
     };
 
 
