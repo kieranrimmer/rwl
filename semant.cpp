@@ -6,6 +6,8 @@
 
 namespace RWL {
 
+    extern int node_lineno;
+
     static Symbol
             arg,
             arg2,
@@ -84,8 +86,25 @@ namespace RWL {
         return error_stream;
     }
 
+    function_node *ExpressionTable::get_function(Symbol s) {
+        function_node *method = dynamic_cast<function_node*>(functions_.lookup(s));
+        std::cout << "geT_function caled!!!" << std::endl;
+
+        if (method == NULL)
+            semant_error() << "Method not found: " << s->get_string() << std::endl;
+
+        if (method->name == s)
+        {
+            std::cout << "Method found: " << s->get_string() << std::endl;
+            return method;
+
+        }
+        return method;
+    }
+
     void function_node::publish(ExpressionTableP expTable)
     {
+        expTable->functions_.addid(this->name, this);
         SymbolTable<Symbol, Entry> params;
         params.enterscope();
 
@@ -111,6 +130,8 @@ namespace RWL {
 
     ExpressionTable::ExpressionTable(Expressions exps): semant_errors(0) , error_stream(std::cerr) {
         expressions_ = exps;
+        symbols_.enterscope();
+        functions_.enterscope();
     }
 
     void pgm::semant() {
@@ -124,7 +145,7 @@ namespace RWL {
     }
 
     Symbol declaration_node::semant(ExpressionTableP expTab) {
-        return True;
+        return initialisation->semant(expTab);
     }
 
     Symbol loop_node::semant(ExpressionTableP expTab) {
@@ -137,11 +158,18 @@ namespace RWL {
 
     Symbol function_node::semant(ExpressionTableP expTab) {
         std::cout << blue << "entered function_node semant() function" << std::endl;
+        publish(expTab);
+//        expTab->functions_.addid(name, this);
         return True;
     }
 
     Symbol dispatch_node::semant(ExpressionTableP expTab) {
-        return True;
+
+        function_node *f = expTab->get_function(name);
+        std::cout << "dispatch_node::semant()" << std::endl;
+        std::cout << "dispatch_node::semant() -- function_node found: " << f->name->get_string() << std::endl;
+
+        return f->name;
     }
 
     Symbol integer_node::semant(ExpressionTableP expTab) {

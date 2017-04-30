@@ -40,12 +40,13 @@ namespace RWL {
         Expression get_current_expression() { return current_expression_; }
 
         Symbol get_return_type(Symbol m);
-        function_node* get_method(Symbol m);
+        function_node* get_function(Symbol m);
 
         void publish_variables(function_node* m);
 
 
         SymbolTable<Symbol, Entry> symbols_;
+        SymbolTable<Symbol, function_node> functions_;
     };
 }
 
