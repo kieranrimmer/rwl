@@ -15,6 +15,7 @@
 #define _SYMTAB_H_
 
 #include "list.hpp"
+#include <string>
 
 using namespace std;
 
@@ -95,7 +96,7 @@ namespace RWL {
             return *this;
         }
 
-        void fatal_error(char *msg) {
+        void fatal_error(std::string msg) {
             cerr << msg << "\n";
             exit(1);
         }

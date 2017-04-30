@@ -16,14 +16,12 @@ namespace RWL {
     template
     class StringTable<IntEntry>;
 
-    Entry::Entry(char *s, int l, int i) : len(l), index(i) {
-        str = new char[len + 1];
-        strncpy(str, s, len);
-        str[len] = '\0';
+    Entry::Entry(std::string s, int l, int i) : len(l), index(i) {
+        str.assign(s);
     }
 
-    int Entry::equal_string(char *string, int length) const {
-        return (len == length) && (strncmp(str, string, len) == 0);
+    int Entry::equal_string(std::string string, int length) const {
+        return (len == length) && (str.compare(string) == 0);
     }
 
     ostream &Entry::print(ostream &s) const {
@@ -39,7 +37,7 @@ namespace RWL {
         return s << *sym;
     }
 
-    char *Entry::get_string() const {
+    std::string Entry::get_string() const {
         return str;
     }
 
@@ -60,11 +58,11 @@ namespace RWL {
         s << sym << endl;
     }
 
-    StringEntry::StringEntry(char *s, int l, int i) : Entry(s, l, i) {}
+    StringEntry::StringEntry(std::string s, int l, int i) : Entry(s, l, i) {}
 
-    IdEntry::IdEntry(char *s, int l, int i) : Entry(s, l, i) {}
+    IdEntry::IdEntry(std::string s, int l, int i) : Entry(s, l, i) {}
 
-    IntEntry::IntEntry(char *s, int l, int i) : Entry(s, l, i) {}
+    IntEntry::IntEntry(std::string s, int l, int i) : Entry(s, l, i) {}
 
     IdTable idtable;
     IntTable inttable;

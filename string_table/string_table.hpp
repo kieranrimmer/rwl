@@ -24,6 +24,7 @@ using std::endl;
 using std::ofstream;
 
 # include <iomanip>
+# include <string>
 
 using std::oct;
 using std::dec;
@@ -53,14 +54,14 @@ namespace RWL {
 
     class Entry {
     protected:
-        char *str;     // the string
+        std::string str;     // the string
         int len;      // the length of the string (without trailing \0)
         int index;     // a unique index for each string
     public:
-        Entry(char *s, int l, int i);
+        Entry(std::string s, int l, int i);
 
         // is string argument equal to the str of this Entry?
-        int equal_string(char *s, int len) const;
+        int equal_string(std::string s, int len) const;
 
         // is the integer argument equal to the index of this Entry?
         bool equal_index(int ind) const { return ind == index; }
@@ -68,7 +69,7 @@ namespace RWL {
         ostream &print(ostream &s) const;
 
         // Return the str and len components of the Entry.
-        char *get_string() const;
+        std::string get_string() const;
 
         int get_len() const;
     };
@@ -92,12 +93,12 @@ namespace RWL {
 
         void code_ref(ostream &str);
 
-        StringEntry(char *s, int l, int i);
+        StringEntry(std::string s, int l, int i);
     };
 
     class IdEntry : public Entry {
     public:
-        IdEntry(char *s, int l, int i);
+        IdEntry(std::string s, int l, int i);
     };
 
     class IntEntry : public Entry {
@@ -106,7 +107,7 @@ namespace RWL {
 
         void code_ref(ostream &str);
 
-        IntEntry(char *s, int l, int i);
+        IntEntry(std::string s, int l, int i);
     };
 
     typedef StringEntry *StringEntryP;
@@ -131,10 +132,10 @@ namespace RWL {
         // Returns a pointer to the string table entry with the string.
 
         // add the prefix of s of length maxchars
-        Elem *add_string(char *s, int maxchars);
+        Elem *add_string(std::string s, int maxchars);
 
         // add the (null terminated) string s
-        Elem *add_string(char *s);
+        Elem *add_string(std::string s);
 
         // add the string representation of an integer
         Elem *add_int(int i);
@@ -146,7 +147,7 @@ namespace RWL {
         int next(int i);   // next index
 
         Elem *lookup(int index);      // lookup an element using its index
-        Elem *lookup_string(char *s); // lookup an element using its string
+        Elem *lookup_string(std::string s); // lookup an element using its string
         Elem *lookup_std_string(std::string mystring);
 
         void print();  // print the entire table; for debugging
@@ -184,7 +185,7 @@ namespace RWL {
 //
 
     template<class Elem>
-    Elem *StringTable<Elem>::add_string(char *s) {
+    Elem *StringTable<Elem>::add_string(std::string s) {
         return add_string(s, MAXSIZE);
     }
 
@@ -195,8 +196,8 @@ namespace RWL {
 // to the list.
 //
     template<class Elem>
-    Elem *StringTable<Elem>::add_string(char *s, int maxchars) {
-        int len = min((int) strlen(s), maxchars);
+    Elem *StringTable<Elem>::add_string(std::string s, int maxchars) {
+        int len = min((int) s.length(), maxchars);
         for (List<Elem> *l = tbl; l; l = l->tl())
             if (l->hd()->equal_string(s, len))
                 return l->hd();
@@ -212,8 +213,8 @@ namespace RWL {
 // is used only for strings that one expects to find in the table.
 //
     template<class Elem>
-    Elem *StringTable<Elem>::lookup_string(char *s) {
-        int len = strlen(s);
+    Elem *StringTable<Elem>::lookup_string(std::string s) {
+        int len = s.length();
         for (List<Elem> *l = tbl; l; l = l->tl())
             if (l->hd()->equal_string(s, len))
                 return l->hd();
