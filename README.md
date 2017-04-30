@@ -46,6 +46,16 @@ The Lexer, Parser, AST, String Tables (one each for IDs, strings and integers), 
 
 http://web.eecs.utk.edu/~bvz/teaching/cs461Sp11/notes/parse_tree/
 
+### Semantic analysis
+
+The language is rather simple, pretty much everything is an expression.
+Some expressions return a trivial type.
+
+#### TODO:
+
+- complete implementation of various semant() functions.
+- implement and tune error recovery.
+
 #### LLVM integration
 
 Sorta scaffolded.
