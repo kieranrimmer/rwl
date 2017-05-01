@@ -11,6 +11,7 @@ def string kr_fn(int i, string kfed) { "return string" }
 string xyz = "newer string"
 int xy = 20
 xy = 10
+zyzz = 20
 }
 kr_fn(1, "who is that?")
 // smith

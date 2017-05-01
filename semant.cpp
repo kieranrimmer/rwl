@@ -74,7 +74,7 @@ namespace RWL {
     }
 
     ostream &ExpressionTable::semant_error(Symbol filename, tree_node *t) {
-        error_stream << filename << ":" << t->get_line_no() << ": ";
+        error_stream << red << "Semantic error: " << norm << filename << ":" << t->get_line_no() << ": ";
         return semant_error();
     }
 
@@ -160,7 +160,7 @@ namespace RWL {
     }
 
     Symbol function_node::semant(ExpressionTableP expTab) {
-        std::cout << blue << "entered function_node semant() function" << std::endl;
+        std::cout << blue << "entered function_node semant() function" << norm << std::endl;
         publish(expTab);
         return NoType;
     }
@@ -249,7 +249,6 @@ namespace RWL {
 
     Symbol assignment_stmt::semant(ExpressionTableP expTab) {
         Symbol type = expTab->symbols_.lookup(_id->get_symbol());
-
         if (type == nullptr) {
             expTab->semant_error(this) <<
                "Identifier not declared: " << _id->get_string() << std::endl;
