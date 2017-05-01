@@ -85,7 +85,7 @@ namespace RWL {
 
     function_node *ExpressionTable::get_function(Symbol s) {
         function_node *method = dynamic_cast<function_node *>(functions_.lookup(s));
-        std::cout << "get_function() caled!!!" << std::endl;
+        std::cout << "get_function() called!!!" << std::endl;
 
         if (method == NULL)
             semant_error() << "Method not found: " << s->get_string() << std::endl;
@@ -144,7 +144,10 @@ namespace RWL {
     }
 
     Symbol block_node::semant(ExpressionTableP expTab) {
-        return body->semant(expTab);
+        expTab->symbols_.enterscope();
+        Symbol retVal = body->semant(expTab);
+        expTab->symbols_.exitscope();
+        return retVal;
     }
 
     Symbol declaration_node::semant(ExpressionTableP expTab) {
