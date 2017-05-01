@@ -46,7 +46,7 @@ namespace RWL {
         concat = idtable.add_string("concat");
         cool_abort = idtable.add_string("abort");
         copy = idtable.add_string("copy");
-        Int = idtable.add_string("Int");
+        Int = idtable.add_string("int");
         in_int = idtable.add_string("in_int");
         in_string = idtable.add_string("in_string");
         IO = idtable.add_string("IO");
@@ -148,6 +148,7 @@ namespace RWL {
     }
 
     Symbol declaration_node::semant(ExpressionTableP expTab) {
+        expTab->symbols_.addid(this->name, this->type);
         return initialisation->semant(expTab);
     }
 
@@ -260,7 +261,7 @@ namespace RWL {
 
         if (type != type2) {
             expTab->semant_error(this) <<
-               "Wrong type in assign statement" << std::endl;
+               "Wrong type in assign statement: " << type << " != " << type2  << std::endl;
             set_type(NoType);
             return NoType;
         }
