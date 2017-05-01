@@ -106,6 +106,9 @@ namespace RWL {
 
     class exp_node: public tree_node {
     public:
+        Symbol type;
+        Symbol get_type() { return type; }
+        exp_node *set_type(Symbol s) { type = s; return this; }
         virtual Symbol semant(ExpressionTableP xps) = 0;
 
     };

@@ -33,7 +33,8 @@ namespace RWL {
             type_name,
             val,
             True,
-            False;
+            False,
+            NoType;
     //
     // Initializing the predefined symbols.
     //
@@ -64,6 +65,8 @@ namespace RWL {
         val         = idtable.add_string("_val");
         True        = idtable.add_string("true");
         False       = idtable.add_string("false");
+        NoType      = idtable.add_string("_no_type");
+
     }
 
     ostream& ExpressionTable::semant_error(Expression c)
@@ -85,12 +88,12 @@ namespace RWL {
 
     function_node *ExpressionTable::get_function(Symbol s) {
         function_node *method = dynamic_cast<function_node*>(functions_.lookup(s));
-        std::cout << "geT_function caled!!!" << std::endl;
+        std::cout << "get_function() caled!!!" << std::endl;
 
         if (method == NULL)
             semant_error() << "Method not found: " << s->get_string() << std::endl;
 
-        if (method->name == s)
+        else if (method->name == s)
         {
             std::cout << "Method found: " << s->get_string() << std::endl;
             return method;
@@ -130,8 +133,8 @@ namespace RWL {
         if (name == self)
         {
             expTable->semant_error() <<
-                                                                      "Using keyword as parameter name: " << name
-                                                                      << std::endl;
+              "Using keyword as parameter name: " << name
+              << std::endl;
             return;
         }
         expTable->symbols_.addid(name, type);
@@ -158,17 +161,17 @@ namespace RWL {
     }
 
     Symbol loop_node::semant(ExpressionTableP expTab) {
-        return True;
+        return NoType;
     }
 
     Symbol cond_node::semant(ExpressionTableP expTab) {
-        return True;
+        return NoType;
     }
 
     Symbol function_node::semant(ExpressionTableP expTab) {
         std::cout << blue << "entered function_node semant() function" << std::endl;
         publish(expTab);
-        return True;
+        return NoType;
     }
 
     Symbol dispatch_node::semant(ExpressionTableP expTab) {
