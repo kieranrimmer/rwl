@@ -626,6 +626,10 @@ namespace RWL {
 
         Symbol get_symbol() { return sym; }
 
+        std::string get_string() {
+            return sym->get_string();
+        }
+
         id_node(Symbol value) : sym(value) {}
 
         void print() override;
