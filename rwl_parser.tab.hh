@@ -32,7 +32,7 @@
 
 /**
  ** \file rwl_parser.tab.hh
- ** Define the RWL::parser class.
+ ** Define the  RWL ::parser class.
  */
 
 // C++ LALR(1) parser skeleton written by Akim Demaille.
@@ -42,22 +42,22 @@
 // //                    "%code requires" blocks.
 #line 8 "rwl_parser.yy" // lalr1.cc:377
 
-  #include "AST/tree.hpp"
-  #include "string_table/string_table.hpp"
-   namespace RWL {
-      class RWL_Driver;
-      class RWL_Scanner;
-   }
 
-// The following definitions is missing when %locations isn't used
-# ifndef YY_NULLPTR
-#  if defined __cplusplus && 201103L <= __cplusplus
-#   define YY_NULLPTR nullptr
-#  else
-#   define YY_NULLPTR 0
-#  endif
-# endif
+    #include "AST/tree.hpp"
+    #include "string_table/string_table.hpp"
+    namespace RWL {
+        class RWL_Driver;
+        class RWL_Scanner;
+    }
 
+    // The following definitions is missing when %locations isn't used
+    # ifndef YY_NULLPTR
+    #  if defined __cplusplus && 201103L <= __cplusplus
+    #   define YY_NULLPTR nullptr
+    #  else
+    #   define YY_NULLPTR 0
+    #  endif
+    # endif
 
 
 #line 64 "rwl_parser.tab.hh" // lalr1.cc:377
@@ -131,7 +131,7 @@
 #endif
 
 #line 5 "rwl_parser.yy" // lalr1.cc:377
-namespace RWL {
+namespace  RWL  {
 #line 136 "rwl_parser.tab.hh" // lalr1.cc:377
 
 
@@ -139,29 +139,29 @@ namespace RWL {
 
 
   /// A Bison parser.
-  class RWL_Parser
+  class  RWL_Parser 
   {
   public:
 #ifndef YYSTYPE
     /// Symbol semantic values.
     union semantic_type
     {
-    #line 59 "rwl_parser.yy" // lalr1.cc:377
+    #line 55 "rwl_parser.yy" // lalr1.cc:377
 
-  char *num;
-  int boolean;
-  Symbol symbol;
-  char *id;
-  char *string_const;
+    char *num;
+    int boolean;
+    Symbol symbol;
+    char *id;
+    char *string_const;
     exp_node *expnode;
-  char *error;
-  std::list<RWL::Expression> *stmts;
-  RWL::Expression st;
-  RWL::Formal formal_;
-  RWL::Formals formals_;
-  RWL::Expressions params;
-  RWL::pgm *prog;
-  RWL::function_node *function;
+    char *error;
+    std::list<RWL::Expression> *stmts;
+    RWL::Expression st;
+    RWL::Formal formal_;
+    RWL::Formals formals_;
+    RWL::Expressions params;
+    RWL::pgm *prog;
+    RWL::function_node *function;
 
 #line 167 "rwl_parser.tab.hh" // lalr1.cc:377
     };
@@ -320,8 +320,8 @@ namespace RWL {
 
 
     /// Build a parser object.
-    RWL_Parser (RWL_Scanner  &scanner_yyarg, RWL_Driver  &driver_yyarg);
-    virtual ~RWL_Parser ();
+     RWL_Parser  (RWL_Scanner  &scanner_yyarg, RWL_Driver  &driver_yyarg);
+    virtual ~ RWL_Parser  ();
 
     /// Parse.
     /// \returns  0 iff parsing succeeded.
@@ -351,8 +351,8 @@ namespace RWL {
 
   private:
     /// This class is not copyable.
-    RWL_Parser (const RWL_Parser&);
-    RWL_Parser& operator= (const RWL_Parser&);
+     RWL_Parser  (const  RWL_Parser &);
+     RWL_Parser & operator= (const  RWL_Parser &);
 
     /// State numbers.
     typedef int state_type;
@@ -424,7 +424,7 @@ namespace RWL {
     static const char* const yytname_[];
 #if YYDEBUG
   // YYRLINE[YYN] -- Source line where rule number YYN was defined.
-  static const unsigned char yyrline_[];
+  static const unsigned short int yyrline_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
     virtual void yy_reduce_print_ (int r);
     /// Print the state stack on the debug stream.
@@ -539,7 +539,7 @@ namespace RWL {
 
 
 #line 5 "rwl_parser.yy" // lalr1.cc:377
-} // RWL
+} //  RWL 
 #line 544 "rwl_parser.tab.hh" // lalr1.cc:377
 
 

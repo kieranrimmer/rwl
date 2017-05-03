@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 
-/* Implementation of yyFlexScanner */ 
+/* Implementation of yyFlexScanner */
 #include "rwl_scanner.hpp"
 #include "string_table/string_table.hpp"
 
@@ -65,11 +65,7 @@ string  \"[^\n"]+\"
 ws      [ \t]+
 
 TRUE    t(?i:rue)
-
 FALSE   f(?i:alse)
-
-
-
 
 alpha   [A-Za-z]
 dig     [0-9]
@@ -83,18 +79,17 @@ print (?i:print)
 
 
 %%
+
 %{          /** Code executed at the beginning of yylex **/
             yylval = lval;
 %}
 
-{print}     {
-
-
-                return(token::PRINT);
-            }
+{print} {
+    return(token::PRINT);
+}
 
 {assign} {
-  return(token::ASSIGN);
+    return(token::ASSIGN);
 }
 
 {sql_comment}  {  }
@@ -106,52 +101,73 @@ print (?i:print)
     return (token::DEF);
 }
 
-{IF} { std::cout << "IF detected!!!" << std::endl; return (token::IF); }
-{then} { std::cout << "THEN detected!!!" << std::endl; return (token::THEN); }
-{ELSE} { return (token::ELSE); }
-{FI} { return (token::FI); }
-{WHILE} { return (token::WHILE); }
-{LOOP} { return (token::LOOP); }
-{POOL} { return (token::POOL); }
-
-{type_declarator} {
-                    std::cout << "detected type declarator: " << yytext << std::endl;
-                    yylval->symbol = idtable.add_string(yytext);
-                    return (token::TYPE_DECL);
-                  }
-
-{integer}    {
-  std::cout << "detected integer: " << yytext << std::endl;
-  yylval->symbol = inttable.add_string(yytext);
-  return (token::INTEGER_CONST);
+{IF} {
+    std::cout << "IF detected!!!" << std::endl;
+    return (token::IF);
 }
 
-{string}    {
-  yylval->symbol = stringtable.add_string(yytext);
-  return(token::STRING);
+{then} {
+    std::cout << "THEN detected!!!" << std::endl;
+    return (token::THEN);
+}
+
+{ELSE} {
+    return (token::ELSE);
+}
+
+{FI} {
+    return (token::FI);
+}
+
+{WHILE} {
+    return (token::WHILE);
+}
+
+{LOOP} {
+    return (token::LOOP);
+}
+
+{POOL} {
+    return (token::POOL);
+}
+
+{type_declarator} {
+    std::cout << "detected type declarator: " << yytext << std::endl;
+    yylval->symbol = idtable.add_string(yytext);
+    return (token::TYPE_DECL);
+}
+
+{integer} {
+    std::cout << "detected integer: " << yytext << std::endl;
+    yylval->symbol = inttable.add_string(yytext);
+    return (token::INTEGER_CONST);
+}
+
+{string} {
+    yylval->symbol = stringtable.add_string(yytext);
+    return(token::STRING);
 }
 
 {TRUE} {
-  yylval->boolean = 1;
-  return token::BOOL_CONST;
+    yylval->boolean = 1;
+    return token::BOOL_CONST;
 }
 
 {FALSE} {
-  yylval->boolean = 0;
-  return token::BOOL_CONST;
+    yylval->boolean = 0;
+    return token::BOOL_CONST;
 }
 
+{disallowed_name} {
+    yylval->error = strdup(yytext);
+    std::cout << "Disallowed name: " << yytext << "!!!" <<std::endl;
+    return (token::ERROR);
+}
 
-
-
-
-
-{disallowed_name} { yylval->error = strdup(yytext); std::cout << "Disallowed name: " << yytext << "!!!" <<std::endl; return (token::ERROR); }
-
-{name}      {
-                yylval->symbol = idtable.add_string(yytext);
-                return( token::WORD );
-            }
+{name} {
+    yylval->symbol = idtable.add_string(yytext);
+    return( token::WORD );
+}
 
 "."	{ return (int)'.'; }
 ";"	{ return (int)';'; }
@@ -170,17 +186,20 @@ print (?i:print)
 "@"	{ return (int)'@'; }
 
 
-{ws}   {}
+{ws} {}
 
-\n          {
-               // Update line number
-               loc->lines();
-               ++node_lineno;
-               std::cout << "loc = " << loc << ", node_lineno = " << node_lineno << std::endl;
-               // return( token::NEWLINE );
-            }
+\n {
+    // Update line number
+    loc->lines();
+    ++node_lineno;
+    std::cout << "loc = " << loc << ", node_lineno = " << node_lineno << std::endl;
+    // return( token::NEWLINE );
+}
 
-.    { yylval->error = strdup(yytext); return (token::ERROR); }
+. {
+    yylval->error = strdup(yytext);
+    return (token::ERROR);
+}
 
 %%
 

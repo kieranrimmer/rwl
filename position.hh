@@ -32,7 +32,7 @@
 
 /**
  ** \file position.hh
- ** Define the RWL::position class.
+ ** Define the  RWL ::position class.
  */
 
 #ifndef YY_YY_POSITION_HH_INCLUDED
@@ -51,7 +51,7 @@
 # endif
 
 #line 5 "rwl_parser.yy" // location.cc:296
-namespace RWL {
+namespace  RWL  {
 #line 56 "position.hh" // location.cc:296
   /// Abstract a position.
   class position
@@ -175,6 +175,6 @@ namespace RWL {
   }
 
 #line 5 "rwl_parser.yy" // location.cc:296
-} // RWL
+} //  RWL 
 #line 180 "position.hh" // location.cc:296
 #endif // !YY_YY_POSITION_HH_INCLUDED

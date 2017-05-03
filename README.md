@@ -26,21 +26,19 @@ https://lagunita.stanford.edu/courses/Engineering/Compilers/Fall2014
 
 ## Current status
 
-The Lexer, Parser, AST, String Tables (one each for IDs, strings and integers), symbol tables (on for variables, one for functions) are all implemented.
+The Lexer, Parser, AST, String Tables 
+(one each for IDs, strings and integers), 
+symbol tables (on for variables, one for functions) 
+are all implemented.
 
 
 ### Lexer
-
-#### TODO:
-
-- reformat
 
 ### Parser
 
 #### TODO:
 
 - remove shift-reduce conflicts
-- reformat
 
 ### AST
 
@@ -54,7 +52,9 @@ Some expressions return a trivial type.
 #### TODO:
 
 - complete implementation of various semant() functions.
-- implement and tune error recovery.
+- implement and tune error recovery.  I'm thinking here we
+go with casting all non-assignables and erroneous assignments
+to "no_type", a special type symbol.
 
 #### LLVM integration
 
@@ -68,6 +68,7 @@ http://gnuu.org/2009/09/18/writing-your-own-toy-compiler/4/
 
 #### TODO:
 
+- generate IR code
 - optimisation
 - basic code generation for X86_64
 
@@ -78,6 +79,13 @@ http://gnuu.org/2009/09/18/writing-your-own-toy-compiler/4/
 - get it working
 
 https://cmake.org/pipermail/cmake/2002-September/003028.html
+
+### Documentation
+
+- doxygen?
+- readthedocs?
+- HLDD?
+
 
 ## Copyright
 

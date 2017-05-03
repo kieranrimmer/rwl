@@ -51,28 +51,24 @@
 // Unqualified %code blocks.
 #line 31 "rwl_parser.yy" // lalr1.cc:413
 
-   #include <iostream>
-   #include <cstdlib>
-   #include <fstream>
+    #include <iostream>
+    #include <cstdlib>
+    #include <fstream>
 
-   
-   /* include for all driver functions */
-   #include "rwl_driver.hpp"
-   
-   
+    /* include for all driver functions */
+    #include "rwl_driver.hpp"
 
+    // the root of the abstract syntax tree
+    RWL::pgm *RWL::root;
 
-// the root of the abstract syntax tree
- RWL::pgm *RWL::root;
+    // for keeping track of line numbers in the program we are parsing
+    int line_num = 1;
+    extern int node_lineno;
 
-// for keeping track of line numbers in the program we are parsing
-  int line_num = 1;
-  extern int node_lineno;
+    #undef yylex
+    #define yylex scanner.yylex
 
-#undef yylex
-#define yylex scanner.yylex
-
-#line 76 "rwl_parser.tab.cc" // lalr1.cc:413
+#line 72 "rwl_parser.tab.cc" // lalr1.cc:413
 
 
 #ifndef YY_
@@ -157,8 +153,8 @@
 #define YYRECOVERING()  (!!yyerrstatus_)
 
 #line 5 "rwl_parser.yy" // lalr1.cc:479
-namespace RWL {
-#line 162 "rwl_parser.tab.cc" // lalr1.cc:479
+namespace  RWL  {
+#line 158 "rwl_parser.tab.cc" // lalr1.cc:479
 
   /* Return YYSTR after stripping away unnecessary quotes and
      backslashes, so that it's suitable for yyerror.  The heuristic is
@@ -166,7 +162,7 @@ namespace RWL {
      apostrophe, a comma, or backslash (other than backslash-backslash).
      YYSTR is taken from yytname.  */
   std::string
-  RWL_Parser::yytnamerr_ (const char *yystr)
+   RWL_Parser ::yytnamerr_ (const char *yystr)
   {
     if (*yystr == '"')
       {
@@ -199,7 +195,7 @@ namespace RWL {
 
 
   /// Build a parser object.
-  RWL_Parser::RWL_Parser (RWL_Scanner  &scanner_yyarg, RWL_Driver  &driver_yyarg)
+   RWL_Parser :: RWL_Parser  (RWL_Scanner  &scanner_yyarg, RWL_Driver  &driver_yyarg)
     :
 #if YYDEBUG
       yydebug_ (false),
@@ -209,7 +205,7 @@ namespace RWL {
       driver (driver_yyarg)
   {}
 
-  RWL_Parser::~RWL_Parser ()
+   RWL_Parser ::~ RWL_Parser  ()
   {}
 
 
@@ -218,7 +214,7 @@ namespace RWL {
   `---------------*/
 
   inline
-  RWL_Parser::syntax_error::syntax_error (const location_type& l, const std::string& m)
+   RWL_Parser ::syntax_error::syntax_error (const location_type& l, const std::string& m)
     : std::runtime_error (m)
     , location (l)
   {}
@@ -226,13 +222,13 @@ namespace RWL {
   // basic_symbol.
   template <typename Base>
   inline
-  RWL_Parser::basic_symbol<Base>::basic_symbol ()
+   RWL_Parser ::basic_symbol<Base>::basic_symbol ()
     : value ()
   {}
 
   template <typename Base>
   inline
-  RWL_Parser::basic_symbol<Base>::basic_symbol (const basic_symbol& other)
+   RWL_Parser ::basic_symbol<Base>::basic_symbol (const basic_symbol& other)
     : Base (other)
     , value ()
     , location (other.location)
@@ -243,7 +239,7 @@ namespace RWL {
 
   template <typename Base>
   inline
-  RWL_Parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const semantic_type& v, const location_type& l)
+   RWL_Parser ::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const semantic_type& v, const location_type& l)
     : Base (t)
     , value (v)
     , location (l)
@@ -253,7 +249,7 @@ namespace RWL {
   /// Constructor for valueless symbols.
   template <typename Base>
   inline
-  RWL_Parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const location_type& l)
+   RWL_Parser ::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const location_type& l)
     : Base (t)
     , value ()
     , location (l)
@@ -261,7 +257,7 @@ namespace RWL {
 
   template <typename Base>
   inline
-  RWL_Parser::basic_symbol<Base>::~basic_symbol ()
+   RWL_Parser ::basic_symbol<Base>::~basic_symbol ()
   {
     clear ();
   }
@@ -269,7 +265,7 @@ namespace RWL {
   template <typename Base>
   inline
   void
-  RWL_Parser::basic_symbol<Base>::clear ()
+   RWL_Parser ::basic_symbol<Base>::clear ()
   {
     Base::clear ();
   }
@@ -277,7 +273,7 @@ namespace RWL {
   template <typename Base>
   inline
   bool
-  RWL_Parser::basic_symbol<Base>::empty () const
+   RWL_Parser ::basic_symbol<Base>::empty () const
   {
     return Base::type_get () == empty_symbol;
   }
@@ -285,7 +281,7 @@ namespace RWL {
   template <typename Base>
   inline
   void
-  RWL_Parser::basic_symbol<Base>::move (basic_symbol& s)
+   RWL_Parser ::basic_symbol<Base>::move (basic_symbol& s)
   {
     super_type::move(s);
     value = s.value;
@@ -294,30 +290,30 @@ namespace RWL {
 
   // by_type.
   inline
-  RWL_Parser::by_type::by_type ()
+   RWL_Parser ::by_type::by_type ()
     : type (empty_symbol)
   {}
 
   inline
-  RWL_Parser::by_type::by_type (const by_type& other)
+   RWL_Parser ::by_type::by_type (const by_type& other)
     : type (other.type)
   {}
 
   inline
-  RWL_Parser::by_type::by_type (token_type t)
+   RWL_Parser ::by_type::by_type (token_type t)
     : type (yytranslate_ (t))
   {}
 
   inline
   void
-  RWL_Parser::by_type::clear ()
+   RWL_Parser ::by_type::clear ()
   {
     type = empty_symbol;
   }
 
   inline
   void
-  RWL_Parser::by_type::move (by_type& that)
+   RWL_Parser ::by_type::move (by_type& that)
   {
     type = that.type;
     that.clear ();
@@ -325,7 +321,7 @@ namespace RWL {
 
   inline
   int
-  RWL_Parser::by_type::type_get () const
+   RWL_Parser ::by_type::type_get () const
   {
     return type;
   }
@@ -333,38 +329,38 @@ namespace RWL {
 
   // by_state.
   inline
-  RWL_Parser::by_state::by_state ()
+   RWL_Parser ::by_state::by_state ()
     : state (empty_state)
   {}
 
   inline
-  RWL_Parser::by_state::by_state (const by_state& other)
+   RWL_Parser ::by_state::by_state (const by_state& other)
     : state (other.state)
   {}
 
   inline
   void
-  RWL_Parser::by_state::clear ()
+   RWL_Parser ::by_state::clear ()
   {
     state = empty_state;
   }
 
   inline
   void
-  RWL_Parser::by_state::move (by_state& that)
+   RWL_Parser ::by_state::move (by_state& that)
   {
     state = that.state;
     that.clear ();
   }
 
   inline
-  RWL_Parser::by_state::by_state (state_type s)
+   RWL_Parser ::by_state::by_state (state_type s)
     : state (s)
   {}
 
   inline
-  RWL_Parser::symbol_number_type
-  RWL_Parser::by_state::type_get () const
+   RWL_Parser ::symbol_number_type
+   RWL_Parser ::by_state::type_get () const
   {
     if (state == empty_state)
       return empty_symbol;
@@ -373,12 +369,12 @@ namespace RWL {
   }
 
   inline
-  RWL_Parser::stack_symbol_type::stack_symbol_type ()
+   RWL_Parser ::stack_symbol_type::stack_symbol_type ()
   {}
 
 
   inline
-  RWL_Parser::stack_symbol_type::stack_symbol_type (state_type s, symbol_type& that)
+   RWL_Parser ::stack_symbol_type::stack_symbol_type (state_type s, symbol_type& that)
     : super_type (s, that.location)
   {
     value = that.value;
@@ -387,8 +383,8 @@ namespace RWL {
   }
 
   inline
-  RWL_Parser::stack_symbol_type&
-  RWL_Parser::stack_symbol_type::operator= (const stack_symbol_type& that)
+   RWL_Parser ::stack_symbol_type&
+   RWL_Parser ::stack_symbol_type::operator= (const stack_symbol_type& that)
   {
     state = that.state;
     value = that.value;
@@ -400,7 +396,7 @@ namespace RWL {
   template <typename Base>
   inline
   void
-  RWL_Parser::yy_destroy_ (const char* yymsg, basic_symbol<Base>& yysym) const
+   RWL_Parser ::yy_destroy_ (const char* yymsg, basic_symbol<Base>& yysym) const
   {
     if (yymsg)
       YY_SYMBOL_PRINT (yymsg, yysym);
@@ -412,7 +408,7 @@ namespace RWL {
 #if YYDEBUG
   template <typename Base>
   void
-  RWL_Parser::yy_print_ (std::ostream& yyo,
+   RWL_Parser ::yy_print_ (std::ostream& yyo,
                                      const basic_symbol<Base>& yysym) const
   {
     std::ostream& yyoutput = yyo;
@@ -432,7 +428,7 @@ namespace RWL {
 
   inline
   void
-  RWL_Parser::yypush_ (const char* m, state_type s, symbol_type& sym)
+   RWL_Parser ::yypush_ (const char* m, state_type s, symbol_type& sym)
   {
     stack_symbol_type t (s, sym);
     yypush_ (m, t);
@@ -440,7 +436,7 @@ namespace RWL {
 
   inline
   void
-  RWL_Parser::yypush_ (const char* m, stack_symbol_type& s)
+   RWL_Parser ::yypush_ (const char* m, stack_symbol_type& s)
   {
     if (m)
       YY_SYMBOL_PRINT (m, s);
@@ -449,40 +445,40 @@ namespace RWL {
 
   inline
   void
-  RWL_Parser::yypop_ (unsigned int n)
+   RWL_Parser ::yypop_ (unsigned int n)
   {
     yystack_.pop (n);
   }
 
 #if YYDEBUG
   std::ostream&
-  RWL_Parser::debug_stream () const
+   RWL_Parser ::debug_stream () const
   {
     return *yycdebug_;
   }
 
   void
-  RWL_Parser::set_debug_stream (std::ostream& o)
+   RWL_Parser ::set_debug_stream (std::ostream& o)
   {
     yycdebug_ = &o;
   }
 
 
-  RWL_Parser::debug_level_type
-  RWL_Parser::debug_level () const
+   RWL_Parser ::debug_level_type
+   RWL_Parser ::debug_level () const
   {
     return yydebug_;
   }
 
   void
-  RWL_Parser::set_debug_level (debug_level_type l)
+   RWL_Parser ::set_debug_level (debug_level_type l)
   {
     yydebug_ = l;
   }
 #endif // YYDEBUG
 
-  inline RWL_Parser::state_type
-  RWL_Parser::yy_lr_goto_state_ (state_type yystate, int yysym)
+  inline  RWL_Parser ::state_type
+   RWL_Parser ::yy_lr_goto_state_ (state_type yystate, int yysym)
   {
     int yyr = yypgoto_[yysym - yyntokens_] + yystate;
     if (0 <= yyr && yyr <= yylast_ && yycheck_[yyr] == yystate)
@@ -492,19 +488,19 @@ namespace RWL {
   }
 
   inline bool
-  RWL_Parser::yy_pact_value_is_default_ (int yyvalue)
+   RWL_Parser ::yy_pact_value_is_default_ (int yyvalue)
   {
     return yyvalue == yypact_ninf_;
   }
 
   inline bool
-  RWL_Parser::yy_table_value_is_error_ (int yyvalue)
+   RWL_Parser ::yy_table_value_is_error_ (int yyvalue)
   {
     return yyvalue == yytable_ninf_;
   }
 
   int
-  RWL_Parser::parse ()
+   RWL_Parser ::parse ()
   {
     // State.
     int yyn;
@@ -637,183 +633,205 @@ namespace RWL {
           switch (yyn)
             {
   case 2:
-#line 109 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.prog) = new pgm((yystack_[0].value.params)); root = (yylhs.value.prog); }
-#line 643 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 105 "rwl_parser.yy" // lalr1.cc:859
+    {
+            (yylhs.value.prog) = new pgm((yystack_[0].value.params));
+            root = (yylhs.value.prog);
+        }
+#line 642 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 3:
-#line 112 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.params) = single_Expressions((yystack_[0].value.expnode)); }
-#line 649 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 114 "rwl_parser.yy" // lalr1.cc:859
+    {
+            (yylhs.value.params) = single_Expressions((yystack_[0].value.expnode));
+        }
+#line 650 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 4:
-#line 114 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.params) = append_Expressions((yystack_[1].value.params), single_Expressions((yystack_[0].value.expnode))); }
-#line 655 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 120 "rwl_parser.yy" // lalr1.cc:859
+    {
+            (yylhs.value.params) = append_Expressions((yystack_[1].value.params), single_Expressions((yystack_[0].value.expnode)));
+        }
+#line 658 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 5:
-#line 116 "rwl_parser.yy" // lalr1.cc:859
-    { // just copy up the stmtlist when an error occurs
-                         (yylhs.value.params) = (yystack_[1].value.params);
-                         yyclearin; }
-#line 663 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 126 "rwl_parser.yy" // lalr1.cc:859
+    {
+            // just copy up the stmtlist when an error occurs
+            (yylhs.value.params) = (yystack_[1].value.params);
+            yyclearin;
+        }
+#line 668 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 6:
-#line 119 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.params) = nil_Expressions(); }
-#line 669 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 135 "rwl_parser.yy" // lalr1.cc:859
+    {
+            (yylhs.value.params) = nil_Expressions();
+        }
+#line 676 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 7:
-#line 124 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.params) = append_Expressions((yystack_[2].value.params), single_Expressions((yystack_[0].value.expnode))); }
-#line 675 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 143 "rwl_parser.yy" // lalr1.cc:859
+    {
+            (yylhs.value.params) = append_Expressions((yystack_[2].value.params), single_Expressions((yystack_[0].value.expnode)));
+        }
+#line 684 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 8:
-#line 126 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.params) = single_Expressions((yystack_[0].value.expnode)); }
-#line 681 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 149 "rwl_parser.yy" // lalr1.cc:859
+    {
+            (yylhs.value.params) = single_Expressions((yystack_[0].value.expnode));
+        }
+#line 692 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 9:
-#line 127 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.params) = nil_Expressions(); }
-#line 687 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 156 "rwl_parser.yy" // lalr1.cc:859
+    {
+            (yylhs.value.params) = nil_Expressions();
+        }
+#line 700 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 10:
-#line 132 "rwl_parser.yy" // lalr1.cc:859
+#line 163 "rwl_parser.yy" // lalr1.cc:859
     {
-        (yylhs.value.formal_) = new formal_node((yystack_[1].value.symbol), (yystack_[0].value.symbol));
-    }
-#line 695 "rwl_parser.tab.cc" // lalr1.cc:859
+            (yylhs.value.formal_) = new formal_node((yystack_[1].value.symbol), (yystack_[0].value.symbol));
+        }
+#line 708 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 11:
-#line 139 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.formals_) = append_Formals((yystack_[2].value.formals_), single_Formals((yystack_[0].value.formal_))); }
-#line 701 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 170 "rwl_parser.yy" // lalr1.cc:859
+    {
+            (yylhs.value.formals_) = append_Formals((yystack_[2].value.formals_), single_Formals((yystack_[0].value.formal_)));
+        }
+#line 716 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 12:
-#line 141 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.formals_) = single_Formals((yystack_[0].value.formal_)); }
-#line 707 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 176 "rwl_parser.yy" // lalr1.cc:859
+    {
+            (yylhs.value.formals_) = single_Formals((yystack_[0].value.formal_));
+        }
+#line 724 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 13:
-#line 142 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.formals_) = nil_Formals(); }
-#line 713 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 182 "rwl_parser.yy" // lalr1.cc:859
+    {
+            (yylhs.value.formals_) = nil_Formals();
+        }
+#line 732 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 14:
-#line 153 "rwl_parser.yy" // lalr1.cc:859
+#line 189 "rwl_parser.yy" // lalr1.cc:859
     {
-      (yylhs.value.expnode) = new print_stmt((yystack_[0].value.expnode));
-      std::cout << "PRINT WORD" << std::endl;
-         }
-#line 722 "rwl_parser.tab.cc" // lalr1.cc:859
+            (yylhs.value.expnode) = new print_stmt((yystack_[0].value.expnode));
+            std::cout << "PRINT WORD" << std::endl;
+        }
+#line 741 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 15:
-#line 159 "rwl_parser.yy" // lalr1.cc:859
+#line 196 "rwl_parser.yy" // lalr1.cc:859
     {
             (yylhs.value.expnode) = block((yystack_[1].value.params));
-
-         }
-#line 731 "rwl_parser.tab.cc" // lalr1.cc:859
+        }
+#line 749 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 16:
-#line 165 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.expnode) = cond((yystack_[6].value.expnode), (yystack_[3].value.expnode), (yystack_[1].value.expnode)); }
-#line 737 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 202 "rwl_parser.yy" // lalr1.cc:859
+    {
+            (yylhs.value.expnode) = cond((yystack_[6].value.expnode), (yystack_[3].value.expnode), (yystack_[1].value.expnode));
+        }
+#line 757 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 17:
-#line 167 "rwl_parser.yy" // lalr1.cc:859
-    { (yylhs.value.expnode) = loop((yystack_[4].value.expnode), (yystack_[1].value.expnode)); }
-#line 743 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 208 "rwl_parser.yy" // lalr1.cc:859
+    {
+            (yylhs.value.expnode) = loop((yystack_[4].value.expnode), (yystack_[1].value.expnode));
+        }
+#line 765 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 18:
-#line 174 "rwl_parser.yy" // lalr1.cc:859
+#line 214 "rwl_parser.yy" // lalr1.cc:859
     {
-          std::cout << "descending!!!" << std::endl;
-          (yylhs.value.expnode) = new assignment_stmt((yystack_[2].value.symbol), (yystack_[0].value.expnode));
-          }
-#line 752 "rwl_parser.tab.cc" // lalr1.cc:859
+            std::cout << "descending!!!" << std::endl;
+            (yylhs.value.expnode) = new assignment_stmt((yystack_[2].value.symbol), (yystack_[0].value.expnode));
+        }
+#line 774 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 19:
-#line 181 "rwl_parser.yy" // lalr1.cc:859
+#line 221 "rwl_parser.yy" // lalr1.cc:859
     {
-          std::cout << "found variable definition!!!" << std::endl;
-          (yylhs.value.expnode) = new declaration_node((yystack_[3].value.symbol), (yystack_[2].value.symbol), (yystack_[0].value.expnode));
-          }
-#line 761 "rwl_parser.tab.cc" // lalr1.cc:859
+            std::cout << "found variable definition!!!" << std::endl;
+            (yylhs.value.expnode) = new declaration_node((yystack_[3].value.symbol), (yystack_[2].value.symbol), (yystack_[0].value.expnode));
+        }
+#line 783 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 20:
-#line 187 "rwl_parser.yy" // lalr1.cc:859
+#line 228 "rwl_parser.yy" // lalr1.cc:859
     {
-                std::cout << red << "found function declaration!!!" << norm << std::endl;
-                (yylhs.value.expnode) = new function_node((yystack_[7].value.symbol), (yystack_[6].value.symbol), (yystack_[4].value.formals_), (yystack_[1].value.expnode));
-          }
-#line 770 "rwl_parser.tab.cc" // lalr1.cc:859
+            std::cout << red << "found function declaration!!!" << norm << std::endl;
+            (yylhs.value.expnode) = new function_node((yystack_[7].value.symbol), (yystack_[6].value.symbol), (yystack_[4].value.formals_), (yystack_[1].value.expnode));
+        }
+#line 792 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 21:
-#line 193 "rwl_parser.yy" // lalr1.cc:859
+#line 235 "rwl_parser.yy" // lalr1.cc:859
     {
-      std::cout << "INTEGER expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
-      (yylhs.value.expnode) = new integer_node((yystack_[0].value.symbol));
-    }
-#line 779 "rwl_parser.tab.cc" // lalr1.cc:859
+            std::cout << "INTEGER expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
+            (yylhs.value.expnode) = new integer_node((yystack_[0].value.symbol));
+        }
+#line 801 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 22:
-#line 200 "rwl_parser.yy" // lalr1.cc:859
+#line 242 "rwl_parser.yy" // lalr1.cc:859
     {
-
-    std::cout << "function expression detected: "; (yystack_[3].value.symbol)->print(std::cout); std::cout << std::endl;
-
+            std::cout << "function expression detected: "; (yystack_[3].value.symbol)->print(std::cout); std::cout << std::endl;
             (yylhs.value.expnode) = new dispatch_node((yystack_[3].value.symbol), (yystack_[1].value.params));
             std::cout << "function expression detection complete " << std::endl;
-    }
-#line 791 "rwl_parser.tab.cc" // lalr1.cc:859
+        }
+#line 811 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 23:
-#line 212 "rwl_parser.yy" // lalr1.cc:859
+#line 250 "rwl_parser.yy" // lalr1.cc:859
     {
-        std::cout << "WORD expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
-
-        (yylhs.value.expnode) = new id_node((yystack_[0].value.symbol));
-        std::cout << "WORD expression detection complete " << std::endl;
-    }
-#line 802 "rwl_parser.tab.cc" // lalr1.cc:859
+            std::cout << "WORD expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
+            (yylhs.value.expnode) = new id_node((yystack_[0].value.symbol));
+            std::cout << "WORD expression detection complete " << std::endl;
+        }
+#line 821 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
   case 24:
-#line 221 "rwl_parser.yy" // lalr1.cc:859
+#line 258 "rwl_parser.yy" // lalr1.cc:859
     {
-        std::cout << "STRING expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
-
-        (yylhs.value.expnode) = new string_node((yystack_[0].value.symbol));
-        std::cout << "STRING expression detection complete " << std::endl;
-    }
-#line 813 "rwl_parser.tab.cc" // lalr1.cc:859
+            std::cout << "STRING expression detected: "; (yystack_[0].value.symbol)->print(std::cout); std::cout << std::endl;
+            (yylhs.value.expnode) = new string_node((yystack_[0].value.symbol));
+            std::cout << "STRING expression detection complete " << std::endl;
+        }
+#line 831 "rwl_parser.tab.cc" // lalr1.cc:859
     break;
 
 
-#line 817 "rwl_parser.tab.cc" // lalr1.cc:859
+#line 835 "rwl_parser.tab.cc" // lalr1.cc:859
             default:
               break;
             }
@@ -966,14 +984,14 @@ namespace RWL {
   }
 
   void
-  RWL_Parser::error (const syntax_error& yyexc)
+   RWL_Parser ::error (const syntax_error& yyexc)
   {
     error (yyexc.location, yyexc.what());
   }
 
   // Generate an error message.
   std::string
-  RWL_Parser::yysyntax_error_ (state_type yystate, const symbol_type& yyla) const
+   RWL_Parser ::yysyntax_error_ (state_type yystate, const symbol_type& yyla) const
   {
     // Number of reported tokens (one for the "unexpected", one per
     // "expected").
@@ -1068,12 +1086,12 @@ namespace RWL {
   }
 
 
-  const signed char RWL_Parser::yypact_ninf_ = -36;
+  const signed char  RWL_Parser ::yypact_ninf_ = -36;
 
-  const signed char RWL_Parser::yytable_ninf_ = -3;
+  const signed char  RWL_Parser ::yytable_ninf_ = -3;
 
   const signed char
-  RWL_Parser::yypact_[] =
+   RWL_Parser ::yypact_[] =
   {
       46,   -35,   -32,   -18,    46,   -36,   -36,   -11,   -16,    46,
       18,    13,   -36,    46,    46,    46,    46,   -36,     1,    -3,
@@ -1084,7 +1102,7 @@ namespace RWL {
   };
 
   const unsigned char
-  RWL_Parser::yydefact_[] =
+   RWL_Parser ::yydefact_[] =
   {
        6,     0,     0,    23,     0,    24,    21,     0,     0,     6,
        0,     0,     3,     0,     0,     0,     9,    14,     0,     0,
@@ -1095,19 +1113,19 @@ namespace RWL {
   };
 
   const signed char
-  RWL_Parser::yypgoto_[] =
+   RWL_Parser ::yypgoto_[] =
   {
      -36,   -36,    53,   -36,     7,   -36,    -4
   };
 
   const signed char
-  RWL_Parser::yydefgoto_[] =
+   RWL_Parser ::yydefgoto_[] =
   {
       -1,    10,    11,    27,    42,    43,    12
   };
 
   const signed char
-  RWL_Parser::yytable_[] =
+   RWL_Parser ::yytable_[] =
   {
       17,    34,    15,    13,    47,    35,    14,    23,    48,    24,
       25,    26,    28,    -2,    22,    18,    23,    19,    21,     1,
@@ -1121,7 +1139,7 @@ namespace RWL {
   };
 
   const signed char
-  RWL_Parser::yycheck_[] =
+   RWL_Parser ::yycheck_[] =
   {
        4,    35,    20,    38,    35,    39,    38,    11,    39,    13,
       14,    15,    16,     0,     1,    26,    20,    33,     0,     6,
@@ -1135,7 +1153,7 @@ namespace RWL {
   };
 
   const unsigned char
-  RWL_Parser::yystos_[] =
+   RWL_Parser ::yystos_[] =
   {
        0,     6,    13,    26,    29,    30,    31,    33,    34,    36,
       41,    42,    46,    38,    38,    20,    38,    46,    26,    33,
@@ -1146,7 +1164,7 @@ namespace RWL {
   };
 
   const unsigned char
-  RWL_Parser::yyr1_[] =
+   RWL_Parser ::yyr1_[] =
   {
        0,    40,    41,    42,    42,    42,    42,    43,    43,    43,
       44,    45,    45,    45,    46,    46,    46,    46,    46,    46,
@@ -1154,7 +1172,7 @@ namespace RWL {
   };
 
   const unsigned char
-  RWL_Parser::yyr2_[] =
+   RWL_Parser ::yyr2_[] =
   {
        0,     2,     1,     1,     2,     2,     0,     3,     1,     0,
        2,     3,     1,     0,     2,     3,     9,     7,     3,     4,
@@ -1166,7 +1184,7 @@ namespace RWL {
   // YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
   // First, the terminals, then, starting at \a yyntokens_, nonterminals.
   const char*
-  const RWL_Parser::yytname_[] =
+  const  RWL_Parser ::yytname_[] =
   {
   "\"end of file\"", "error", "$undefined", "CLASS", "ELSE", "FI", "IF",
   "IN", "INHERITS", "LET", "LOOP", "POOL", "THEN", "WHILE", "CASE", "ESAC",
@@ -1178,17 +1196,17 @@ namespace RWL {
   };
 
 #if YYDEBUG
-  const unsigned char
-  RWL_Parser::yyrline_[] =
+  const unsigned short int
+   RWL_Parser ::yyrline_[] =
   {
-       0,   109,   109,   112,   113,   115,   119,   123,   126,   127,
-     132,   139,   141,   142,   153,   159,   164,   166,   172,   181,
-     187,   193,   200,   212,   221
+       0,   105,   105,   114,   120,   126,   135,   143,   149,   156,
+     163,   170,   176,   182,   189,   196,   202,   208,   214,   221,
+     228,   235,   242,   250,   258
   };
 
   // Print the state stack on the debug stream.
   void
-  RWL_Parser::yystack_print_ ()
+   RWL_Parser ::yystack_print_ ()
   {
     *yycdebug_ << "Stack now";
     for (stack_type::const_iterator
@@ -1201,7 +1219,7 @@ namespace RWL {
 
   // Report on the debug stream that the rule \a yyrule is going to be reduced.
   void
-  RWL_Parser::yy_reduce_print_ (int yyrule)
+   RWL_Parser ::yy_reduce_print_ (int yyrule)
   {
     unsigned int yylno = yyrline_[yyrule];
     int yynrhs = yyr2_[yyrule];
@@ -1217,8 +1235,8 @@ namespace RWL {
 
   // Symbol number corresponding to token number t.
   inline
-  RWL_Parser::token_number_type
-  RWL_Parser::yytranslate_ (int t)
+   RWL_Parser ::token_number_type
+   RWL_Parser ::yytranslate_ (int t)
   {
     static
     const token_number_type
@@ -1267,14 +1285,12 @@ namespace RWL {
   }
 
 #line 5 "rwl_parser.yy" // lalr1.cc:1167
-} // RWL
-#line 1272 "rwl_parser.tab.cc" // lalr1.cc:1167
-#line 235 "rwl_parser.yy" // lalr1.cc:1168
+} //  RWL 
+#line 1290 "rwl_parser.tab.cc" // lalr1.cc:1167
+#line 268 "rwl_parser.yy" // lalr1.cc:1168
 
 
 
-void 
-RWL::RWL_Parser::error( const location_type &l, const std::string &err_message )
-{
-   std::cerr << "Error: " << err_message << " at " << l  << "counted line number = " << std::endl;
-}
+    void RWL::RWL_Parser::error( const location_type &l, const std::string &err_message ) {
+       std::cerr << "Error: " << err_message << " at " << l  << "counted line number = " << std::endl;
+    }
