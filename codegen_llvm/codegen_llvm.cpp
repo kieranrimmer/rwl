@@ -12,6 +12,10 @@ namespace RWL {
     static std::unique_ptr <Module> TheModule;
     static std::map<std::string, Value *> NamedValues;
 
+    void pgm::codegen() {
+        exps->codegen();
+    }
+
     Value *integer_node::codegen() {
         return ConstantInt::get(TheContext, APSInt(sym->get_string()));
     }

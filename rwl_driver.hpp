@@ -43,6 +43,8 @@ namespace RWL {
 
         void semant();
 
+        void codegen();
+
         std::ostream &print(std::ostream &stream);
 
         std::ostream &declare_start(std::ostream &stream);

@@ -117,6 +117,12 @@ namespace RWL {
         root->semant();
     }
 
+    void RWL_Driver::codegen() {
+        std::cout << blue << "Codegen beginning" << norm << std::endl << std::endl;
+        root->codegen();
+        std::cout << blue << "Codegen finished" << norm << std::endl << std::endl;
+    }
+
     std::ostream &
     RWL_Driver::print(std::ostream &stream) {
         stream << red << "Results: " << norm << "\n";

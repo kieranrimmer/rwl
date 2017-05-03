@@ -62,7 +62,7 @@ namespace RWL {
     public:
         pgm(Expressions explist) { exps = explist; filename = filename_symbol; }
 
-        Value *codegen();
+        void codegen();
 
         void print();
 
@@ -134,7 +134,6 @@ namespace RWL {
             std::cout << red << "templated list node (block), with  formal parameters" << norm << std::endl;
         }
 
-        Value *codegen() override { return nullptr; }
 
     };
 
@@ -149,6 +148,7 @@ namespace RWL {
         Elem nth_length(int n, int &len) override;
         void print() override { std::cout <<  "nil node" << std::endl; }
         Symbol semant(ExpressionTableP exprs) override;
+        Value *codegen() override;
     };
 
     template <class Elem> class single_list_node : public list_node<Elem> {
@@ -162,6 +162,7 @@ namespace RWL {
         Elem nth_length(int n, int &len) override;
         void print() override { std::cout <<  "single list node: " << std::endl; elem->print(); }
         Symbol semant(ExpressionTableP exprs) override;
+        Value *codegen() override;
     };
 
 
@@ -192,6 +193,9 @@ namespace RWL {
         }
 
         Symbol semant(ExpressionTableP exprs) override;
+
+        Value *codegen() override;
+
     };
 
     template <class Elem> Symbol nil_node<Elem>::semant(ExpressionTableP exprs) {
@@ -213,6 +217,28 @@ namespace RWL {
         return restSym == nullptr ? retVal : restSym;
 
     }
+
+    template <class Elem> Value *nil_node<Elem>::codegen() {
+        std::cout << "codegen() called on nil node" << std::endl;
+        return nullptr;
+    }
+
+    template <class Elem> Value *single_list_node<Elem>::codegen() {
+        std::cout << "codegen() called on single list node" << std::endl;
+        return elem->codegen();
+    }
+
+    template <class Elem> Value *append_node<Elem>::codegen() {
+        std::cout << "codegen() called on append node" << std::endl;
+        Value *retVal = some->codegen();
+        Value *restSym = rest->codegen();
+        std::cout << "append_node::codegen() retVal = " << retVal << std::endl;
+        std::cout << "append_node::codegen() restSym = " << restSym << std::endl;
+        return restSym == nullptr ? retVal : restSym;
+
+    }
+
+
 
 
 
