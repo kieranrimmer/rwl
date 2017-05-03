@@ -32,8 +32,6 @@ using namespace llvm;
 
 namespace RWL {
 
-//    #define yylineno curr_lineno;
-
     extern int node_lineno;
     extern Symbol filename_symbol;
 
@@ -44,11 +42,6 @@ namespace RWL {
     template <class Elem> class nil_node;
     template <class Elem> class single_list_node;
     template <class Elem> class append_node;
-
-
-
-
-
 
     typedef exp_node *Expression;
     typedef list_node<Expression> Expressions_class;
@@ -79,7 +72,7 @@ namespace RWL {
 
     };
 
-// the object at the base of our tree
+    // the object at the base of our tree
     extern pgm *root;
 
     class tree_node {
@@ -113,15 +106,8 @@ namespace RWL {
 
     };
 
-
-
-
-
     template <class Elem> class list_node: public exp_node {
     public:
-//        std::list<Elem> *elements;
-//
-//        list_node(std::list<Elem> *explist) : elements(explist) {}
 
         list_node() {}
 
@@ -143,8 +129,6 @@ namespace RWL {
         static list_node<Elem> *nil();
         static list_node<Elem> *single(Elem);
         static list_node<Elem> *append(list_node<Elem> *l1,list_node<Elem> *l2);
-
-
 
         void print() override {
             std::cout << red << "templated list node (block), with  formal parameters" << norm << std::endl;
@@ -210,20 +194,17 @@ namespace RWL {
         Symbol semant(ExpressionTableP exprs) override;
     };
 
-    template <class Elem> Symbol nil_node<Elem>::semant(ExpressionTableP exprs)
-    {
+    template <class Elem> Symbol nil_node<Elem>::semant(ExpressionTableP exprs) {
         std::cout << "semant() called on nil node" << std::endl;
         return nullptr;
     }
 
-    template <class Elem> Symbol single_list_node<Elem>::semant(ExpressionTableP exprs)
-    {
+    template <class Elem> Symbol single_list_node<Elem>::semant(ExpressionTableP exprs) {
         std::cout << "semant() called on single list node" << std::endl;
         return elem->semant(exprs);
     }
 
-    template <class Elem> Symbol append_node<Elem>::semant(ExpressionTableP exprs)
-    {
+    template <class Elem> Symbol append_node<Elem>::semant(ExpressionTableP exprs) {
         std::cout << "semant() called on append node" << std::endl;
         Symbol retVal = some->semant(exprs);
         Symbol restSym = rest->semant(exprs);
@@ -247,13 +228,13 @@ namespace RWL {
         return new append_node<Elem>(l1,l2);
     }
 
+        ///////////////////////////////////////////////////////////////////////////
+    //
+    // list_node::nth
+    //
+    // function to find the nth element of the list
+    //
     ///////////////////////////////////////////////////////////////////////////
-//
-// list_node::nth
-//
-// function to find the nth element of the list
-//
-///////////////////////////////////////////////////////////////////////////
 
     template <class Elem> Elem list_node<Elem>::nth(int n)
     {
@@ -268,9 +249,8 @@ namespace RWL {
         }
     }
 
-// added 10/30/06 cgs
-    template <class Elem> Elem append_node<Elem>::nth(int n)
-    {
+    // added 10/30/06 cgs
+    template <class Elem> Elem append_node<Elem>::nth(int n) {
         int len;
         Elem tmp = nth_length(n ,len);
 
@@ -282,82 +262,76 @@ namespace RWL {
         }
     }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// nil_node::copy_list
-//
-// return the deep copy of the nil_node
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> list_node<Elem> *nil_node<Elem>::copy_list()
-    {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // nil_node::copy_list
+    //
+    // return the deep copy of the nil_node
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <class Elem> list_node<Elem> *nil_node<Elem>::copy_list() {
         return new nil_node<Elem>();
     }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// nil_node::len
-//
-// return the length of the nil_node
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> int nil_node<Elem>::len()
-    {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // nil_node::len
+    //
+    // return the length of the nil_node
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <class Elem> int nil_node<Elem>::len() {
         return 0;
     }
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// nil_node::nth_length
-//
-// return the nth element on the list
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> Elem nil_node<Elem>::nth_length(int, int &len)
-    {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // nil_node::nth_length
+    //
+    // return the nth element on the list
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <class Elem> Elem nil_node<Elem>::nth_length(int, int &len) {
         len = 0;
         return NULL;
     }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// single_list_node::copy_list
-//
-// return the deep copy of the single_list_node
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> list_node<Elem> *single_list_node<Elem>::copy_list()
-    {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // single_list_node::copy_list
+    //
+    // return the deep copy of the single_list_node
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <class Elem> list_node<Elem> *single_list_node<Elem>::copy_list() {
         return new single_list_node<Elem>((Elem) elem->copy());
     }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// single_list_node::len
-//
-// return the length of the single_list_node
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> int single_list_node<Elem>::len()
-    {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // single_list_node::len
+    //
+    // return the length of the single_list_node
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <class Elem> int single_list_node<Elem>::len() {
         return 1;
     }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// single_list_node::nth_length
-//
-// return the nth element on the list
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> Elem single_list_node<Elem>::nth_length(int n, int &len)
-    {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // single_list_node::nth_length
+    //
+    // return the nth element on the list
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <class Elem> Elem single_list_node<Elem>::nth_length(int n, int &len) {
         len = 1;
         if (n)
             return NULL;
@@ -366,41 +340,38 @@ namespace RWL {
     }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// append_node::copy_list
-//
-// return the deep copy of the append_node
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> list_node<Elem> *append_node<Elem>::copy_list()
-    {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // append_node::copy_list
+    //
+    // return the deep copy of the append_node
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <class Elem> list_node<Elem> *append_node<Elem>::copy_list() {
         return new append_node<Elem>(some->copy_list(), rest->copy_list());
     }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// append_node::len
-//
-// return the length of the append_node
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> int append_node<Elem>::len()
-    {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // append_node::len
+    //
+    // return the length of the append_node
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <class Elem> int append_node<Elem>::len() {
         return some->len() + rest->len();
     }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// append_node::nth_length
-//
-// return the nth element on the list
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> Elem append_node<Elem>::nth_length(int n, int &len)
-    {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // append_node::nth_length
+    //
+    // return the nth element on the list
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <class Elem> Elem append_node<Elem>::nth_length(int n, int &len) {
         int rlen;
         Elem tmp = some->nth_length(n, len);
 
@@ -411,35 +382,32 @@ namespace RWL {
         return tmp;
     }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// list
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> single_list_node<Elem> *list(Elem x)
-    {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // list
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <class Elem> single_list_node<Elem> *list(Elem x) {
         return new single_list_node<Elem>(x);
     }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// cons
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> append_node<Elem> *cons(Elem x, list_node<Elem> *l)
-    {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // cons
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <class Elem> append_node<Elem> *cons(Elem x, list_node<Elem> *l) {
         return new append_node<Elem>(list(x), l);
     }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// xcons
-//
-///////////////////////////////////////////////////////////////////////////
-    template <class Elem> append_node<Elem> *xcons(list_node<Elem> *l, Elem x)
-    {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // xcons
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <class Elem> append_node<Elem> *xcons(list_node<Elem> *l, Elem x) {
         return new append_node<Elem>(l, list(x));
     }
 
@@ -737,13 +705,9 @@ namespace RWL {
     };
 
 
-
-
-
     Formals nil_Formals();
     Formals single_Formals(Formal);
     Formals append_Formals(Formals, Formals);
-
 
     Expressions nil_Expressions();
     Expressions single_Expressions(Expression);

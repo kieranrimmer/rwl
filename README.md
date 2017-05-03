@@ -56,7 +56,7 @@ Some expressions return a trivial type.
 go with casting all non-assignables and erroneous assignments
 to "no_type", a special type symbol.
 
-#### LLVM integration
+### LLVM integration
 
 Sorta scaffolded.
 
