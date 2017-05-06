@@ -11,13 +11,6 @@
 
 namespace RWL {
 
-
-
-    // This is a structure that may be used to contain the semantic
-    // information such as the inheritance graph.  You may use it or not as
-    // you like: it is only here to provide a container for the supplied
-    // methods.
-
     class ExpressionTable {
     private:
         int semant_errors;
@@ -47,6 +40,7 @@ namespace RWL {
 
         SymbolTable<Symbol, Entry> symbols_;
         SymbolTable<Symbol, function_node> functions_;
+
     };
 }
 

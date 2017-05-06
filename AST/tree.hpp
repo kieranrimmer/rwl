@@ -85,7 +85,7 @@ namespace RWL {
 
         virtual void print() = 0;
 
-        virtual Value *codegen() = 0;
+        virtual Value *codegen(ExpressionCodeTableP) = 0;
 
         virtual int len() { return 0; }
 
@@ -148,7 +148,7 @@ namespace RWL {
         Elem nth_length(int n, int &len) override;
         void print() override { std::cout <<  "nil node" << std::endl; }
         Symbol semant(ExpressionTableP exprs) override;
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP) override;
     };
 
     template <class Elem> class single_list_node : public list_node<Elem> {
@@ -162,7 +162,7 @@ namespace RWL {
         Elem nth_length(int n, int &len) override;
         void print() override { std::cout <<  "single list node: " << std::endl; elem->print(); }
         Symbol semant(ExpressionTableP exprs) override;
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP) override;
     };
 
 
@@ -194,7 +194,7 @@ namespace RWL {
 
         Symbol semant(ExpressionTableP exprs) override;
 
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP) override;
 
     };
 
@@ -218,20 +218,20 @@ namespace RWL {
 
     }
 
-    template <class Elem> Value *nil_node<Elem>::codegen() {
+    template <class Elem> Value *nil_node<Elem>::codegen(ExpressionCodeTableP expCodeTab) {
         std::cout << "codegen() called on nil node" << std::endl;
         return nullptr;
     }
 
-    template <class Elem> Value *single_list_node<Elem>::codegen() {
+    template <class Elem> Value *single_list_node<Elem>::codegen(ExpressionCodeTableP expCodeTab) {
         std::cout << "codegen() called on single list node" << std::endl;
-        return elem->codegen();
+        return elem->codegen(expCodeTab);
     }
 
-    template <class Elem> Value *append_node<Elem>::codegen() {
+    template <class Elem> Value *append_node<Elem>::codegen(ExpressionCodeTableP expCodeTab) {
         std::cout << "codegen() called on append node" << std::endl;
-        Value *retVal = some->codegen();
-        Value *restSym = rest->codegen();
+        Value *retVal = some->codegen(expCodeTab);
+        Value *restSym = rest->codegen(expCodeTab);
         std::cout << "append_node::codegen() retVal = " << retVal << std::endl;
         std::cout << "append_node::codegen() restSym = " << restSym << std::endl;
         return restSym == nullptr ? retVal : restSym;
@@ -450,7 +450,8 @@ namespace RWL {
         tree_node *copy() override { return nullptr; }
         void print() override  { body->print(); }
 
-        Value *codegen() override { return nullptr; }
+        Value *codegen(ExpressionCodeTableP) override;
+//        Value *codegen() override { return nullptr; }
 
         Symbol semant(ExpressionTableP exprs) override;
 
@@ -465,7 +466,8 @@ namespace RWL {
 
         void print() override  { std::cout << "declaration node: type: " << type->get_string() << ", variable name: " << name->get_string() << ", intitialisation: "; initialisation->print(); std::cout << std::endl; }
 
-        Value *codegen() override { return nullptr; }
+        Value *codegen(ExpressionCodeTableP) override;
+//        Value *codegen() override { return nullptr; }
 
         const Symbol getType() { return type; }
         const Symbol getName() { return name; }
@@ -486,7 +488,8 @@ namespace RWL {
 
         void print() override  { std::cout << "loop node: predicate: "; predicate->print(); std::cout << ", body: "; body->print(); std::cout << std::endl; }
 
-        Value *codegen() override { return nullptr; }
+        Value *codegen(ExpressionCodeTableP) override;
+//        Value *codegen() override { return nullptr; }
 
         loop_node(Expression p, Expression b) : predicate(p), body(b) { }
 
@@ -503,7 +506,8 @@ namespace RWL {
 
         void print() override  { std::cout << "conditional node: predicate: "; predicate->print(); std::cout << ", if body: "; if_body->print(); std::cout << ", then body: "; then_body->print();  std::cout << std::endl; }
 
-        Value *codegen() override { return nullptr; }
+        Value *codegen(ExpressionCodeTableP) override;
+//        Value *codegen() override { return nullptr; }
 
         cond_node(Expression p, Expression ib, Expression tb) : predicate(p), if_body(ib), then_body(tb) { }
         Symbol semant(ExpressionTableP exprs) override;
@@ -526,7 +530,8 @@ namespace RWL {
             body->print(); std::cout << std::endl;
         }
 
-        Value *codegen() override { return nullptr; }
+        Value *codegen(ExpressionCodeTableP) override;
+//        Value *codegen() override { return nullptr; }
 
         function_node(Symbol t, Symbol n, Formals formal_list, exp_node *exp) : returnType(t), name(n) { formals = formal_list; body = exp; }
 
@@ -544,7 +549,8 @@ namespace RWL {
             std::cout << std::endl;
         }
 
-        Value *codegen() override { return nullptr; }
+        Value *codegen(ExpressionCodeTableP) override;
+//        Value *codegen() override { return nullptr; }
 
         dispatch_node(Symbol n, Expressions actual_list) : name(n) { actuals = actual_list; }
         Symbol semant(ExpressionTableP exprs) override;
@@ -561,7 +567,7 @@ namespace RWL {
 
         void print() override;
 
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
     };
 
@@ -576,7 +582,7 @@ namespace RWL {
 
         void print() override;
 
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
         Symbol get_name() { return name; }
         void publish(ExpressionTableP);
@@ -591,7 +597,7 @@ namespace RWL {
         // the constructor for node links the node to its children,
         // and stores the character representation of the operator.
         operator_node(exp_node *L, exp_node *R) : left(L), right(R) {};
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
     };
 
@@ -604,7 +610,7 @@ namespace RWL {
 
         void print() override;
 
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
     };
 
@@ -628,7 +634,7 @@ namespace RWL {
 
         void print() override;
 
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
 
     };
@@ -646,7 +652,7 @@ namespace RWL {
 
         void print() override;
 
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
     };
 
@@ -659,7 +665,7 @@ namespace RWL {
 
         void print() override;
 
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
     };
 
@@ -671,7 +677,7 @@ namespace RWL {
 
         void print() override;
 
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
     };
 
@@ -683,7 +689,7 @@ namespace RWL {
 
         void print() override;
 
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
     };
 
@@ -695,7 +701,7 @@ namespace RWL {
 
         void print() override;
 
-        Value *codegen() override;
+        Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
     };
 
@@ -711,7 +717,7 @@ namespace RWL {
 
         void print() override;
 
-        virtual Value *codegen() override;
+        virtual Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
     };
 
@@ -726,7 +732,7 @@ namespace RWL {
 
         void print() override { std::cout << "Print node: " << std::endl << "\tsym:" << sym << std::endl << "\texp: " << std::endl; exp->print(); std::cout << "End print node" << std::endl;  };
 
-        virtual Value *codegen() override;
+        virtual Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
     };
 
