@@ -20,6 +20,7 @@ namespace RWL {
 
     public:
         ExpressionCodeTable(Expressions exps) : codegen_errors(0), error_stream(std::cerr), builder(TheContext), expressions_(exps) {
+            TheModule = llvm::make_unique<Module>("my cool jit", TheContext);
         };
 
         ostream& codegen_error();
@@ -36,8 +37,7 @@ namespace RWL {
 
         IRBuilder<> builder;
         std::unique_ptr <Module> TheModule;
-        std::map<std::string, Value *> NamedValues;
-        SymbolTable<Symbol, Value *> llvm_values_;
+        SymbolTable<Symbol, Value> llvm_values_;
 
     };
 }

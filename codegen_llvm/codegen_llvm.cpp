@@ -6,19 +6,13 @@
 
 namespace RWL {
 
-    // IR code generation
-//    static LLVMContext TheContext;
-//    static IRBuilder<> Builder(TheContext);
-//    static std::unique_ptr <Module> TheModule;
-//    static std::map<std::string, Value *> NamedValues;
-    static SymbolTable<Symbol, Value *> llvm_values_;
-
     void pgm::codegen() {
-        llvm_values_.enterscope();
-        LLVMContext TheContext;
         ExpressionCodeTableP expCodeTab = new ExpressionCodeTable(exps);
+        expCodeTab->llvm_values_.enterscope();
         exps->codegen(expCodeTab);
-        llvm_values_.exitscope();
+        expCodeTab->llvm_values_.exitscope();
+        // Print out all of the generated code.
+        expCodeTab->TheModule->print(errs(), nullptr);
     }
 
     Value *integer_node::codegen(ExpressionCodeTableP expCodeTab) {
@@ -41,8 +35,22 @@ namespace RWL {
 
     Value *string_node::codegen(ExpressionCodeTableP expCodeTab) { return nullptr; }
 
+    Value *dispatch_node::codegen(ExpressionCodeTableP expCodeTab) { return nullptr; }
+    Value *loop_node::codegen(ExpressionCodeTableP expCodeTab) { return nullptr; }
+    Value *cond_node::codegen(ExpressionCodeTableP expCodeTab) { return nullptr; }
+    Value *block_node::codegen(ExpressionCodeTableP expCodeTab) { return nullptr; }
+    Value *declaration_node::codegen(ExpressionCodeTableP expCodeTab) { return nullptr; }
+    Value *function_node::codegen(ExpressionCodeTableP expCodeTab) { return nullptr; }
+
+
+
     Value *assignment_stmt::codegen(ExpressionCodeTableP expCodeTab) {
-        return exp->codegen(expCodeTab);
+        Value *V = ( expCodeTab->llvm_values_.lookup(_id->get_symbol()) );
+        if (!V) {
+            std::cerr << "Unknown variable name";
+            return nullptr;
+        }
+        return V;
     }
 
     Value *operator_node::codegen(ExpressionCodeTableP expCodeTab) { return nullptr; }

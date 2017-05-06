@@ -39,6 +39,8 @@ CLEANLIST =  $(addsuffix .o, $(OBJ)) $(OBJS) \
 			    util.o tree.o string_table.o \
 			    main.o rwl_driver.o \
 			    codegen_llvm.o \
+			    semant.o \
+			    main.o driver.o \
 				 lexer.o rwl_lexer.yy.cc $(EXE)\
 
 .PHONY: all
@@ -47,12 +49,13 @@ all: rwl
 rwl: $(FILES)
 	$(MAKE) $(SOBJ)
 	$(MAKE) $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS)  util.o string_table.o parser.o tree.o semant.o codegen_llvm.o lexer.o $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS)  util.o string_table.o parser.o tree.o codegen_llvm.o semant.o lexer.o $(LIBS)
 
 parser: rwl_parser.yy
 	${CXX} -c string_table/string_table.cpp -o string_table.o
 	${CXX} -c util/util.cpp -o util.o
 	${CXX} $(CXXFLAGS_COMPILE_ONLY) -c AST/tree.cpp -o tree.o
+	${CXX} $(CXXFLAGS_COMPILE_ONLY) -c semant.cpp -o semant.o
 	${CXX} $(CXXFLAGS_COMPILE_ONLY) -c codegen_llvm/codegen_llvm.cpp -o codegen_llvm.o
 	${CXX} $(CXXFLAGS_COMPILE_ONLY) -c AST/tree.cpp -o tree.o
 	bison -d -v rwl_parser.yy

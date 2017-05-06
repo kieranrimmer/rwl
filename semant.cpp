@@ -155,6 +155,9 @@ namespace RWL {
         return initialisation->semant(expTab);
     }
 
+
+//    Value *declaration_node::codegen(ExpressionCodeTableP expCodeTab) { return nullptr; }
+
     Symbol loop_node::semant(ExpressionTableP expTab) {
         return NoType;
     }

@@ -32,6 +32,12 @@ using namespace llvm;
 
 namespace RWL {
 
+    class ExpressionCodeTable;
+    typedef ExpressionCodeTable *ExpressionCodeTableP;
+
+    class ExpressionTable;
+    typedef ExpressionTable *ExpressionTableP;
+
     extern int node_lineno;
     extern Symbol filename_symbol;
 
@@ -467,13 +473,12 @@ namespace RWL {
         void print() override  { std::cout << "declaration node: type: " << type->get_string() << ", variable name: " << name->get_string() << ", intitialisation: "; initialisation->print(); std::cout << std::endl; }
 
         Value *codegen(ExpressionCodeTableP) override;
-//        Value *codegen() override { return nullptr; }
 
         const Symbol getType() { return type; }
         const Symbol getName() { return name; }
         Expression getInit() { return initialisation; }
 
-        declaration_node(Symbol t, Symbol n, exp_node *exp) : type(t), name(n) { initialisation = exp; }
+        declaration_node(Symbol t, Symbol n, exp_node *exp) : type(t), name(n), initialisation(exp) {  }
 
         Symbol semant(ExpressionTableP exprs) override;
 
@@ -489,7 +494,6 @@ namespace RWL {
         void print() override  { std::cout << "loop node: predicate: "; predicate->print(); std::cout << ", body: "; body->print(); std::cout << std::endl; }
 
         Value *codegen(ExpressionCodeTableP) override;
-//        Value *codegen() override { return nullptr; }
 
         loop_node(Expression p, Expression b) : predicate(p), body(b) { }
 
@@ -506,11 +510,10 @@ namespace RWL {
 
         void print() override  { std::cout << "conditional node: predicate: "; predicate->print(); std::cout << ", if body: "; if_body->print(); std::cout << ", then body: "; then_body->print();  std::cout << std::endl; }
 
-        Value *codegen(ExpressionCodeTableP) override;
-//        Value *codegen() override { return nullptr; }
 
         cond_node(Expression p, Expression ib, Expression tb) : predicate(p), if_body(ib), then_body(tb) { }
         Symbol semant(ExpressionTableP exprs) override;
+        Value *codegen(ExpressionCodeTableP) override;
     };
 
     class function_node: public exp_node {
@@ -531,7 +534,6 @@ namespace RWL {
         }
 
         Value *codegen(ExpressionCodeTableP) override;
-//        Value *codegen() override { return nullptr; }
 
         function_node(Symbol t, Symbol n, Formals formal_list, exp_node *exp) : returnType(t), name(n) { formals = formal_list; body = exp; }
 
@@ -550,9 +552,8 @@ namespace RWL {
         }
 
         Value *codegen(ExpressionCodeTableP) override;
-//        Value *codegen() override { return nullptr; }
 
-        dispatch_node(Symbol n, Expressions actual_list) : name(n) { actuals = actual_list; }
+        dispatch_node(Symbol n, Expressions actual_list) : name(n), actuals(actual_list) {  }
         Symbol semant(ExpressionTableP exprs) override;
 
     };

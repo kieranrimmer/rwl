@@ -6,7 +6,6 @@
 #define RWL_SEMANT_HPP
 
 #include "AST/tree.hpp"
-#include "symtab.hpp"
 #include <iostream>
 
 namespace RWL {
