@@ -12,6 +12,8 @@ def string kr_fn(int i, string kfed) { "return string" }
 string xyz = "newer string"
 int xy = 20
 xy = 10
+3 + 5
+xy + xy
 zyzz = 20
 }
 xy = 88

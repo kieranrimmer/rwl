@@ -7,6 +7,13 @@
 
 #include "../AST/tree.hpp"
 
+// #include "llvm/Analysis/Verifier.h"
+#include "llvm/IR/DerivedTypes.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
+#include "llvm/IR/TypeBuilder.h"
+#include "llvm/IR/IRBuilder.h"
+
 namespace RWL {
 
     LLVMContext TheContext;
@@ -38,6 +45,7 @@ namespace RWL {
         IRBuilder<> builder;
         std::unique_ptr <Module> TheModule;
         SymbolTable<Symbol, Value> llvm_values_;
+        Function *CalleeF;
 
     };
 }
