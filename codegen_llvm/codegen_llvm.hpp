@@ -5,6 +5,8 @@
 #ifndef RWL_CODEGEN_LLVM_HPP
 #define RWL_CODEGEN_LLVM_HPP
 
+#include <sstream>
+
 #include "../AST/tree.hpp"
 
 // #include "llvm/Analysis/Verifier.h"
@@ -13,6 +15,7 @@
 #include "llvm/IR/Module.h"
 #include "llvm/IR/TypeBuilder.h"
 #include "llvm/IR/IRBuilder.h"
+
 
 namespace RWL {
 
@@ -45,6 +48,7 @@ namespace RWL {
         IRBuilder<> builder;
         std::unique_ptr <Module> TheModule;
         SymbolTable<Symbol, Value> llvm_values_;
+        std::map<std::string, Value *> NamedValues; // for function formals
         Function *CalleeF;
 
     };

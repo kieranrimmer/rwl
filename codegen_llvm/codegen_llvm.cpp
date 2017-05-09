@@ -12,6 +12,16 @@ namespace RWL {
         return nullptr;
     }
 
+    Function *LogErrorF(std::string Str) {
+        std::cerr << Str << std::endl;
+        return nullptr;
+    }
+
+    template <typename RetType> RetType *LogErrorAll(std::string Str) {
+        std::cerr << Str << std::endl;
+        return nullptr;
+    }
+
     void pgm::codegen() {
         ExpressionCodeTableP expCodeTab = new ExpressionCodeTable(exps);
         expCodeTab->CalleeF = (Function *) expCodeTab->TheModule->getOrInsertFunction("printf",
@@ -35,7 +45,8 @@ namespace RWL {
     }
 
     Value *integer_node::codegen(ExpressionCodeTableP expCodeTab) {
-        return ConstantInt::get(TheContext, APSInt(sym->get_string()));
+        return ConstantInt::get(Type::getInt32Ty(TheContext), sym->get_string(), 10);
+//        return ConstantInt::get(TheContext, APSInt(sym->get_string()));
     }
 
     Value *minus_node::codegen(ExpressionCodeTableP expCodeTab) {
@@ -80,7 +91,27 @@ namespace RWL {
         return ConstantDataArray::getString(TheContext, sym->get_string(), true);
     }
 
-    Value *dispatch_node::codegen(ExpressionCodeTableP expCodeTab) { return nullptr; }
+    Value *dispatch_node::codegen(ExpressionCodeTableP expCodeTab) {
+        std::cout << "calling function `" << name->get_string() << "`" << std::endl;
+        Function *CalleeF = expCodeTab->TheModule->getFunction(name->get_string());
+        if (!CalleeF)
+            return LogErrorAll<Value>("Unknown function referenced");
+
+        // If argument mismatch error.
+        if (CalleeF->arg_size() != actuals->len())
+            return LogErrorV("Incorrect # arguments passed");
+
+        std::vector<Value *> ArgsV;
+        for (unsigned i = 0, e = actuals->len(); i != e; ++i) {
+            ArgsV.push_back(actuals->nth(i)->codegen(expCodeTab));
+            if (!ArgsV.back())
+                return nullptr;
+        }
+
+        std::cout << "calling function with " << ArgsV.size() << " arguments" << std::endl;
+
+        return expCodeTab->builder.CreateCall(CalleeF, ArgsV, "calltmp");
+    }
 
     Value *loop_node::codegen(ExpressionCodeTableP expCodeTab) {
         return nullptr;
@@ -127,45 +158,81 @@ namespace RWL {
         return expCodeTab->builder.CreateCall(CalleeF, ArgsV, "calltmp");
     }
 
-    Function *function_prototype_codegen(ExpressionCodeTableP expCodeTab) {
+    /** **/
+
+    /**   **/
+
+    Function *function_node::function_prototype_codegen(ExpressionCodeTableP expCodeTab) {
         // Make the function type:  double(double,double) etc.
-        std::vector<Type *> Doubles(Args.size(), Type::getDoubleTy(TheContext));
-        FunctionType *FT =
-                FunctionType::get(Type::getDoubleTy(TheContext), Doubles, false);
+        std::vector<Type *> our_formals;
+        for(int i=0; i < formals->len(); i++) {
+            if ( formals->nth(i)->type->get_string().compare("string") == 0 ) {
+                our_formals.push_back(Type::getInt8PtrTy(TheContext));
+                std::cout << "added string formal" << std::endl;
+            }
+            else if ( formals->nth(i)->type->get_string().compare("int") == 0 ) {
+                our_formals.push_back(Type::getInt32Ty(TheContext));
+                std::cout << "added int formal" << std::endl;
+            }
+            else {
+                std::string f_type = formals->nth(i)->type->get_string();
+                std::ostringstream stringStream;
+                stringStream << "Cannot parse formal: " << formals->nth(i)->name->get_string() << " of type: " << f_type << std::endl;
+                std::string copyOfStr = stringStream.str();
+                return LogErrorF(copyOfStr);
+            }
+        }
+        FunctionType *FT = nullptr;
+        std::cout << "created FunctionType pointer as nullptr" << std::endl;
+        std::cout << "return type for function is: `" << returnType->get_string() << "`" << std::endl;
+        if (returnType->get_string().compare("int") == 0) {
+
+            std::cout << "return type is int" << std::endl;
+            FT =
+            FunctionType::get(Type::getInt32Ty(TheContext), our_formals, false);
+        }
+        else if (returnType->get_string().compare("string") == 0) {
+            std::cout << "return type is string" << std::endl;
+            FT = FunctionType::get(Type::getInt8PtrTy(TheContext), our_formals, false);
+        }
+        std::cout << "created FuntionType pointer, FT = ";
+//        FT->dump();
+        std::cout << std::endl;
 
         Function *F =
-                Function::Create(FT, Function::ExternalLinkage, Name, TheModule.get());
+                Function::Create(FT, Function::ExternalLinkage, name->get_string(), expCodeTab->TheModule.get());
 
         // Set names for all arguments.
         unsigned Idx = 0;
         for (auto &Arg : F->args())
-            Arg.setName(Args[Idx++]);
+            Arg.setName(formals->nth(Idx++)->get_name()->get_string());
 
         return F;
     }
 
-    Function *function_codegen(ExpressionCodeTableP expCodeTab) {
+    /** **/
+    Function *function_node::function_codegen(ExpressionCodeTableP expCodeTab) {
         // First, check for an existing function from a previous 'extern' declaration.
-        Function *TheFunction = expCodeTab->TheModule->getFunction(Proto->getName());
+        Function *TheFunction = expCodeTab->TheModule->getFunction(name->get_string());
 
         if (!TheFunction)
-            TheFunction = Proto->codegen();
+            TheFunction = function_prototype_codegen(expCodeTab);
 
         if (!TheFunction)
             return nullptr;
 
         // Create a new basic block to start insertion into.
         BasicBlock *BB = BasicBlock::Create(TheContext, "entry", TheFunction);
-        Builder.SetInsertPoint(BB);
+        expCodeTab->builder.SetInsertPoint(BB);
 
         // Record the function arguments in the NamedValues map.
-        NamedValues.clear();
+        expCodeTab->NamedValues.clear();
         for (auto &Arg : TheFunction->args())
-            NamedValues[Arg.getName()] = &Arg;
+            expCodeTab->NamedValues[Arg.getName()] = &Arg;
 
-        if (Value *RetVal = Body->codegen()) {
+        if (Value *RetVal = body->codegen(expCodeTab)) {
             // Finish off the function.
-            Builder.CreateRet(RetVal);
+            expCodeTab->builder.CreateRet(RetVal);
 
             // Validate the generated code, checking for consistency.
             verifyFunction(*TheFunction);
@@ -181,7 +248,8 @@ namespace RWL {
     /**   **/
 
     Value *function_node::codegen(ExpressionCodeTableP expCodeTab) {
-
+        function_codegen(expCodeTab);
+        return nullptr;
     }
 
 

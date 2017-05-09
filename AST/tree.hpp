@@ -536,6 +536,9 @@ namespace RWL {
 
         Value *codegen(ExpressionCodeTableP) override;
 
+        Function *function_codegen(ExpressionCodeTableP expCodeTab);
+        Function *function_prototype_codegen(ExpressionCodeTableP expCodeTab);
+
         function_node(Symbol t, Symbol n, Formals formal_list, exp_node *exp) : returnType(t), name(n) { formals = formal_list; body = exp; }
 
     };
