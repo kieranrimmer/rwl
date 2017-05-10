@@ -103,7 +103,11 @@ namespace RWL {
 
         std::vector<Value *> ArgsV;
         for (unsigned i = 0, e = actuals->len(); i != e; ++i) {
-            ArgsV.push_back(actuals->nth(i)->codegen(expCodeTab));
+            Value *V = actuals->nth(i)->codegen(expCodeTab);
+            std::cout << "Arg #" << i+1 << " type: ";
+            V->getType()->dump();
+            std::cout << std::endl;
+            ArgsV.push_back(V);
             if (!ArgsV.back())
                 return nullptr;
         }
@@ -160,7 +164,83 @@ namespace RWL {
 
     /** **/
 
-    /**   **/
+    void generate_string_var(ExpressionCodeTableP expCodeTab) {
+        ArrayType* ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 14);
+        GlobalVariable *gvar_array__str = new GlobalVariable(
+                *(expCodeTab->TheModule),
+                ArrayTy_0,
+                true,
+                GlobalValue::PrivateLinkage,
+                0, // has initializer, specified below
+                ".str");
+        gvar_array__str->setAlignment(1);
+
+        // Constant Definitions
+        Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(), "hello world", true);
+        std::vector<Constant *> const_ptr_5_indices;
+        ConstantInt* const_int64_6 = ConstantInt::get(TheContext, APInt(64, StringRef("0"), 10));
+        const_ptr_5_indices.push_back((Constant *&&) const_int64_6);
+        const_ptr_5_indices.push_back((Constant *&&) const_int64_6);
+        Constant *const_ptr_5 = ConstantExpr::getGetElementPtr(ArrayTy_0, gvar_array__str, const_ptr_5_indices);
+
+        // Global Variable Definitions
+        gvar_array__str->setInitializer(const_array_4);
+    }
+
+    // Function Definitions
+
+//    // Function: foo (func_foo)
+//{
+//
+//    BasicBlock* label_entry = BasicBlock::Create(mod->getContext(), "entry",func_foo,0);
+//
+//    // Block entry (label_entry)
+//    ReturnInst::Create(mod->getContext(), const_ptr_5, label_entry);
+//
+//}
+//
+//    /**
+//     *
+//     */
+//    GlobalVariable* gvar_array__str = new GlobalVariable(
+//            //Module=
+//            *mod,
+//    //Type=
+//    ArrayTy_0,
+//    //isConstant=
+//    true,
+//    //Linkage=
+//    GlobalValue::PrivateLinkage,
+//    //Initializer=
+//    0, // has initializer, specified below
+//    //Name=
+//    ".str");
+//    gvar_array__str->setAlignment(1);
+//
+//    // Constant Definitions
+//    Constant *const_array_4 = ConstantDataArray::getString(mod->getContext(), "hello world", true);
+//    std::vector<Constant*> const_ptr_5_indices;
+//    ConstantInt* const_int64_6 = ConstantInt::get(mod->getContext(), APInt(64, StringRef("0"), 10));
+//    const_ptr_5_indices.push_back(const_int64_6);
+//    const_ptr_5_indices.push_back(const_int64_6);
+//    Constant* const_ptr_5 = ConstantExpr::getGetElementPtr(gvar_array__str, const_ptr_5_indices);
+//
+//    // Global Variable Definitions
+//    gvar_array__str->setInitializer(const_array_4);
+//
+//    // Function Definitions
+//
+//    // Function: foo (func_foo)
+//{
+//
+//    BasicBlock* label_entry = BasicBlock::Create(mod->getContext(), "entry",func_foo,0);
+//
+//    // Block entry (label_entry)
+//    ReturnInst::Create(mod->getContext(), const_ptr_5, label_entry);
+//
+//}
+
+//     * **/
 
     Function *function_node::function_prototype_codegen(ExpressionCodeTableP expCodeTab) {
         // Make the function type:  double(double,double) etc.

@@ -9,7 +9,7 @@ string jkl = "new string"
 jkl = "further modified string"
 def int simple_fn() { 88 }
 def int kr_fn_int(int i, int j) { 3 }
-def string kr_fn(int i, string kfed) { "return string" }
+// def string kr_fn(int i, string kfed) { "return string" }
 {
 string xyz = "newer string"
 int xy = 20
@@ -20,8 +20,8 @@ zyzz = 20
 }
 xy = 88
 simple_fn()
-int kfed = kr_fn_int(3, 5)
-string hk = kr_fn(1, "who is that?")
+int kfed33 = kr_fn_int(3, 5)
+// string hk = kr_fn(1, "who is that?")
 // smith
 if ( "yo" )
 then "awesome" ELSE "perfect" FI
