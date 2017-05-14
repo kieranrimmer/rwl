@@ -9,7 +9,7 @@ string jkl = "new string"
 jkl = "further modified string"
 def int simple_fn() { 88 }
 def int kr_fn_int(int i, int j) { 3 }
-// def string kr_fn(int i, string kfed) { "return string" }
+def string kr_fn(int i, string kfed) { "return string" }
 {
 string xyz = "newer string"
 int xy = 20
@@ -26,3 +26,6 @@ int kfed33 = kr_fn_int(3, 5)
 if ( "yo" )
 then "awesome" ELSE "perfect" FI
 WHILE ( x = 1 ) LOOP x = 2 POOL
+def int main() { 1 }
+
+main()

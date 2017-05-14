@@ -31,6 +31,27 @@ The Lexer, Parser, AST, String Tables
 symbol tables (on for variables, one for functions) 
 are all implemented.
 
+## Setup
+
+You will need to add the include paths for clang / llvm 5.0
+
+This can be done by amending the CPATH shell variable.
+
+You can use the provided script:
+```$xslt
+source ./path_setup.sh <llvm include dir> <build include dir>
+```
+
+In my case:
+```$xslt
+source ./path_setup.sh /Users/kieranrimmer/packages/llvm/include /Users/kieranrimmer/packages/build/include
+```
+
+To check which paths the clang++ is including:
+
+```$xslt
+echo | clang++  -Wp,-v -stdlib=libc++ -x c++ - -fsyntax-only
+```
 
 ### Lexer
 
@@ -57,6 +78,8 @@ go with casting all non-assignables and erroneous assignments
 to "no_type", a special type symbol.
 
 ### LLVM integration
+
+llvm version 5.0.0
 
 Sorta scaffolded.
 

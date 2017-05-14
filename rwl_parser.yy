@@ -261,6 +261,14 @@
             std::cout << "STRING expression detection complete " << std::endl;
         }
 
+        |
+
+        exp '+' exp {
+            std::cout << "plus expression detected: "; $1->print(); std::cout << " + "; $3->print();  std::cout << std::endl;
+            $$ = new plus_node($1, $3);
+            std::cout << "STRING expression detection complete " << std::endl;
+        }
+
     ;
 
 

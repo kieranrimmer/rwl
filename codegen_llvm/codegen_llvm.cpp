@@ -77,10 +77,11 @@ namespace RWL {
     }
 
     Value *plus_node::codegen(ExpressionCodeTableP expCodeTab) {
+        std::cout << blue << "plus_node::codegen() called" << norm << std::endl;
         Value *L = left->codegen(expCodeTab);
         Value *R = right->codegen(expCodeTab);
         if (!L || !R) return nullptr;
-        return expCodeTab->builder.CreateFAdd(L, R, "addtmp");
+        return expCodeTab->builder.CreateAdd(L, R, "addtmp");
     }
 
     Value *id_node::codegen(ExpressionCodeTableP expCodeTab) {
@@ -114,6 +115,7 @@ namespace RWL {
 
         std::cout << "calling function with " << ArgsV.size() << " arguments" << std::endl;
 
+//        CallInst* int32_call = CallInst::Create(CalleeF, const_int32_13, "call", label_entry_18);
         return expCodeTab->builder.CreateCall(CalleeF, ArgsV, "calltmp");
     }
 
@@ -140,30 +142,6 @@ namespace RWL {
         return V;
     }
 
-    /** **
-
-    Value *invoke_function_codegen(ExpressionCodeTableP expCodeTab, std::string Callee) {
-        // Look up the name in the global module table.
-        Function *CalleeF = expCodeTab->TheModule->getFunction(Callee);
-        if (!CalleeF)
-            return LogErrorV("Unknown function referenced");
-
-        // If argument mismatch error.
-        if (CalleeF->arg_size() != Args.size())
-            return LogErrorV("Incorrect # arguments passed");
-
-        std::vector<Value *> ArgsV;
-        for (unsigned i = 0, e = Args.size(); i != e; ++i) {
-            ArgsV.push_back(Args[i]->codegen());
-            if (!ArgsV.back())
-                return nullptr;
-        }
-
-        return expCodeTab->builder.CreateCall(CalleeF, ArgsV, "calltmp");
-    }
-
-    /** **/
-
     void generate_string_var(ExpressionCodeTableP expCodeTab) {
         ArrayType* ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 14);
         GlobalVariable *gvar_array__str = new GlobalVariable(
@@ -186,61 +164,6 @@ namespace RWL {
         // Global Variable Definitions
         gvar_array__str->setInitializer(const_array_4);
     }
-
-    // Function Definitions
-
-//    // Function: foo (func_foo)
-//{
-//
-//    BasicBlock* label_entry = BasicBlock::Create(mod->getContext(), "entry",func_foo,0);
-//
-//    // Block entry (label_entry)
-//    ReturnInst::Create(mod->getContext(), const_ptr_5, label_entry);
-//
-//}
-//
-//    /**
-//     *
-//     */
-//    GlobalVariable* gvar_array__str = new GlobalVariable(
-//            //Module=
-//            *mod,
-//    //Type=
-//    ArrayTy_0,
-//    //isConstant=
-//    true,
-//    //Linkage=
-//    GlobalValue::PrivateLinkage,
-//    //Initializer=
-//    0, // has initializer, specified below
-//    //Name=
-//    ".str");
-//    gvar_array__str->setAlignment(1);
-//
-//    // Constant Definitions
-//    Constant *const_array_4 = ConstantDataArray::getString(mod->getContext(), "hello world", true);
-//    std::vector<Constant*> const_ptr_5_indices;
-//    ConstantInt* const_int64_6 = ConstantInt::get(mod->getContext(), APInt(64, StringRef("0"), 10));
-//    const_ptr_5_indices.push_back(const_int64_6);
-//    const_ptr_5_indices.push_back(const_int64_6);
-//    Constant* const_ptr_5 = ConstantExpr::getGetElementPtr(gvar_array__str, const_ptr_5_indices);
-//
-//    // Global Variable Definitions
-//    gvar_array__str->setInitializer(const_array_4);
-//
-//    // Function Definitions
-//
-//    // Function: foo (func_foo)
-//{
-//
-//    BasicBlock* label_entry = BasicBlock::Create(mod->getContext(), "entry",func_foo,0);
-//
-//    // Block entry (label_entry)
-//    ReturnInst::Create(mod->getContext(), const_ptr_5, label_entry);
-//
-//}
-
-//     * **/
 
     Function *function_node::function_prototype_codegen(ExpressionCodeTableP expCodeTab) {
         // Make the function type:  double(double,double) etc.

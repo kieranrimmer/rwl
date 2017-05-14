@@ -670,6 +670,8 @@ namespace RWL {
 
         void print() override;
 
+        tree_node *copy() override { return nullptr; }
+
         Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
     };

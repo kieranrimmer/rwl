@@ -10,15 +10,10 @@ CXXDEBUG = -g -Wall
 CSTD = -std=c99
 CXXSTD = -std=c++14
 
-LLVM_DIR = /Users/kieranrimmer/packages/build
 
-LLVMCONFIG = $(LLVM_DIR)/bin/llvm-config
+LLVM_COMPILE_ONLY = `llvm-config --cppflags`
 
-LLVM_INCDIRS = -I/Users/kieranrimmer/packages/llvm/include -I/Users/kieranrimmer/packages/build/include
-
-LLVM_COMPILE_ONLY = `$(LLVMCONFIG) --cppflags`
-
-LLVM_FLAGS = `$(LLVMCONFIG) --cppflags --ldflags --system-libs --libs core`
+LLVM_FLAGS = `llvm-config --cppflags --ldflags --system-libs --libs core`
 
 CFLAGS = -Wno-deprecated-register -O0 $(CDEBUG) $(CSTD)
 CXXFLAGS = -Wno-deprecated-register -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_FLAGS)
