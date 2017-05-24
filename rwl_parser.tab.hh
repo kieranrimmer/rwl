@@ -523,7 +523,7 @@ namespace  RWL  {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 84,     ///< Last index in yytable_.
+      yylast_ = 103,     ///< Last index in yytable_.
       yynnts_ = 7,  ///< Number of nonterminal symbols.
       yyfinal_ = 21, ///< Termination state number.
       yyterror_ = 1,

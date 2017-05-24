@@ -225,7 +225,7 @@
 
         |
 
-        DEF TYPE_DECL WORD '(' formals ')' '{' exp '}' {
+        DEF TYPE_DECL WORD '(' formals ')' '{' explist '}' {
             std::cout << red << "found function declaration!!!" << norm << std::endl;
             $$ = new function_node($2, $3, $5, $8);
         }

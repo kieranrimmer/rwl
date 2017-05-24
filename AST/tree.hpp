@@ -239,9 +239,10 @@ namespace RWL {
         std::cout << "codegen() called on append node" << std::endl;
         Value *retVal = some->codegen(expCodeTab);
         Value *restSym = rest->codegen(expCodeTab);
-        std::cout << "append_node::codegen() retVal = " << retVal << std::endl;
-        std::cout << "append_node::codegen() restSym = " << restSym << std::endl;
-        return restSym == nullptr ? retVal : restSym;
+//        if (retVal) { std::cout << "append_node::codegen() retVal = "; retVal->print(errs()); std::cout  << std::endl; }
+//        if (restSym) std::cout << "append_node::codegen() restSym = "; restSym->print(errs()); std::cout << std::endl;
+
+        return restSym ? restSym : retVal;
 
     }
 
@@ -458,6 +459,8 @@ namespace RWL {
         void print() override  { body->print(); }
 
         Value *codegen(ExpressionCodeTableP) override;
+
+        std::vector<Value *> codegen_block(ExpressionCodeTableP);
 //        Value *codegen() override { return nullptr; }
 
         Symbol semant(ExpressionTableP exprs) override;

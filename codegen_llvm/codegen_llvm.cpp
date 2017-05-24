@@ -42,10 +42,12 @@ namespace RWL {
         expCodeTab->llvm_values_.exitscope();
         // Print out all of the generated code.
         expCodeTab->TheModule->print(errs(), nullptr);
+        expCodeTab->TheModule->dump();
     }
 
     Value *integer_node::codegen(ExpressionCodeTableP expCodeTab) {
-        return ConstantInt::get(Type::getInt32Ty(TheContext), sym->get_string(), 10);
+        std::cout << "integer node codegen called" << std::endl;
+        return ConstantInt::get(Type::getInt32Ty(TheContext), StringRef(sym->get_string()), (u_int8_t) 10);
 //        return ConstantInt::get(TheContext, APSInt(sym->get_string()));
     }
 
@@ -127,10 +129,31 @@ namespace RWL {
         return nullptr;
     }
 
+    std::vector<Value *> block_node::codegen_block(ExpressionCodeTableP expCodeTab) {
+        expCodeTab->llvm_values_.enterscope();
+        // do code gen
+        std::vector<Value *> bodyCode;
+        Value *V = nullptr;
+        for (int i = body->first(); body->more(i); i = body->next(i))
+        {
+            V = body->nth(i)->codegen(expCodeTab);
+            bodyCode.push_back(V);
+        }
+        expCodeTab->llvm_values_.exitscope();
+        std::cout << red << "block node codegen output = "; V->dump(); std::cout << norm << std::endl;
+        return bodyCode;
+    }
+
     Value *block_node::codegen(ExpressionCodeTableP expCodeTab) {
         expCodeTab->llvm_values_.enterscope();
         // do code gen
-        Value *V = body->codegen(expCodeTab);
+        std::vector<Value *> bodyCode;
+        Value *V = nullptr;
+        for (int i = body->first(); body->more(i); i = body->next(i))
+        {
+            V = body->nth(i)->codegen(expCodeTab);
+            bodyCode.push_back(V);
+        }
         expCodeTab->llvm_values_.exitscope();
         return V;
     }
@@ -233,8 +256,11 @@ namespace RWL {
         for (auto &Arg : TheFunction->args())
             expCodeTab->NamedValues[Arg.getName()] = &Arg;
 
-        if (Value *RetVal = body->codegen(expCodeTab)) {
+        Value * RetVal = body->codegen(expCodeTab);
+
+        if (RetVal) {
             // Finish off the function.
+//            expCodeTab->builder.
             expCodeTab->builder.CreateRet(RetVal);
 
             // Validate the generated code, checking for consistency.
@@ -251,8 +277,8 @@ namespace RWL {
     /**   **/
 
     Value *function_node::codegen(ExpressionCodeTableP expCodeTab) {
-        function_codegen(expCodeTab);
-        return nullptr;
+        return function_codegen(expCodeTab);
+//        return nullptr;
     }
 
 
