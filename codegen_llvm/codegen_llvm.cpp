@@ -6,6 +6,20 @@
 
 namespace RWL {
 
+    Constant* geti8StrVal(Module& M, char const* str, Twine const& name, ExpressionCodeTableP expCodeTab) {
+        LLVMContext& ctx = TheContext;
+        Constant* strConstant = ConstantDataArray::getString(ctx, str);
+        GlobalVariable* GVStr =
+                new GlobalVariable(M, strConstant->getType(), true,
+                                   GlobalValue::InternalLinkage, strConstant, name);
+        Constant* zero = Constant::getNullValue(IntegerType::getInt32Ty(ctx));
+        Constant* indices[] = {zero, zero};
+        ArrayType* ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 14);
+        Constant* strVal = ConstantExpr::getGetElementPtr(ArrayTy_0, GVStr, indices);
+
+        return strVal;
+    }
+
 
     Value *LogErrorV(const char *Str) {
         std::cerr << Str << std::endl;
@@ -43,6 +57,8 @@ namespace RWL {
         // Print out all of the generated code.
         expCodeTab->TheModule->print(errs(), nullptr);
         expCodeTab->TheModule->dump();
+        generate_string_var(expCodeTab);
+
     }
 
     Value *integer_node::codegen(ExpressionCodeTableP expCodeTab) {
@@ -61,7 +77,35 @@ namespace RWL {
     Value *unary_minus_node::codegen(ExpressionCodeTableP expCodeTab) { return nullptr; }
 
     Value *print_stmt::codegen(ExpressionCodeTableP expCodeTab) {
-        return expCodeTab->builder.CreateCall(expCodeTab->CalleeF, exp->codegen(expCodeTab), "printfCall");
+        ArrayType* ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 12);
+        Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(), "hello world");
+        const_array_4->getType()->dump();
+        ArrayTy_0->dump();
+        GlobalVariable *gvar_array__str = new GlobalVariable(
+                *(expCodeTab->TheModule),
+                ArrayTy_0,
+                true,
+                GlobalValue::PrivateLinkage,
+                const_array_4, // has initializer, specified below
+                ".str");
+        gvar_array__str->setAlignment(1);
+
+
+
+
+
+        // Constant Definitions
+//        Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(), "hello world");
+        std::vector<Constant *> const_ptr_5_indices;
+        ConstantInt* const_int64_6 = ConstantInt::get(TheContext, APInt(32,0, false));
+        const_ptr_5_indices.push_back((Constant *&&) const_int64_6);
+        const_ptr_5_indices.push_back((Constant *&&) const_int64_6);
+        Constant *const_ptr_5 = ConstantExpr::getGetElementPtr(ArrayTy_0, gvar_array__str, const_ptr_5_indices);
+
+
+        // Global Variable Definitions
+//        gvar_array__str->setInitializer(const_ptr_5);
+        return expCodeTab->builder.CreateCall(expCodeTab->CalleeF, const_ptr_5);
     }
 
     Value *divide_node::codegen(ExpressionCodeTableP expCodeTab) {
@@ -166,26 +210,37 @@ namespace RWL {
     }
 
     void generate_string_var(ExpressionCodeTableP expCodeTab) {
-        ArrayType* ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 14);
+//        typedef unsigned long long uint64_t;
+//        uint64_t x = 14;
+        ArrayType* ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 12);
+        Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(), "hello world");
+        const_array_4->getType()->dump();
+        ArrayTy_0->dump();
         GlobalVariable *gvar_array__str = new GlobalVariable(
                 *(expCodeTab->TheModule),
                 ArrayTy_0,
                 true,
                 GlobalValue::PrivateLinkage,
-                0, // has initializer, specified below
+                const_array_4, // has initializer, specified below
                 ".str");
         gvar_array__str->setAlignment(1);
 
+
+
+
+
         // Constant Definitions
-        Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(), "hello world", true);
+//        Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(), "hello world");
         std::vector<Constant *> const_ptr_5_indices;
-        ConstantInt* const_int64_6 = ConstantInt::get(TheContext, APInt(64, StringRef("0"), 10));
+        ConstantInt* const_int64_6 = ConstantInt::get(TheContext, APInt(32,0, false));
         const_ptr_5_indices.push_back((Constant *&&) const_int64_6);
         const_ptr_5_indices.push_back((Constant *&&) const_int64_6);
         Constant *const_ptr_5 = ConstantExpr::getGetElementPtr(ArrayTy_0, gvar_array__str, const_ptr_5_indices);
 
+
         // Global Variable Definitions
-        gvar_array__str->setInitializer(const_array_4);
+//        gvar_array__str->setInitializer(const_ptr_5);
+        expCodeTab->builder.CreateCall(expCodeTab->CalleeF, const_ptr_5);
     }
 
     Function *function_node::function_prototype_codegen(ExpressionCodeTableP expCodeTab) {

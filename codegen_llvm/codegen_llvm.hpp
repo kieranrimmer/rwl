@@ -52,6 +52,10 @@ namespace RWL {
         Function *CalleeF;
 
     };
+
+
+    void generate_string_var(ExpressionCodeTableP expCodeTab);
+
 }
 
 #endif //RWL_CODEGEN_LLVM_HPP

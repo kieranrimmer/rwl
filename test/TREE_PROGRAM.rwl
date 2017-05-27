@@ -37,6 +37,8 @@ def int zz() {
 
 def int main() {
    int kf = simple_fn()
+   print "this should call printf"
+   // printf("this is the only way")
    kf + 3
 }
 

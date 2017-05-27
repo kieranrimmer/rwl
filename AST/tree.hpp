@@ -740,7 +740,7 @@ namespace RWL {
         print_stmt(Symbol _sym) : sym(_sym) {};
         print_stmt(exp_node *_exp) : exp(_exp) {};
 
-        void print() override { std::cout << "Print node: " << std::endl << "\tsym:" << sym << std::endl << "\texp: " << std::endl; exp->print(); std::cout << "End print node" << std::endl;  };
+        void print() override { std::cout << "Print node: " << std::endl /* << "\tsym:" << sym << std::endl */ << "\texp: " << std::endl; exp->print(); std::cout << "End print node" << std::endl;  };
 
         virtual Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
