@@ -8,6 +8,7 @@
 #include <sstream>
 
 #include "../AST/tree.hpp"
+#include "../type_check.hpp"
 
 // #include "llvm/Analysis/Verifier.h"
 #include "llvm/IR/DerivedTypes.h"

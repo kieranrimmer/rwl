@@ -145,7 +145,9 @@ namespace RWL {
 
     Symbol block_node::semant(ExpressionTableP expTab) {
         expTab->symbols_.enterscope();
+        std::cout << blue << "entering block node semant()" << std::endl;
         Symbol retVal = body->semant(expTab);
+        std::cout << blue << "exiting block node semant()" << std::endl;
         expTab->symbols_.exitscope();
         return retVal;
     }
@@ -169,6 +171,7 @@ namespace RWL {
     Symbol function_node::semant(ExpressionTableP expTab) {
         std::cout << blue << "entered function_node semant() function" << norm << std::endl;
         publish(expTab);
+        body->semant(expTab);
         return NoType;
     }
 
@@ -202,6 +205,7 @@ namespace RWL {
     }
 
     Symbol string_node::semant(ExpressionTableP expTab) {
+        std::cout << red << "semant() called on string node: " << norm << "\"" << sym->get_string() << "\"" << std::endl;
         set_type(Str);
         return Str;
     }
@@ -277,6 +281,8 @@ namespace RWL {
     }
 
     Symbol print_stmt::semant(ExpressionTableP expTab) {
+        std::cout << blue << "semant() called on print statement" << norm << std::endl;
+        exp->semant(expTab);
         return NoType;
     }
 
