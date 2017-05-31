@@ -86,9 +86,11 @@ namespace RWL {
 
         switch (TypeCheck::checkType(exp->get_type())) {
             case RwlTypes::STRING: {
-                ArrayType *ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 14);
+
+                std::string strValue = exp->get_value()->get_string();
+                ArrayType *ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), strValue.length() + 1);
                 Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(),
-                                                                       "hello world/n");
+                                                                       strValue.c_str());
                 const_array_4->getType()->dump();
                 ArrayTy_0->dump();
                 GlobalVariable *gvar_array__str = new GlobalVariable(

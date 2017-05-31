@@ -109,7 +109,11 @@ namespace RWL {
         Symbol type;
         Symbol get_type() { return type; }
         exp_node *set_type(Symbol s) { type = s; return this; }
+
+        virtual Symbol get_value() { return nullptr; }
+
         virtual Symbol semant(ExpressionTableP xps) = 0;
+
 
     };
 
@@ -659,6 +663,8 @@ namespace RWL {
         string_node(Symbol value): sym(value)  {};
 
         void print() override;
+
+        Symbol get_value() override { return sym; }
 
         Value *codegen(ExpressionCodeTableP expCodeTab) override;
         Symbol semant(ExpressionTableP exprs) override;
