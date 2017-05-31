@@ -80,11 +80,15 @@ namespace RWL {
 
         std::cout <<  "print_stmt::codegen(), type = " << std::endl;
 
-//        switch (TypeCheck::checkType(get_type())) {
-//            case RwlTypes::STRING: {
-                ArrayType *ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 12);
+
+
+        RwlTypes rwlType = TypeCheck::checkType(exp->get_type());
+
+        switch (TypeCheck::checkType(exp->get_type())) {
+            case RwlTypes::STRING: {
+                ArrayType *ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 14);
                 Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(),
-                                                                       "hello world");
+                                                                       "hello world/n");
                 const_array_4->getType()->dump();
                 ArrayTy_0->dump();
                 GlobalVariable *gvar_array__str = new GlobalVariable(
@@ -96,25 +100,40 @@ namespace RWL {
                         ".str");
                 gvar_array__str->setAlignment(1);
 
-
-
-
-
-                // Constant Definitions
-//        Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(), "hello world");
                 std::vector<Constant *> const_ptr_5_indices;
                 ConstantInt *const_int64_6 = ConstantInt::get(TheContext, APInt(32, 0, false));
                 const_ptr_5_indices.push_back((Constant *&&) const_int64_6);
                 const_ptr_5_indices.push_back((Constant *&&) const_int64_6);
                 Constant *const_ptr_5 = ConstantExpr::getGetElementPtr(ArrayTy_0, gvar_array__str, const_ptr_5_indices);
-
-
-                // Global Variable Definitions
-//        gvar_array__str->setInitializer(const_ptr_5);
                 return expCodeTab->builder.CreateCall(expCodeTab->CalleeF, const_ptr_5);
 
-//            }
-//        }
+            }
+
+            case RwlTypes::INT: {
+                ArrayType *ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 5);
+                Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(),
+                                                                       "%d/n");
+                const_array_4->getType()->dump();
+                ArrayTy_0->dump();
+                GlobalVariable *gvar_array__str = new GlobalVariable(
+                        *(expCodeTab->TheModule),
+                        ArrayTy_0,
+                        true,
+                        GlobalValue::PrivateLinkage,
+                        const_array_4, // has initializer, specified below
+                        ".int");
+                gvar_array__str->setAlignment(1);
+
+                std::vector<Constant *> const_ptr_5_indices;
+                ConstantInt *const_int64_6 = ConstantInt::get(TheContext, APInt(32, 0, false));
+                const_ptr_5_indices.push_back((Constant *&&) const_int64_6);
+                const_ptr_5_indices.push_back((Constant *&&) const_int64_6);
+                Constant *const_ptr_5 = ConstantExpr::getGetElementPtr(ArrayTy_0, gvar_array__str, const_ptr_5_indices);
+                return expCodeTab->builder.CreateCall(expCodeTab->CalleeF, {const_ptr_5, ConstantInt::get(TheContext, APInt(32, 22)) } );
+
+            }
+
+        }
     }
 
     Value *divide_node::codegen(ExpressionCodeTableP expCodeTab) {

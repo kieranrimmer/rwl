@@ -38,6 +38,7 @@ def int zz() {
 def int main() {
    int kf = simple_fn()
    print "this should call printf"
+   print 333
    // printf("this is the only way")
    kf + 3
 }

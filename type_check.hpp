@@ -11,7 +11,7 @@
 
 namespace RWL {
 
-    enum RwlTypes {INT =0, STRING=1, BOOLEAN, VOID};
+    enum RwlTypes {INT =0, STRING=1, BOOLEAN, VOID, NO_TYPE};
 
     class TypeCheck {
     protected:
@@ -19,11 +19,15 @@ namespace RWL {
 
     public:
         static RwlTypes checkType(Symbol type) {
+            if (!type)
+                return  RwlTypes::NO_TYPE;
             std::string typeString = type->get_string();
             std::cout << "RwlTypes::checkType() -- typeString = " << typeString << std::endl;
-            if (typeString.compare("string")) return RwlTypes::STRING;
-            else if (typeString.compare("int")) return RwlTypes::INT;
-            else if (typeString.compare("boolean")) return RwlTypes::BOOLEAN;
+//            int c1 = typeString.compare("string");
+            if (typeString.compare("string") == 0) return RwlTypes::STRING;
+            else if (typeString.compare("int") == 0) return RwlTypes::INT;
+            else if (typeString.compare("boolean") == 0) return RwlTypes::BOOLEAN;
+            else return RwlTypes::NO_TYPE;
         }
 
 
