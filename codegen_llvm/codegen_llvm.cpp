@@ -38,7 +38,7 @@ namespace RWL {
 
     void pgm::codegen() {
         ExpressionCodeTableP expCodeTab = new ExpressionCodeTable(exps);
-        expCodeTab->CalleeF = (Function *) expCodeTab->TheModule->getOrInsertFunction("printf",
+    expCodeTab->CalleeF = (Function *) expCodeTab->TheModule->getOrInsertFunction("printf",
                                  FunctionType::get(
                                      IntegerType::getInt32Ty(TheContext),
                                      PointerType::get(Type::getInt8Ty(TheContext), 0),
@@ -58,6 +58,8 @@ namespace RWL {
         expCodeTab->TheModule->print(errs(), nullptr);
         expCodeTab->TheModule->dump();
         generate_string_var(expCodeTab);
+
+        expCodeTab->generateObjectCode();
 
     }
 
@@ -242,6 +244,7 @@ namespace RWL {
     void generate_string_var(ExpressionCodeTableP expCodeTab) {
 //        typedef unsigned long long uint64_t;
 //        uint64_t x = 14;
+        std::cout << "generate_string_var() called" << std::endl;
         ArrayType* ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 12);
         Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(), "hello world");
         const_array_4->getType()->dump();

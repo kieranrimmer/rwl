@@ -11,12 +11,13 @@ CSTD = -std=c99
 CXXSTD = -std=c++14
 
 
-LLVM_COMPILE_ONLY = `llvm-config --cppflags`
+LLVM_COMPILE_ONLY = `llvm-config --cppflags --ldflags`
 
 LLVM_FLAGS = `llvm-config --cppflags --ldflags --system-libs --libs core`
+LLVM_FLAGS_OBJECT = `llvm-config --cppflags --ldflags --system-libs --libs all`
 
 CFLAGS = -Wno-deprecated-register -O0 $(CDEBUG) $(CSTD)
-CXXFLAGS = -Wno-deprecated-register -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_FLAGS)
+CXXFLAGS = -Wno-deprecated-register -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_FLAGS_OBJECT)
 CXXFLAGS_COMPILE_ONLY = -Wno-deprecated-register -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_COMPILE_ONLY)
 
 
