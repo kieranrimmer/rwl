@@ -27,6 +27,7 @@ int main(const int argc, const char **argv) {
         driver.semant();
         driver.print(std::cout) << "\n";
         driver.codegen();
+        std::cout << "main function ready to return" << std::endl;
 
     } else {
         /** exit with failure condition **/

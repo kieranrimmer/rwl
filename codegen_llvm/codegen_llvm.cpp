@@ -37,20 +37,27 @@ namespace RWL {
     }
 
     void pgm::codegen() {
+
+//        const Type *SBP = PointerType::get(Type::SByteTy);
+//        const FunctionType *MTy =
+//                FunctionType::get(Type::IntTy, std::vector<const Type*>(1, SBP), true);
+//        PrintfFunc = M.getOrInsertFunction("printf", MTy);
+
+//
         ExpressionCodeTableP expCodeTab = new ExpressionCodeTable(exps);
-    expCodeTab->CalleeF = (Function *) expCodeTab->TheModule->getOrInsertFunction("printf",
+        expCodeTab->CalleeF = expCodeTab->TheModule->getOrInsertFunction("printf",
                                  FunctionType::get(
                                      IntegerType::getInt32Ty(TheContext),
                                      PointerType::get(Type::getInt8Ty(TheContext), 0),
                                      true /* this is var arg func type*/)
         );
-        FunctionType *printf_type =
-                TypeBuilder<int(char *, ...), false>::get(TheContext);
-
-        Function *func = cast<Function>(expCodeTab->TheModule->getOrInsertFunction(
-                "printf", printf_type)
-        );
-        expCodeTab->CalleeF = func;
+//        FunctionType *printf_type =
+//                TypeBuilder<int(char *, ...), false>::get(TheContext);
+//
+//        Function *func = cast<Function>(expCodeTab->TheModule->getOrInsertFunction(
+//                "printf", printf_type)
+//        );
+//        expCodeTab->CalleeF = func;
         expCodeTab->llvm_values_.enterscope();
         exps->codegen(expCodeTab);
         expCodeTab->llvm_values_.exitscope();
@@ -60,8 +67,76 @@ namespace RWL {
         generate_string_var(expCodeTab);
 
         expCodeTab->generateObjectCode();
-
+        std::cout << "Object code generation complete" << std::endl;
     }
+
+
+
+
+    int ExpressionCodeTable::generateObjectCode() {
+        std::cout << "generateObjectCode() called" << std::endl;
+        InitializeAllTargetInfos();
+        InitializeAllTargets();
+        InitializeAllTargetMCs();
+        InitializeAllAsmParsers();
+        InitializeAllAsmPrinters();
+
+        auto TargetTriple = sys::getDefaultTargetTriple();
+        TheModule->setTargetTriple(TargetTriple);
+
+        std::string Error;
+        auto Target = TargetRegistry::lookupTarget(TargetTriple, Error);
+
+        // Print an error and exit if we couldn't find the requested target.
+        // This generally occurs if we've forgotten to initialise the
+        // TargetRegistry or we have a bogus target triple.
+        if (!Target) {
+            errs() << Error;
+            return 1;
+        }
+
+        auto CPU = "generic";
+        auto Features = "";
+
+        TargetOptions opt;
+        auto RM = Optional<Reloc::Model>();
+        auto TheTargetMachine =
+                Target->createTargetMachine(TargetTriple, CPU, Features, opt, RM);
+
+        TheModule->setDataLayout(TheTargetMachine->createDataLayout());
+
+        auto Filename = "output.o";
+        std::error_code EC;
+        raw_fd_ostream dest(Filename, EC, sys::fs::F_None);
+
+        if (EC) {
+            errs() << "Could not open file: " << EC.message();
+            return 1;
+        }
+
+        legacy::PassManager pass;
+        auto FileType = TargetMachine::CGFT_ObjectFile;
+
+        pass.add(createVerifierPass());
+
+        if (TheTargetMachine->addPassesToEmitFile(pass, dest, FileType)) {
+            errs() << "TheTargetMachine can't emit a file of this type";
+            return 1;
+        }
+
+        std::cout << "preparing to run object code generation..." << std::endl;
+
+
+        pass.run(*TheModule);
+        dest.flush();
+
+        outs() << "Wrote " << Filename << "\n";
+        return 0;
+    }
+
+
+
+
 
     Value *integer_node::codegen(ExpressionCodeTableP expCodeTab) {
         std::cout << "integer node codegen called" << std::endl;
@@ -245,8 +320,111 @@ namespace RWL {
 //        typedef unsigned long long uint64_t;
 //        uint64_t x = 14;
         std::cout << "generate_string_var() called" << std::endl;
-        ArrayType* ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 12);
-        Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(), "hello world");
+
+        PointerType *PointerTy_6 = PointerType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 0);
+        ConstantInt *const_int32_12 = ConstantInt::get(expCodeTab->TheModule->getContext(), APInt(32, StringRef("0"), 10));
+
+        std::vector<Type *> FuncTy_8_args;
+        FuncTy_8_args.emplace_back(PointerTy_6);
+// ArrayRef<Type*> fty = ArrayRef(FuncTy_8_args);
+        FunctionType *FuncTy_8 = FunctionType::get(
+                /*Result=*/IntegerType::get(expCodeTab->TheModule->getContext(), 32),
+                /*Params=*/FuncTy_8_args,
+                /*isVarArg=*/true);
+
+        std::vector<Type *> FuncTy_2_args;
+        FuncTy_2_args.push_back(IntegerType::get(expCodeTab->TheModule->getContext(), 32));
+        FunctionType *FuncTy_2 = FunctionType::get(
+                /*Result=*/IntegerType::get(expCodeTab->TheModule->getContext(), 32),
+                /*Params=*/FuncTy_2_args,
+                /*isVarArg=*/false);
+
+        Function *func_some_function = expCodeTab->TheModule->getFunction("some_function");
+        if (!func_some_function) {
+            func_some_function = Function::Create(
+                    /*Type=*/FuncTy_2,
+                    /*Linkage=*/GlobalValue::ExternalLinkage,
+                    /*Name=*/"some_function", expCodeTab->TheModule.get());
+            func_some_function->setCallingConv(CallingConv::C);
+        }
+        AttributeList func_some_function_PAL;
+        {
+            SmallVector<AttributeList, 4> Attrs;
+            AttributeList PAS;
+            {
+                AttrBuilder B;
+                B.addAttribute(Attribute::NoUnwind);
+                B.addAttribute(Attribute::StackProtect);
+                B.addAttribute(Attribute::UWTable);
+                PAS = AttributeList::get(expCodeTab->TheModule->getContext(), ~0U, B);
+            }
+
+            Attrs.push_back(PAS);
+            func_some_function_PAL = AttributeList::get(expCodeTab->TheModule->getContext(), Attrs);
+
+        }
+        func_some_function->setAttributes(func_some_function_PAL);
+
+        Function *func_printf = expCodeTab->TheModule->getFunction("printf");
+        if (!func_printf) {
+            func_printf = Function::Create(
+                    /*Type=*/FuncTy_8,
+                    /*Linkage=*/GlobalValue::ExternalLinkage,
+                    /*Name=*/"printf", expCodeTab->TheModule.get()); // (external, no body)
+            func_printf->setCallingConv(CallingConv::C);
+        }
+        AttributeList func_printf_PAL;
+        {
+            SmallVector<AttributeList, 4> Attrs;
+            AttributeList PAS;
+            {
+                AttrBuilder B;
+                PAS = AttributeList::get(expCodeTab->TheModule->getContext(), ~0U, B);
+            }
+
+            Attrs.push_back(PAS);
+            func_printf_PAL = AttributeList::get(expCodeTab->TheModule->getContext(), Attrs);
+
+        }
+        func_printf->setAttributes(func_printf_PAL);
+
+
+        std::vector<Type *> FuncTy_4_args;
+        FunctionType *FuncTy_4 = FunctionType::get(
+                /*Result=*/IntegerType::get(expCodeTab->TheModule->getContext(), 32),
+                /*Params=*/FuncTy_4_args,
+                /*isVarArg=*/false);
+
+        Function *func_main = expCodeTab->TheModule->getFunction("main");
+        if (!func_main) {
+            func_main = Function::Create(
+                    /*Type=*/FuncTy_4,
+                    /*Linkage=*/GlobalValue::ExternalLinkage,
+                    /*Name=*/"main", expCodeTab->TheModule.get());
+            func_main->setCallingConv(CallingConv::C);
+        }
+        AttributeList func_main_PAL;
+        {
+            SmallVector<AttributeList, 4> Attrs;
+            AttributeList PAS;
+            {
+                AttrBuilder B;
+                B.addAttribute(Attribute::NoUnwind);
+                B.addAttribute(Attribute::StackProtect);
+                B.addAttribute(Attribute::UWTable);
+                PAS = AttributeList::get(expCodeTab->TheModule->getContext(), ~0U, B);
+            }
+
+            Attrs.push_back(PAS);
+            func_main_PAL = AttributeList::get(expCodeTab->TheModule->getContext(), Attrs);
+
+        }
+        func_main->setAttributes(func_main_PAL);
+
+
+        ArrayType* ArrayTy_0 = ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), 13);
+        Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(), "hello world\x0A", true);
+//        Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(), "hello world");
         const_array_4->getType()->dump();
         ArrayTy_0->dump();
         GlobalVariable *gvar_array__str = new GlobalVariable(
@@ -254,26 +432,84 @@ namespace RWL {
                 ArrayTy_0,
                 true,
                 GlobalValue::PrivateLinkage,
-                const_array_4, // has initializer, specified below
+                0, // has initializer, specified below
                 ".str");
         gvar_array__str->setAlignment(1);
 
 
+        gvar_array__str->setInitializer(const_array_4);
+
+
+//        ConstantInt *const_int32_12 = ConstantInt::get(expCodeTab->TheModule->getContext(), APInt(32, StringRef("0"), 10));
 
 
 
-        // Constant Definitions
-//        Constant *const_array_4 = ConstantDataArray::getString(expCodeTab->TheModule->getContext(), "hello world");
         std::vector<Constant *> const_ptr_5_indices;
         ConstantInt* const_int64_6 = ConstantInt::get(TheContext, APInt(32,0, false));
-        const_ptr_5_indices.push_back((Constant *&&) const_int64_6);
-        const_ptr_5_indices.push_back((Constant *&&) const_int64_6);
         Constant *const_ptr_5 = ConstantExpr::getGetElementPtr(ArrayTy_0, gvar_array__str, const_ptr_5_indices);
+        ConstantInt *const_int32_13 = ConstantInt::get(expCodeTab->TheModule->getContext(), APInt(32, StringRef("21"), 10));
 
 
-        // Global Variable Definitions
-//        gvar_array__str->setInitializer(const_ptr_5);
-        expCodeTab->builder.CreateCall(expCodeTab->CalleeF, const_ptr_5);
+        const_ptr_5_indices.emplace_back( const_ptr_5 );
+        const_ptr_5_indices.emplace_back( const_int64_6);
+
+
+
+        BasicBlock *label_entry_18 = BasicBlock::Create(expCodeTab->TheModule->getContext(), "entry", func_main, 0);
+
+        AllocaInst *ptr_retval = new AllocaInst(IntegerType::get(expCodeTab->TheModule->getContext(), 32), "retval", label_entry_18);
+        ptr_retval->setAlignment(4);
+        AllocaInst *ptr_answer = new AllocaInst(IntegerType::get(expCodeTab->TheModule->getContext(), 32), "answer", label_entry_18);
+        ptr_answer->setAlignment(4);
+        StoreInst *void_19 = new StoreInst(const_int32_12, ptr_retval, false, label_entry_18);
+//        CallInst *int32_call = CallInst::Create(func_some_function, const_int32_13, "call", label_entry_18);
+//        int32_call->setCallingConv(CallingConv::C);
+//        int32_call->setTailCall(false);
+//        AttributeList int32_call_PAL;
+//        int32_call->setAttributes(int32_call_PAL);
+
+        CallInst *int32_call = CallInst::Create(func_some_function, const_int32_13, "call", label_entry_18);
+        int32_call->setCallingConv(CallingConv::C);
+        int32_call->setTailCall(false);
+        AttributeList int32_call_PAL;
+        int32_call->setAttributes(int32_call_PAL);
+
+        StoreInst *void_20 = new StoreInst(int32_call, ptr_answer, false, label_entry_18);
+
+        void_20->setAlignment(4);
+        LoadInst *int32_21 = new LoadInst(ptr_answer, "", false, label_entry_18);
+        int32_21->setAlignment(4);
+        std::vector<Value *> int32_call1_params;
+        int32_call1_params.emplace_back(const_ptr_5);
+        int32_call1_params.emplace_back(int32_21);
+//        CallInst *int32_call1 = CallInst::Create(func_printf, int32_call1_params, "call1", label_entry_18);
+//        int32_call1->setCallingConv(CallingConv::C);
+//        int32_call1->setTailCall(false);
+//        AttributeList int32_call1_PAL;
+//        int32_call1->setAttributes(int32_call1_PAL);
+
+        ReturnInst::Create(expCodeTab->TheModule->getContext(), const_int64_6, label_entry_18);
+
+
+
+//        BasicBlock *label_entry_18 = BasicBlock::Create(expCodeTab->TheModule->getContext(), "entry", func_main, 0);
+//        LoadInst *int32_21 = new LoadInst(const_int64_6, "", false, label_entry_18);
+//        int32_21->setAlignment(4);
+//        CallInst *cI = CallInst::Create(expCodeTab->CalleeF, const_ptr_5_indices, "call1", label_entry_18);
+
+//        CallInst *cI = expCodeTab->builder.CreateCall(expCodeTab->CalleeF, const_ptr_5_indices, "calling", label_entry_18);
+
+//        CallInst *int32_call1 = CallInst::Create(func_printf, int32_call1_params, "call1", label_entry_18);
+//        cI->setCallingConv(CallingConv::C);
+//        cI->setTailCall(false);
+//        AttributeList int32_call1_PAL;
+//        cI->setAttributes(int32_call1_PAL);
+//
+//
+//        cI->dump();
+//
+//        ReturnInst::Create(expCodeTab->TheModule->getContext(), const_int64_6, label_entry_18);
+
     }
 
     Function *function_node::function_prototype_codegen(ExpressionCodeTableP expCodeTab) {

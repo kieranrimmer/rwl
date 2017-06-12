@@ -13,12 +13,12 @@ CXXSTD = -std=c++14
 
 LLVM_COMPILE_ONLY = `llvm-config --cppflags --ldflags`
 
-LLVM_FLAGS = `llvm-config --cppflags --ldflags --system-libs --libs core`
+LLVM_FLAGS = `llvm-config --cppflags --ldflags --system-libs --libs all`
 LLVM_FLAGS_OBJECT = `llvm-config --cppflags --ldflags --system-libs --libs all`
 
 CFLAGS = -Wno-deprecated-register -O0 $(CDEBUG) $(CSTD)
-CXXFLAGS = -Wno-deprecated-register -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_FLAGS_OBJECT)
-CXXFLAGS_COMPILE_ONLY = -Wno-deprecated-register -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_COMPILE_ONLY)
+CXXFLAGS = -Wno-deprecated-register -fvisibility=hidden -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_FLAGS_OBJECT)
+CXXFLAGS_COMPILE_ONLY = -Wno-deprecated-register -fvisibility=hidden -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_COMPILE_ONLY)
 
 
 CPPOBJ = main rwl_driver
@@ -48,8 +48,8 @@ rwl: $(FILES)
 	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS)  util.o string_table.o parser.o tree.o codegen_llvm.o semant.o lexer.o $(LIBS)
 
 parser: rwl_parser.yy
-	${CXX} -c string_table/string_table.cpp -o string_table.o
-	${CXX} -c util/util.cpp -o util.o
+	${CXX} $(CXXFLAGS_COMPILE_ONLY) -c string_table/string_table.cpp -o string_table.o
+	${CXX} $(CXXFLAGS_COMPILE_ONLY) -c util/util.cpp -o util.o
 	${CXX} $(CXXFLAGS_COMPILE_ONLY) -c AST/tree.cpp -o tree.o
 	${CXX} $(CXXFLAGS_COMPILE_ONLY) -c semant.cpp -o semant.o
 	${CXX} $(CXXFLAGS_COMPILE_ONLY) -c codegen_llvm/codegen_llvm.cpp -o codegen_llvm.o
