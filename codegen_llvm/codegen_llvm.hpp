@@ -48,6 +48,10 @@ namespace RWL {
 
     LLVMContext TheContext;
 
+    Module *Mod;
+
+    Module *makeLLVMModule();
+
 
     // Initialize the target registry etc.
 
@@ -61,7 +65,7 @@ namespace RWL {
 
     public:
         ExpressionCodeTable(Expressions exps) : codegen_errors(0), error_stream(std::cerr), builder(TheContext), expressions_(exps) {
-            TheModule = llvm::make_unique<Module>("my cool jit", TheContext);
+            TheModule = llvm::make_unique<Module>("test.ll", TheContext);
 
         };
 
