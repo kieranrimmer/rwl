@@ -1,4 +1,7 @@
 
 int xx = 22
 
+def int new_fn(int inputInt) {
+    88
+}
 

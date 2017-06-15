@@ -826,6 +826,8 @@ namespace RWL {
 
         // Function Declarations
 
+        Function *func_new_function = mod->getFunction("new_fn");
+
         Function *func_some_function = mod->getFunction("some_function");
         if (!func_some_function) {
             func_some_function = Function::Create(
@@ -961,7 +963,7 @@ namespace RWL {
             AllocaInst *ptr_answer = new AllocaInst(IntegerType::get(mod->getContext(), 32), "answer", label_entry_18);
             ptr_answer->setAlignment(4);
             StoreInst *void_19 = new StoreInst(const_int32_12, ptr_retval, false, label_entry_18);
-            CallInst *int32_call = CallInst::Create(func_some_function, const_int32_13, "call", label_entry_18);
+            CallInst *int32_call = CallInst::Create(func_new_function, const_int32_13, "call", label_entry_18);
             int32_call->setCallingConv(CallingConv::C);
             int32_call->setTailCall(false);
             AttributeList int32_call_PAL;
