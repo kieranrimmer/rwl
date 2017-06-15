@@ -50,7 +50,7 @@ namespace RWL {
 
     Module *Mod;
 
-    Module *makeLLVMModule();
+    Module *makeLLVMModule(ExpressionCodeTableP expCodeTab);
 
 
     // Initialize the target registry etc.
