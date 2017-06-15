@@ -91,9 +91,9 @@ http://gnuu.org/2009/09/18/writing-your-own-toy-compiler/4/
 
 #### TODO:
 
-- generate IR code
-- optimisation
-- basic code generation for X86_64
+- generate IR code DONE
+- optimisation DONE
+- basic code generation for X86_64 DONE
 
 ### CMAKE integration
 
@@ -102,6 +102,18 @@ http://gnuu.org/2009/09/18/writing-your-own-toy-compiler/4/
 - get it working
 
 https://cmake.org/pipermail/cmake/2002-September/003028.html
+
+it kinda does work now...
+
+```$xslt
+make clean && make
+./rwl_phaseone ./test/TREE_PROGRAM.rwl 
+clang output.o -o d1
+./d1
+```
+
+the output demonstates that we can link against RWL code :)
+
 
 ### Documentation
 
