@@ -1,6 +1,10 @@
 CC    ?= clang
 CXX   ?= clang++
 
+LINK_OBJ = output.o
+
+TEST_EXE = d1
+
 EXE = rwl_phaseone
 
 CDEBUG = -g -Wall
@@ -28,7 +32,7 @@ FILES = $(addsuffix .cpp, $(CPPOBJ))
 
 OBJS  = $(addsuffix .o, $(CPPOBJ))
 
-CLEANLIST =  $(addsuffix .o, $(OBJ)) $(OBJS) \
+CLEANLIST =  $(addsuffix .o, $(OBJ)) $(OBJS) $(LINK_OBJ) $(TEST_EXE) \
 				 rwl_parser.tab.cc rwl_parser.tab.hh \
 				 location.hh position.hh \
 			    stack.hh rwl_parser.output parser.o \
@@ -64,11 +68,14 @@ lexer: rwl_lexer.l
 
 .PHONY: test
 test:
-	echo "22 33l if IF ELSE 44 btrne_77" | ./rwl_lexer
+	./rwl_phaseone ./test/TREE_PROGRAM.rwl
+	clang output.o -o d1
+	./d1
 
 .PHONY: clean
 clean:
 	rm -rf $(CLEANLIST)
+
 
 
 
