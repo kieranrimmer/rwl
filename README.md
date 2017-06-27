@@ -112,6 +112,13 @@ clang output.o -o d1
 ./d1
 ```
 
+...or if you're feeleing lazy...
+
+```
+make clean && make && make test
+
+```
+
 the output demonstates that we can link against RWL code :)
 
 ## Manually calling the linker

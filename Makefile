@@ -33,15 +33,15 @@ FILES = $(addsuffix .cpp, $(CPPOBJ))
 OBJS  = $(addsuffix .o, $(CPPOBJ))
 
 CLEANLIST =  $(addsuffix .o, $(OBJ)) $(OBJS) $(LINK_OBJ) $(TEST_EXE) \
-				 rwl_parser.tab.cc rwl_parser.tab.hh \
-				 location.hh position.hh \
+				rwl_parser.tab.cc rwl_parser.tab.hh \
+				location.hh position.hh \
 			    stack.hh rwl_parser.output parser.o \
 			    util.o tree.o string_table.o \
 			    main.o rwl_driver.o \
 			    codegen_llvm.o \
 			    semant.o \
 			    main.o driver.o \
-				 lexer.o rwl_lexer.yy.cc $(EXE)\
+				lexer.o rwl_lexer.yy.cc $(EXE)\
 
 .PHONY: all
 all: rwl
