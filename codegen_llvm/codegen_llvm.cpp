@@ -264,7 +264,7 @@ namespace RWL {
             return nullptr;
 
         // Convert condition to a bool by comparing non-equal to 0.0.
-        CondV = expCodeTab->builder.CreateICmpEQ(
+        CondV = expCodeTab->builder.CreateICmpNE(
                 CondV, ConstantInt::get(TheContext, APInt(8, 0)), "ifcond");
 
         Function *TheFunction = expCodeTab->builder.GetInsertBlock()->getParent();
@@ -280,7 +280,7 @@ namespace RWL {
         // Emit then value.
         expCodeTab->builder.SetInsertPoint(ThenBB);
 
-        Value *ThenV = then_body->codegen(expCodeTab);
+        Value *ThenV = if_body->codegen(expCodeTab);
         if (!ThenV)
             return nullptr;
 

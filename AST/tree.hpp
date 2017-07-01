@@ -512,15 +512,14 @@ namespace RWL {
     public:
         Expression predicate;
         Expression if_body;
-        Expression then_body;
         Expression else_body;
 
         tree_node *copy() override { return nullptr; }
 
-        void print() override  { std::cout << "conditional node: predicate: "; predicate->print(); std::cout << ", if body: "; if_body->print(); std::cout << ", then body: "; then_body->print();  std::cout << std::endl; }
+        void print() override  { std::cout << "conditional node: predicate: "; predicate->print(); std::cout << ", if body: "; if_body->print(); std::cout << ", else body: "; else_body->print();  std::cout << std::endl; }
 
 
-        cond_node(Expression p, Expression ib, Expression tb) : predicate(p), if_body(ib), then_body(tb) { }
+        cond_node(Expression p, Expression ib, Expression tb) : predicate(p), if_body(ib), else_body(tb) { }
         Symbol semant(ExpressionTableP exprs) override;
         Value *codegen(ExpressionCodeTableP) override;
     };
