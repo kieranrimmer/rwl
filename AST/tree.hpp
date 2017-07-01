@@ -513,6 +513,7 @@ namespace RWL {
         Expression predicate;
         Expression if_body;
         Expression then_body;
+        Expression else_body;
 
         tree_node *copy() override { return nullptr; }
 

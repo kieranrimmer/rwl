@@ -259,7 +259,55 @@ namespace RWL {
     }
 
     Value *cond_node::codegen(ExpressionCodeTableP expCodeTab) {
-        return nullptr;
+        Value *CondV = predicate->codegen(expCodeTab);
+        if (!CondV)
+            return nullptr;
+
+        // Convert condition to a bool by comparing non-equal to 0.0.
+        CondV = expCodeTab->builder.CreateICmpEQ(
+                CondV, ConstantInt::get(TheContext, APInt(8, 0)), "ifcond");
+
+        Function *TheFunction = expCodeTab->builder.GetInsertBlock()->getParent();
+
+        // Create blocks for the then and else cases.  Insert the 'then' block at the
+        // end of the function.
+        BasicBlock *ThenBB = BasicBlock::Create(TheContext, "then", TheFunction);
+        BasicBlock *ElseBB = BasicBlock::Create(TheContext, "else");
+        BasicBlock *MergeBB = BasicBlock::Create(TheContext, "ifcont");
+
+        expCodeTab->builder.CreateCondBr(CondV, ThenBB, ElseBB);
+
+        // Emit then value.
+        expCodeTab->builder.SetInsertPoint(ThenBB);
+
+        Value *ThenV = then_body->codegen(expCodeTab);
+        if (!ThenV)
+            return nullptr;
+
+        expCodeTab->builder.CreateBr(MergeBB);
+        // Codegen of 'Then' can change the current block, update ThenBB for the PHI.
+        ThenBB = expCodeTab->builder.GetInsertBlock();
+
+        // Emit else block.
+        TheFunction->getBasicBlockList().push_back(ElseBB);
+        expCodeTab->builder.SetInsertPoint(ElseBB);
+
+        Value *ElseV = else_body->codegen(expCodeTab);
+        if (!ElseV)
+            return nullptr;
+
+        expCodeTab->builder.CreateBr(MergeBB);
+        // Codegen of 'Else' can change the current block, update ElseBB for the PHI.
+        ElseBB = expCodeTab->builder.GetInsertBlock();
+
+        // Emit merge block.
+        TheFunction->getBasicBlockList().push_back(MergeBB);
+        expCodeTab->builder.SetInsertPoint(MergeBB);
+        PHINode *PN = expCodeTab->builder.CreatePHI(Type::getInt8Ty(TheContext), 10, "iftmp");
+
+        PN->addIncoming(ThenV, ThenBB);
+        PN->addIncoming(ElseV, ElseBB);
+        return PN;
     }
 
     std::vector<Value *> block_node::codegen_block(ExpressionCodeTableP expCodeTab) {
