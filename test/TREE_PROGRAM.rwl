@@ -3,6 +3,5 @@ int xx = 187
 
 def int new_fn(int inputInt) {
     if ( 0 ) then { 22 } else { 44 } fi
-    xx
 }
 
