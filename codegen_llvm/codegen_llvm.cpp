@@ -265,7 +265,7 @@ namespace RWL {
 
         // Convert condition to a bool by comparing non-equal to 0.0.
         CondV = expCodeTab->builder.CreateICmpNE(
-                CondV, ConstantInt::get(TheContext, APInt(8, 0)), "ifcond");
+                CondV, ConstantInt::get(TheContext, APInt(32, 0)), "ifcond");
 
         Function *TheFunction = expCodeTab->builder.GetInsertBlock()->getParent();
 
@@ -303,7 +303,7 @@ namespace RWL {
         // Emit merge block.
         TheFunction->getBasicBlockList().push_back(MergeBB);
         expCodeTab->builder.SetInsertPoint(MergeBB);
-        PHINode *PN = expCodeTab->builder.CreatePHI(Type::getInt8Ty(TheContext), 10, "iftmp");
+        PHINode *PN = expCodeTab->builder.CreatePHI(Type::getInt32Ty(TheContext), 10, "iftmp");
 
         PN->addIncoming(ThenV, ThenBB);
         PN->addIncoming(ElseV, ElseBB);
