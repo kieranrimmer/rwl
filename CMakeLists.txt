@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.7)
 project(rwl)
 
-include_directories(/Users/kieranrimmer/packages/llvm/include /Users/kieranrimmer/packages/build/include)
+include_directories(/Users/kieranrimmer/packages/llvm/include /Users/kieranrimmer/packages/build/include /Users/kieranrimmer/packages/llvm/examples/Kaleidoscope)
+
 
 set(CMAKE_CXX_STANDARD 11)
 

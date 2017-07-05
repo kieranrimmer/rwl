@@ -17,12 +17,13 @@ CXXSTD = -std=c++14
 
 LLVM_COMPILE_ONLY = `llvm-config --cppflags --ldflags`
 
-LLVM_FLAGS = `llvm-config --cppflags --ldflags --system-libs --libs all`
-LLVM_FLAGS_OBJECT = `llvm-config --cppflags --ldflags --system-libs --libs all`
+LLVM_FLAGS = `llvm-config --cppflags --ldflags --system-libs --libs all mcjit native`
+LLVM_FLAGS_OBJECT = `llvm-config --cppflags --ldflags --system-libs --libs all mcjit native`
 
-CFLAGS = -Wno-deprecated-register -O0 $(CDEBUG) $(CSTD)
-CXXFLAGS = -Wno-deprecated-register -fvisibility=hidden -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_FLAGS_OBJECT)
-CXXFLAGS_COMPILE_ONLY = -Wno-deprecated-register -fvisibility=hidden -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_COMPILE_ONLY)
+LLVM_EXAMPLE_ROOT = -I/Users/kieranrimmer/packages/llvm/examples/Kaleidoscope
+CFLAGS = -Wno-deprecated-register -O0 $(CDEBUG) $(CSTD) $(LLVM_EXAMPLE_ROOT)
+CXXFLAGS = -Wno-deprecated-register -fvisibility=hidden -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_FLAGS_OBJECT) $(LLVM_EXAMPLE_ROOT)
+CXXFLAGS_COMPILE_ONLY = -Wno-deprecated-register -fvisibility=hidden -O0  $(CXXDEBUG) $(CXXSTD) $(LLVM_COMPILE_ONLY) $(LLVM_EXAMPLE_ROOT)
 
 
 CPPOBJ = main rwl_driver

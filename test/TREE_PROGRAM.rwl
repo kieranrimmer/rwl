@@ -1,7 +1,19 @@
 
 int xx = 187
 
+def int js(int jkl) {
+   int st = 3
+   st
+}
+
 def int new_fn(int inputInt) {
-    if ( 0 ) then { 22 } else { 44 } fi
+     // int jj = 22
+     // int kr = js(55)
+     33
+
+    // inputInt
+    // if ( 0 ) then { 22 } else { 44 } fi
+    // inputInt
+
 }
 

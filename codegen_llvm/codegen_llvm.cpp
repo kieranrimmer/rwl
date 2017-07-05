@@ -42,6 +42,15 @@ namespace RWL {
         std::cout << "Object code generation complete" << std::endl;
     }
 
+    /// CreateEntryBlockAlloca - Create an alloca instruction in the entry block of
+    /// the function.  This is used for mutable variables etc.
+    static AllocaInst *CreateEntryBlockAlloca(Function *TheFunction,
+                                              const std::string &VarName) {
+        IRBuilder<> TmpB(&TheFunction->getEntryBlock(),
+                         TheFunction->getEntryBlock().begin());
+        return TmpB.CreateAlloca(Type::getDoubleTy(TheContext), nullptr, VarName);
+    }
+
 
 
 
@@ -411,8 +420,25 @@ namespace RWL {
 
         // Record the function arguments in the NamedValues map.
         expCodeTab->NamedValues.clear();
-        for (auto &Arg : TheFunction->args())
+//        for (auto &Arg : TheFunction->args()) {
+//            // Create an alloca for this variable.
+//            AllocaInst *Alloca = CreateEntryBlockAlloca(TheFunction, Arg.getName());
+//
+//            // Store the initial value into the alloca.
+//            expCodeTab->builder.CreateStore(&Arg, Alloca);
+//
+//            // Add arguments to variable symbol table.
+//            expCodeTab->NamedValues[Arg.getName()] = Alloca;
+//        }
+
+//         Record the function arguments in the NamedValues map.
+        expCodeTab->NamedValues.clear();
+        for (auto &Arg : TheFunction->args()) {
             expCodeTab->NamedValues[Arg.getName()] = &Arg;
+            std::cout << "Funtion " << name->get_string() << ", parameter type: "; Arg.dump(); std::cout << ", parameter name: " << Arg.getName().data() << std::endl;
+        }
+
+
 
         Value * RetVal = body->codegen(expCodeTab);
 
