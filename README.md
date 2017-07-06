@@ -112,7 +112,7 @@ clang output.o -o d1
 ./d1
 ```
 
-...or if you're feeleing lazy...
+...or if you're feeling lazy...
 
 ```
 make clean && make && make test

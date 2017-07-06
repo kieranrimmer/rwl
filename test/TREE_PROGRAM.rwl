@@ -2,14 +2,14 @@
 int xx = 187
 
 def int js(int jkl) {
-   int st = 3
-   st
+   int st = 3 + jkl
+   33
 }
 
 def int new_fn(int inputInt) {
      // int jj = 22
-     // int kr = js(55)
-     33
+     int kr = js(55)
+     kr
 
     // inputInt
     // if ( 0 ) then { 22 } else { 44 } fi
