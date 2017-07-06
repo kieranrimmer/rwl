@@ -9,10 +9,10 @@ def int js(int jkl) {
 def int new_fn(int inputInt) {
      // int jj = 22
      int kr = js(55)
-     kr
+     // kr + 44
 
     // inputInt
-    // if ( 0 ) then { 22 } else { 44 } fi
+    if ( 0 ) then { js(55) } else { 88 + js(55) } fi
     // inputInt
 
 }
