@@ -230,7 +230,10 @@ namespace RWL {
     }
 
     Value *id_node::codegen(ExpressionCodeTableP expCodeTab) {
-        return expCodeTab->llvm_values_.lookup(sym);
+        std::cout << "id_node::codegen() called" << std::endl;
+        Value *V = expCodeTab->llvm_values_.lookup(sym);
+        expCodeTab->builder.CreateLoad(V, sym->get_string().c_str());
+        return V;
     }
 
     Value *string_node::codegen(ExpressionCodeTableP expCodeTab) {
@@ -352,6 +355,7 @@ namespace RWL {
         Value *V = initialisation->codegen(expCodeTab);
         std::cout << "Adding decalaration for variable: " << name << std::endl;
         expCodeTab->llvm_values_.addid(name, V);
+        expCodeTab->builder.CreateStore(V, expCodeTab->llvm_values_.lookup(name));
         return V;
     }
 
@@ -467,11 +471,16 @@ namespace RWL {
 
 
     Value *assignment_stmt::codegen(ExpressionCodeTableP expCodeTab) {
-        Value *V = ( expCodeTab->llvm_values_.lookup(_id->get_symbol()) );
-        if (!V) {
+        Value *Var = ( expCodeTab->llvm_values_.lookup(_id->get_symbol()) );
+        if (!Var) {
             std::cerr << red <<  "Unknown variable name: " << norm << _id->get_string() << std::endl;
             return nullptr;
         }
+
+        Value *V = exp->codegen(expCodeTab);
+
+        expCodeTab->builder.CreateStore(V, Var);
+
         return V;
     }
 
