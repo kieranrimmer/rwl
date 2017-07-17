@@ -85,7 +85,29 @@ namespace RWL {
     class tree_node {
     protected:
         int line_no;
+
+        bool isFunction;
+
+        tree_node *parent = nullptr;
+
     public:
+
+
+        bool getIsFunction() {
+            return isFunction;
+        }
+
+        void setIsFunction(bool isFunction) {
+            this->isFunction = isFunction;
+        }
+
+        // Recurse back up the tree, seeing if we are inside any function
+        bool getIsInsideFunction() {
+            if (isFunction)
+                return isFunction;
+            return (bool) parent && parent->getIsInsideFunction();
+        }
+
         tree_node();
 
         virtual tree_node *copy() = 0;
@@ -106,6 +128,7 @@ namespace RWL {
 
     class exp_node: public tree_node {
     public:
+
         Symbol type;
         Symbol get_type() { return type; }
         exp_node *set_type(Symbol s) { type = s; return this; }
@@ -546,7 +569,7 @@ namespace RWL {
         Function *function_codegen(ExpressionCodeTableP expCodeTab);
         Function *function_prototype_codegen(ExpressionCodeTableP expCodeTab);
 
-        function_node(Symbol t, Symbol n, Formals formal_list, exp_node *exp) : returnType(t), name(n) { formals = formal_list; body = exp; }
+        function_node(Symbol t, Symbol n, Formals formal_list, exp_node *exp) : returnType(t), name(n) { formals = formal_list; body = exp; isFunction=true; }
 
     };
 

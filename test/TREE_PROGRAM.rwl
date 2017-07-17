@@ -1,5 +1,5 @@
 
-int xx = 187
+// int xx = 187
 
 def int js(int jkl) {
    // int st = 3 + jkl
@@ -12,14 +12,15 @@ def int js(int jkl) {
 
 def int new_fn(int inputInt) {
      // int jj = 22
-     int kr = 22
+     // int kr = 22
      // int kar = 55 + kr
      // int kr = js(55) // + inputInt
      // kr + 44
 
     // inputInt
-    if ( 1 ) then { 33 + kr } else { 88  } fi
+    // if ( 1 ) then { 33  } else { 88  } fi
     // inputInt
+    22 + inputInt
 
 }
 

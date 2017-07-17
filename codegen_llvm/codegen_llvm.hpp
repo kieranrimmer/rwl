@@ -94,6 +94,8 @@ namespace RWL {
         Expressions expressions_;
         Expression current_expression_;
 
+        Function *currentFunction;
+
     public:
         ExpressionCodeTable(Expressions exps) : codegen_errors(0), error_stream(std::cerr), builder(TheContext), expressions_(exps) {
             TheModule = llvm::make_unique<Module>("test.ll", TheContext);
@@ -110,6 +112,14 @@ namespace RWL {
 
         void set_current_expression(Expression exp) { current_expression_ = exp; }
         Expression get_current_expression() { return current_expression_; }
+
+        Function *getCurrentFunction() {
+            return currentFunction;
+        }
+
+        void setCurrentFunction(Function *function) {
+            currentFunction = function;
+        }
 
 
 

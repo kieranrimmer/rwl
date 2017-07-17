@@ -16,6 +16,7 @@ namespace RWL {
         return nullptr;
     }
 
+
     template <typename RetType> RetType *LogErrorAll(std::string Str) {
         std::cerr << Str << std::endl;
         return nullptr;
@@ -48,6 +49,14 @@ namespace RWL {
                                               const std::string &VarName, Type *VarType) {
         IRBuilder<> TmpB(&TheFunction->getEntryBlock(),
                          TheFunction->getEntryBlock().begin());
+        return TmpB.CreateAlloca(VarType, nullptr, VarName);
+    }
+
+    /// CreateEntryBlockAlloca - Create an alloca instruction in the entry block of
+    /// the function.  This is used for mutable variables etc.
+    static AllocaInst *CreateGlobalAlloca( ExpressionCodeTableP expCodeTab,
+                                              const std::string &VarName, Type *VarType) {
+        IRBuilder<> TmpB(expCodeTab->TheModule->getContext());
         return TmpB.CreateAlloca(VarType, nullptr, VarName);
     }
 
@@ -145,6 +154,28 @@ namespace RWL {
 
     Value *unary_minus_node::codegen(ExpressionCodeTableP expCodeTab) { return nullptr; }
 
+    static Type *inferType(ExpressionCodeTableP expCodeTab, Expression exp) {
+
+        std::cout <<  "inferType(), type = " << std::endl;
+
+        RwlTypes rwlType = TypeCheck::checkType(exp->get_type());
+
+        switch (TypeCheck::checkType(exp->get_type())) {
+            case RwlTypes::STRING: {
+
+                std::string strValue = exp->get_value()->get_string();
+                return ArrayType::get(IntegerType::get(expCodeTab->TheModule->getContext(), 8), strValue.length() + 1);
+
+            }
+
+            case RwlTypes::INT: {
+                return IntegerType::get(expCodeTab->TheModule->getContext(), 32);
+
+            }
+
+        }
+    }
+
     Value *print_stmt::codegen(ExpressionCodeTableP expCodeTab) {
 
         std::cout <<  "print_stmt::codegen(), type = " << std::endl;
@@ -231,9 +262,11 @@ namespace RWL {
 
     Value *id_node::codegen(ExpressionCodeTableP expCodeTab) {
         std::cout << "id_node::codegen() called" << std::endl;
-        Value *V = expCodeTab->llvm_values_.lookup(sym);
-        expCodeTab->builder.CreateLoad(V, sym->get_string().c_str());
-        return V;
+        Value *V;
+        if (!(V = expCodeTab->NamedValues[sym->get_string().c_str()]) )
+            V = expCodeTab->llvm_values_.lookup(sym);
+        return expCodeTab->builder.CreateLoad(V, sym->get_string().c_str());
+//        return V;
     }
 
     Value *string_node::codegen(ExpressionCodeTableP expCodeTab) {
@@ -353,9 +386,14 @@ namespace RWL {
 
     Value *declaration_node::codegen(ExpressionCodeTableP expCodeTab) {
         Value *V = initialisation->codegen(expCodeTab);
+        AllocaInst *Alloca = nullptr;
+        if (getIsInsideFunction())
+            Alloca = CreateGlobalAlloca(expCodeTab, name->get_string(), inferType(expCodeTab, initialisation));
+        else
+            Alloca = CreateEntryBlockAlloca(expCodeTab->builder.GetInsertBlock()->getParent(), name->get_string(), inferType(expCodeTab, initialisation));
         std::cout << "Adding decalaration for variable: " << name << std::endl;
         expCodeTab->llvm_values_.addid(name, V);
-        expCodeTab->builder.CreateStore(V, expCodeTab->llvm_values_.lookup(name));
+        expCodeTab->builder.CreateStore(expCodeTab->llvm_values_.lookup(name), Alloca);
         return V;
     }
 
@@ -432,6 +470,7 @@ namespace RWL {
             expCodeTab->builder.CreateStore(&Arg, Alloca);
 
             // Add arguments to variable symbol table.
+            // expCodeTab->llvm_values_.addid(, Alloca);
             expCodeTab->NamedValues[Arg.getName()] = Alloca;
         }
 
