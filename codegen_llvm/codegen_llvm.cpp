@@ -510,7 +510,9 @@ namespace RWL {
 
 
     Value *assignment_stmt::codegen(ExpressionCodeTableP expCodeTab) {
-        Value *Var = ( expCodeTab->llvm_values_.lookup(_id->get_symbol()) );
+        Value *Var;
+        if (!(Var = expCodeTab->NamedValues[_id->get_symbol()->get_string().c_str()]))
+            Var = ( expCodeTab->llvm_values_.lookup(_id->get_symbol()) );
         if (!Var) {
             std::cerr << red <<  "Unknown variable name: " << norm << _id->get_string() << std::endl;
             return nullptr;

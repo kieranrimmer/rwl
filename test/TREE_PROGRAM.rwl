@@ -17,7 +17,7 @@ def int new_fn(int inputInt) {
      // int kr = js(55) // + inputInt
      // kr + 44
 
-    // inputInt
+    inputInt = inputInt + 22
     if ( 1 ) then { 33 + inputInt  } else { 88  } fi
     // inputInt
     // int xy = 33
