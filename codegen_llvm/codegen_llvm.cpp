@@ -387,14 +387,14 @@ namespace RWL {
     Value *declaration_node::codegen(ExpressionCodeTableP expCodeTab) {
         Value *V = initialisation->codegen(expCodeTab);
         AllocaInst *Alloca = nullptr;
-        if (getIsInsideFunction())
+        if (!getIsInsideFunction())
             Alloca = CreateGlobalAlloca(expCodeTab, name->get_string(), inferType(expCodeTab, initialisation));
         else
             Alloca = CreateEntryBlockAlloca(expCodeTab->builder.GetInsertBlock()->getParent(), name->get_string(), inferType(expCodeTab, initialisation));
         std::cout << "Adding decalaration for variable: " << name << std::endl;
         expCodeTab->llvm_values_.addid(name, V);
-        expCodeTab->builder.CreateStore(expCodeTab->llvm_values_.lookup(name), Alloca);
-        return V;
+        return expCodeTab->builder.CreateStore(expCodeTab->llvm_values_.lookup(name), Alloca);
+        // return V;
     }
 
     Function *function_node::function_prototype_codegen(ExpressionCodeTableP expCodeTab) {
