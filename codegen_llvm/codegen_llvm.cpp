@@ -52,13 +52,9 @@ namespace RWL {
         return TmpB.CreateAlloca(VarType, nullptr, VarName);
     }
 
-    /// CreateEntryBlockAlloca - Create an alloca instruction in the entry block of
-    /// the function.  This is used for mutable variables etc.
-    static AllocaInst *CreateGlobalAlloca( ExpressionCodeTableP expCodeTab,
-                                              const std::string &VarName, Type *VarType) {
-        IRBuilder<> TmpB(expCodeTab->TheModule->getContext());
-        return TmpB.CreateAlloca(VarType, nullptr, VarName);
-    }
+    static Type *inferType(ExpressionCodeTableP, Expression);
+
+
 
 
 
@@ -387,8 +383,18 @@ namespace RWL {
     Value *declaration_node::codegen(ExpressionCodeTableP expCodeTab) {
         Value *V = initialisation->codegen(expCodeTab);
         AllocaInst *Alloca = nullptr;
-        if (!getIsInsideFunction())
-            Alloca = CreateGlobalAlloca(expCodeTab, name->get_string(), inferType(expCodeTab, initialisation));
+        if (!getIsInsideFunction()) {
+            Type *gType = inferType(expCodeTab, initialisation);
+            GlobalVariable *gvar = new GlobalVariable(
+                    *(expCodeTab->TheModule),
+                    gType,
+                    false,
+                    GlobalValue::PrivateLinkage,
+                    (Constant *) V, // has initializer, specified below
+                    ".int");
+            return gvar;
+        }
+            // Alloca = CreateGlobalAlloca(expCodeTab, name->get_string(), initialisation, inferType(expCodeTab, initialisation));
         else
             Alloca = CreateEntryBlockAlloca(expCodeTab->builder.GetInsertBlock()->getParent(), name->get_string(), inferType(expCodeTab, initialisation));
         std::cout << "Adding decalaration for variable: " << name << std::endl;
