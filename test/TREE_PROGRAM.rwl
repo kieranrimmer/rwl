@@ -7,7 +7,7 @@ def int js(int jkl) {
    // 22
    // int jj = 3
    // jj =  99
-   99
+   jkl + 99 + xx
 }
 
 def int new_fn(int inputInt) {

@@ -259,8 +259,10 @@ namespace RWL {
     Value *id_node::codegen(ExpressionCodeTableP expCodeTab) {
         std::cout << "id_node::codegen() called" << std::endl;
         Value *V;
-        if (!(V = expCodeTab->NamedValues[sym->get_string().c_str()]) )
+        if (!(V = expCodeTab->NamedValues[sym->get_string().c_str()]) ) {
             V = expCodeTab->llvm_values_.lookup(sym);
+            return V;
+        }
         return expCodeTab->builder.CreateLoad(V, sym->get_string().c_str());
 //        return V;
     }
@@ -392,6 +394,7 @@ namespace RWL {
                     GlobalValue::PrivateLinkage,
                     (Constant *) V, // has initializer, specified below
                     ".int");
+            expCodeTab->llvm_values_.addid(name, V);
             return gvar;
         }
             // Alloca = CreateGlobalAlloca(expCodeTab, name->get_string(), initialisation, inferType(expCodeTab, initialisation));
